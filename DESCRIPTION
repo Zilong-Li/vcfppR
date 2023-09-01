@@ -1,18 +1,22 @@
 Package: vcfppR
 Title: What the Package Does (One Line, Title Case)
-Version: 0.1.8
+Version: 0.2.0
 Authors@R: 
     person("Zilong", "Li", , "zilong.dk@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5859-2078"))
 Description: This package demonstrates the usage of vcfpp in R
-License: MIT + file LICENSE.md
+License: MIT
 Encoding: UTF-8
+Depends: R (>= 3.6.0)
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+SystemRequirements: C++11
 Imports: 
     Rcpp
 LinkingTo:
     Rcpp
+URL: https://github.com/Zilong-Li/vcfppR
+BugReports: https://github.com/Zilong-Li/vcfppR/issues

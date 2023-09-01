@@ -41,7 +41,7 @@ This example shows how to read PL tag in the VCF/BCF into R tables:
 
 ``` r
 library(vcfppR)
-vcffile <- system.file("extdata", "test-GL.vcf.gz", package="vcfppR")
+vcffile <- system.file("extdata", "test-PL.vcf.gz", package="vcfppR")
 (pl <- tablePL(vcffile,"chr20"))
 summary(pl)
 ```
