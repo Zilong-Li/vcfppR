@@ -6,48 +6,42 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of vcfppR is to …
+The goal of vcfppR is to demonstrate the usage of vcfpp in R and
+implement some useful function in R.
 
 ## Installation
 
 You can install the development version of vcfppR like so:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+devtools::install_github("Zilong-Li/vcfppR")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This example shows how to read GT tag in the VCF/BCF into R tables:
 
 ``` r
 library(vcfppR)
-## basic example code
+vcffile <- system.file("extdata", "test-GL.vcf.gz", package="vcfppR")
+(gt <- tableGT(vcffile,"chr20"))
+summary(gt)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+This example shows how to read GL tag in the VCF/BCF into R tables:
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+library(vcfppR)
+vcffile <- system.file("extdata", "test-GL.vcf.gz", package="vcfppR")
+(gl <- tableGL(vcffile,"chr20"))
+summary(gl)
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this. You could also
-use GitHub Actions to re-render `README.Rmd` every time you push. An
-example workflow can be found here:
-<https://github.com/r-lib/actions/tree/v1/examples>.
+This example shows how to read PL tag in the VCF/BCF into R tables:
 
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+``` r
+library(vcfppR)
+vcffile <- system.file("extdata", "test-GL.vcf.gz", package="vcfppR")
+(pl <- tablePL(vcffile,"chr20"))
+summary(pl)
+```
