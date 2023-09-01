@@ -7,8 +7,9 @@
 #' @param region  region to extract 
 #' @param samples samples to extract
 #' @return A list of genotypes and other fixed fields in VCF
+#' @export
 tableGT <- function(vcffile, region, samples = "-") {
-    .Call(`_vcfppR_tableGT`, vcffile, region, samples)
+    .Call('_vcfppR_tableGT', PACKAGE = 'vcfppR', vcffile, region, samples)
 }
 
 #' parse GL of a VCF file into tables in R
@@ -17,8 +18,9 @@ tableGT <- function(vcffile, region, samples = "-") {
 #' @param region  region to extract 
 #' @param samples samples to extract
 #' @return A list of genotypes and other fixed fields in VCF
+#' @export
 tableGL <- function(vcffile, region, samples = "-") {
-    .Call(`_vcfppR_tableGL`, vcffile, region, samples)
+    .Call('_vcfppR_tableGL', PACKAGE = 'vcfppR', vcffile, region, samples)
 }
 
 #' parse PL of a VCF file into tables in R
@@ -27,7 +29,8 @@ tableGL <- function(vcffile, region, samples = "-") {
 #' @param region  region to extract 
 #' @param samples samples to extract
 #' @return A list of genotypes and other fixed fields in VCF
+#' @export
 tablePL <- function(vcffile, region, samples = "-") {
-    .Call(`_vcfppR_tablePL`, vcffile, region, samples)
+    .Call('_vcfppR_tablePL', PACKAGE = 'vcfppR', vcffile, region, samples)
 }
 

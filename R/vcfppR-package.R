@@ -1,5 +1,6 @@
 ## usethis namespace: start
-#' @importFrom Rcpp sourceCpp
+#' Imports
 #' @useDynLib vcfppR, .registration = TRUE
+#' @importFrom Rcpp sourceCpp
 ## usethis namespace: end
-NULL
+"_PACKAGE"

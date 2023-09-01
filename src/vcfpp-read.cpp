@@ -10,6 +10,7 @@ using namespace std;
 //' @param region  region to extract 
 //' @param samples samples to extract
 //' @return A list of genotypes and other fixed fields in VCF
+//' @export
 // [[Rcpp::export]]
 List tableGT(std::string vcffile, std::string region, std::string samples="-")
 {
@@ -46,6 +47,7 @@ List tableGT(std::string vcffile, std::string region, std::string samples="-")
 //' @param region  region to extract 
 //' @param samples samples to extract
 //' @return A list of genotypes and other fixed fields in VCF
+//' @export
 // [[Rcpp::export]]
 List tableGL(std::string vcffile, std::string region, std::string samples = "-")
 {
@@ -83,6 +85,7 @@ List tableGL(std::string vcffile, std::string region, std::string samples = "-")
 //' @param region  region to extract 
 //' @param samples samples to extract
 //' @return A list of genotypes and other fixed fields in VCF
+//' @export
 // [[Rcpp::export]]
 List tablePL(std::string vcffile, std::string region, std::string samples = "-")
 {
