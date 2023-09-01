@@ -42,7 +42,7 @@ List tableGL(std::string vcffile, std::string region, std::string samples = "-")
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
-    vector<vector<float>> GL(nsnps); // R only have double
+    vector<vector<float>> GL(nsnps); 
     vector<float> gl;
     for(int i = 0; i < nsnps; i++)
     {
@@ -63,3 +63,33 @@ List tableGL(std::string vcffile, std::string region, std::string samples = "-")
                         Named("info") = info, Named("gl") = GL);
 }
 
+
+// [[Rcpp::export]]
+List tablePL(std::string vcffile, std::string region, std::string samples = "-")
+{
+    vcfpp::BcfReader vcf(vcffile, samples);
+    vcfpp::BcfRecord var(vcf.header);
+    int nsnps = vcf.getRegionIndex(region);
+    CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
+    IntegerVector pos(nsnps);
+    NumericVector qual(nsnps);
+    vector<vector<int>> PL(nsnps); 
+    vector<int> pl;
+    for(int i = 0; i < nsnps; i++)
+    {
+        vcf.getNextVariant(var);
+        var.getFORMAT("PL",pl);
+        PL[i] = pl;
+        pos(i) = var.POS();
+        qual(i) = var.QUAL();
+        chr(i) = var.CHROM();
+        id(i) = var.ID();
+        ref(i) = var.REF();
+        alt(i) = var.ALT();
+        filter(i) = var.FILTER();
+        info(i) = var.INFO();
+    }
+    return List::create(Named("chr") = chr, Named("pos") = pos, Named("id") = id, Named("ref") = ref,
+                        Named("alt") = alt, Named("qual") = qual, Named("filter") = filter,
+                        Named("info") = info, Named("pl") = PL);
+}

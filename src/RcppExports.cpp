@@ -36,10 +36,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// tablePL
+List tablePL(std::string vcffile, std::string region, std::string samples);
+RcppExport SEXP _vcfppR_tablePL(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
+    Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
+    Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    rcpp_result_gen = Rcpp::wrap(tablePL(vcffile, region, samples));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_vcfppR_tableGT", (DL_FUNC) &_vcfppR_tableGT, 3},
     {"_vcfppR_tableGL", (DL_FUNC) &_vcfppR_tableGL, 3},
+    {"_vcfppR_tablePL", (DL_FUNC) &_vcfppR_tablePL, 3},
     {NULL, NULL, 0}
 };
 

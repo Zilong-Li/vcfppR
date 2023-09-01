@@ -2,10 +2,14 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 tableGT <- function(vcffile, region, samples = "-") {
-    .Call('_vcfppR_tableGT', PACKAGE = 'vcfppR', vcffile, region, samples)
+    .Call(`_vcfppR_tableGT`, vcffile, region, samples)
 }
 
 tableGL <- function(vcffile, region, samples = "-") {
-    .Call('_vcfppR_tableGL', PACKAGE = 'vcfppR', vcffile, region, samples)
+    .Call(`_vcfppR_tableGL`, vcffile, region, samples)
+}
+
+tablePL <- function(vcffile, region, samples = "-") {
+    .Call(`_vcfppR_tablePL`, vcffile, region, samples)
 }
 
