@@ -14,3 +14,5 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     Rcpp
+LinkingTo:
+    Rcpp
