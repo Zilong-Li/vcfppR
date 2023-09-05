@@ -11,35 +11,33 @@ using namespace std;
 //' @return A list of genotypes for each sample along with variant information in VCF
 //' @export
 // [[Rcpp::export]]
-List tableGT(std::string vcffile, std::string region,
-             std::string samples = "-") {
-  vcfpp::BcfReader vcf(vcffile, samples);
-  vcfpp::BcfRecord var(vcf.header);
-  int nsnps = vcf.getRegionIndex(region);
-  CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps),
-      info(nsnps);
-  IntegerVector pos(nsnps);
-  NumericVector qual(nsnps);
-  vector<vector<int>> GT(nsnps);
-  vector<int> gt;
-  for (int i = 0; i < nsnps; i++) {
-    vcf.getNextVariant(var);
-    pos(i) = var.POS();
-    qual(i) = var.QUAL();
-    chr(i) = var.CHROM();
-    id(i) = var.ID();
-    ref(i) = var.REF();
-    alt(i) = var.ALT();
-    filter(i) = var.FILTER();
-    info(i) = var.INFO();
-    var.getGenotypes(gt);
-    GT[i] = gt;
-  }
-  return List::create(Named("samples") = vcf.header.getSamples(),
-                      Named("chr") = chr, Named("pos") = pos, Named("id") = id,
-                      Named("ref") = ref, Named("alt") = alt,
-                      Named("qual") = qual, Named("filter") = filter,
-                      Named("info") = info, Named("gt") = GT);
+List tableGT(std::string vcffile, std::string region, std::string samples = "-") {
+    vcfpp::BcfReader vcf(vcffile, region,samples);
+    vcfpp::BcfRecord var(vcf.header);
+    int nsnps = vcf.getRegionIndex(region);
+    CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
+    IntegerVector pos(nsnps);
+    NumericVector qual(nsnps);
+    vector<vector<int>> GT(nsnps);
+    vector<int> gt;
+    for (int i = 0; i < nsnps; i++) {
+        vcf.getNextVariant(var);
+        pos(i) = var.POS();
+        qual(i) = var.QUAL();
+        chr(i) = var.CHROM();
+        id(i) = var.ID();
+        ref(i) = var.REF();
+        alt(i) = var.ALT();
+        filter(i) = var.FILTER();
+        info(i) = var.INFO();
+        var.getGenotypes(gt);
+        GT[i] = gt;
+    }
+    return List::create(Named("samples") = vcf.header.getSamples(),
+                        Named("chr") = chr, Named("pos") = pos, Named("id") = id,
+                        Named("ref") = ref, Named("alt") = alt,
+                        Named("qual") = qual, Named("filter") = filter,
+                        Named("info") = info, Named("gt") = GT);
 }
 
 //' parse GP FORMAT of the VCF file into tables in R
@@ -51,7 +49,7 @@ List tableGT(std::string vcffile, std::string region,
 // [[Rcpp::export]]
 List tableGP(std::string vcffile, std::string region,
              std::string samples = "-") {
-  vcfpp::BcfReader vcf(vcffile, samples);
+    vcfpp::BcfReader vcf(vcffile, region,samples);
   vcfpp::BcfRecord var(vcf.header);
   int nsnps = vcf.getRegionIndex(region);
   CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps),
@@ -89,7 +87,7 @@ List tableGP(std::string vcffile, std::string region,
 // [[Rcpp::export]]
 List tableDS(std::string vcffile, std::string region,
              std::string samples = "-") {
-  vcfpp::BcfReader vcf(vcffile, samples);
+    vcfpp::BcfReader vcf(vcffile, region,samples);
   vcfpp::BcfRecord var(vcf.header);
   int nsnps = vcf.getRegionIndex(region);
   CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps),
@@ -127,7 +125,7 @@ List tableDS(std::string vcffile, std::string region,
 // [[Rcpp::export]]
 List tableGL(std::string vcffile, std::string region,
              std::string samples = "-") {
-  vcfpp::BcfReader vcf(vcffile, samples);
+    vcfpp::BcfReader vcf(vcffile, region,samples);
   vcfpp::BcfRecord var(vcf.header);
   int nsnps = vcf.getRegionIndex(region);
   CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps),
@@ -165,7 +163,7 @@ List tableGL(std::string vcffile, std::string region,
 // [[Rcpp::export]]
 List tablePL(std::string vcffile, std::string region,
              std::string samples = "-") {
-  vcfpp::BcfReader vcf(vcffile, samples);
+    vcfpp::BcfReader vcf(vcffile, region,samples);
   vcfpp::BcfRecord var(vcf.header);
   int nsnps = vcf.getRegionIndex(region);
   CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps),
@@ -203,7 +201,7 @@ List tablePL(std::string vcffile, std::string region,
 // [[Rcpp::export]]
 List tableGQ(std::string vcffile, std::string region,
              std::string samples = "-") {
-  vcfpp::BcfReader vcf(vcffile, samples);
+    vcfpp::BcfReader vcf(vcffile, region,samples);
   vcfpp::BcfRecord var(vcf.header);
   int nsnps = vcf.getRegionIndex(region);
   CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps),
@@ -242,7 +240,7 @@ List tableGQ(std::string vcffile, std::string region,
 // [[Rcpp::export]]
 List tableHQ(std::string vcffile, std::string region,
              std::string samples = "-") {
-  vcfpp::BcfReader vcf(vcffile, samples);
+    vcfpp::BcfReader vcf(vcffile, region,samples);
   vcfpp::BcfRecord var(vcf.header);
   int nsnps = vcf.getRegionIndex(region);
   CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps),
@@ -280,7 +278,7 @@ List tableHQ(std::string vcffile, std::string region,
 // [[Rcpp::export]]
 List tableDP(std::string vcffile, std::string region,
              std::string samples = "-") {
-  vcfpp::BcfReader vcf(vcffile, samples);
+    vcfpp::BcfReader vcf(vcffile, region,samples);
   vcfpp::BcfRecord var(vcf.header);
   int nsnps = vcf.getRegionIndex(region);
   CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps),
@@ -318,7 +316,7 @@ List tableDP(std::string vcffile, std::string region,
 // [[Rcpp::export]]
 List tableMQ(std::string vcffile, std::string region,
              std::string samples = "-") {
-  vcfpp::BcfReader vcf(vcffile, samples);
+    vcfpp::BcfReader vcf(vcffile, region,samples);
   vcfpp::BcfRecord var(vcf.header);
   int nsnps = vcf.getRegionIndex(region);
   CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps),
@@ -356,7 +354,7 @@ List tableMQ(std::string vcffile, std::string region,
 // [[Rcpp::export]]
 List tablePQ(std::string vcffile, std::string region,
              std::string samples = "-") {
-  vcfpp::BcfReader vcf(vcffile, samples);
+    vcfpp::BcfReader vcf(vcffile, region,samples);
   vcfpp::BcfRecord var(vcf.header);
   int nsnps = vcf.getRegionIndex(region);
   CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps),
