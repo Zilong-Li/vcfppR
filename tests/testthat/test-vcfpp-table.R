@@ -7,4 +7,3 @@ vcffile <- system.file("extdata", "test-GL.vcf.gz", package="vcfppR")
 vcffile <- system.file("extdata", "test-PL.vcf.gz", package="vcfppR")
 (pl <- tablePL(vcffile,"chr20"))
 
-

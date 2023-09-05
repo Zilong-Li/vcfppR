@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{tablePL}
 \alias{tablePL}
-\title{parse PL of a VCF file into tables in R}
+\title{parse PL FORMAT of the VCF file into tables in R}
 \usage{
 tablePL(vcffile, region, samples = "-")
 }
@@ -14,8 +14,8 @@ tablePL(vcffile, region, samples = "-")
 \item{samples}{samples to extract}
 }
 \value{
-A list of genotypes and other fixed fields in VCF
+A list of phred-scaled genotype likelihoods for each sample along with variant information in VCF
 }
 \description{
-parse PL of a VCF file into tables in R
+parse PL FORMAT of the VCF file into tables in R
 }

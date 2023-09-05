@@ -8,6 +8,14 @@
 \description{
 This package demonstrates the usage of vcfpp in R
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/Zilong-Li/vcfppR}
+  \item Report bugs at \url{https://github.com/Zilong-Li/vcfppR/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Zilong Li \email{zilong.dk@gmail.com} (\href{https://orcid.org/0000-0001-5859-2078}{ORCID})
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{tableGL}
 \alias{tableGL}
-\title{parse GL of a VCF file into tables in R}
+\title{parse GL FORMAT of the VCF file into tables in R}
 \usage{
 tableGL(vcffile, region, samples = "-")
 }
@@ -14,8 +14,8 @@ tableGL(vcffile, region, samples = "-")
 \item{samples}{samples to extract}
 }
 \value{
-A list of genotypes and other fixed fields in VCF
+A list of log-scaled genotype likelihoods for each sample along with variant information in VCF
 }
 \description{
-parse GL of a VCF file into tables in R
+parse GL FORMAT of the VCF file into tables in R
 }
