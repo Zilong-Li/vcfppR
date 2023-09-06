@@ -10,6 +10,21 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// getDSskipInfoTagFloat
+List getDSskipInfoTagFloat(double cutoff, std::string tag, std::string vcffile, std::string region, std::string samples);
+RcppExport SEXP _vcfppR_getDSskipInfoTagFloat(SEXP cutoffSEXP, SEXP tagSEXP, SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type cutoff(cutoffSEXP);
+    Rcpp::traits::input_parameter< std::string >::type tag(tagSEXP);
+    Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
+    Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
+    Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    rcpp_result_gen = Rcpp::wrap(getDSskipInfoTagFloat(cutoff, tag, vcffile, region, samples));
+    return rcpp_result_gen;
+END_RCPP
+}
 // tableGT
 List tableGT(std::string vcffile, std::string region, std::string samples);
 RcppExport SEXP _vcfppR_tableGT(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP) {
@@ -142,6 +157,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_vcfppR_getDSskipInfoTagFloat", (DL_FUNC) &_vcfppR_getDSskipInfoTagFloat, 5},
     {"_vcfppR_tableGT", (DL_FUNC) &_vcfppR_tableGT, 3},
     {"_vcfppR_tableGP", (DL_FUNC) &_vcfppR_tableGP, 3},
     {"_vcfppR_tableDS", (DL_FUNC) &_vcfppR_tableDS, 3},
