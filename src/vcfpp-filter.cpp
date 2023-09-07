@@ -1,5 +1,5 @@
-#include "vcfpp.h"
 #include <Rcpp.h>
+#include "vcfpp.h"
 
 using namespace Rcpp;
 using namespace std;
@@ -13,8 +13,8 @@ using namespace std;
 //' @return A list of genotype dosages for each sample along with variant information in VCF
 //' @export
 // [[Rcpp::export]]
-List getDSskipInfoTagFloat(double cutoff, std::string tag, std::string vcffile, std::string region = "",
-                            std::string samples = "-") {
+List getDSskipInfoTagFloat(double cutoff, std::string tag, std::string vcffile,
+                           std::string region = "", std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
     vector<float> ds;
@@ -24,7 +24,7 @@ List getDSskipInfoTagFloat(double cutoff, std::string tag, std::string vcffile, 
     float info;
     while (vcf.getNextVariant(var)) {
         var.getINFO(tag, info);
-        if(info < cutoff) continue;
+        if (info < cutoff) continue;
         var.getFORMAT("DS", ds);
         DS.push_back(ds);
         chr.push_back(var.CHROM());
@@ -32,8 +32,7 @@ List getDSskipInfoTagFloat(double cutoff, std::string tag, std::string vcffile, 
         ref.push_back(var.REF());
         alt.push_back(var.ALT());
     }
-    return List::create(Named("samples") = vcf.header.getSamples(),
-                        Named("chr") = chr, Named("pos") = pos,
-                        Named("ref") = ref, Named("alt") = alt,
+    return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
+                        Named("pos") = pos, Named("ref") = ref, Named("alt") = alt,
                         Named("ds") = DS);
 }
