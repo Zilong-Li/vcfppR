@@ -13,6 +13,16 @@ getDSskipInfoTagFloat <- function(cutoff, tag, vcffile, region = "", samples = "
     .Call(`_vcfppR_getDSskipInfoTagFloat`, cutoff, tag, vcffile, region, samples)
 }
 
+#' calculate the number of heterozygous SNPs for each sample
+#' @param vcffile path to the VCF file with index
+#' @param region  region to extract, default "" for all
+#' @param samples samples to extract, default "-" for all
+#' @return A list of heterozygosity couts for each sample along with its id in the vcf header
+#' @export
+heterozygosity <- function(vcffile, region = "", samples = "-") {
+    .Call(`_vcfppR_heterozygosity`, vcffile, region, samples)
+}
+
 #' parse GT FORMAT of the VCF file into tables in R
 #' @param vcffile path to the VCF file with index
 #' @param region  region to extract
