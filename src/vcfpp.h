@@ -2,7 +2,7 @@
  * @file        https://github.com/Zilong-Li/vcfpp/vcfpp.h
  * @author      Zilong Li
  * @email       zilong.dk@gmail.com
- * @version     v0.2.0
+ * @version     v0.2.1
  * @breif       a single C++ file for manipulating VCF
  * Copyright (C) 2022-2023.The use of this code is governed by the LICENSE file.
  ******************************************************************************/
@@ -358,6 +358,9 @@ class BcfRecord
     int nvalues = 0; // the number of values for a tag in FORMAT
 
   public:
+    std::vector<bool> isGenoMissing; // if a sample has missing genotype or not
+
+  public:
     /** @brief initilize a BcfRecord object using a given BcfHeader object. */
     BcfRecord(const BcfHeader & h) : header(h)
     {
@@ -415,6 +418,7 @@ type as noted in the other overloading function.
             nploidy = ret / nsamples;
         }
         // work with nploidy == 1, haploid?
+        isGenoMissing.resize(nsamples, false);
         int i, j, nphased = 0;
         noneMissing = true;
         fmt = bcf_get_fmt(header.hdr, line, "GT");
@@ -426,6 +430,7 @@ type as noted in the other overloading function.
             if(typeOfGT[i] == GT_UNKN)
             {
                 noneMissing = false; // set missing as het, user should check if isNoneMissing();
+                isGenoMissing[i] = true;
                 v[i * nploidy + 0] = 1;
                 for(j = 1; j < nploidy_cur; j++) v[i * nploidy + j] = 0;
                 continue;
@@ -462,6 +467,7 @@ type as noted in the other overloading function.
         ret = bcf_get_genotypes(header.hdr, line, &gts, &ndst);
         if(ret <= 0) return false; // gt not present
         v.resize(ret);
+        isGenoMissing.resize(nsamples, false);
         nploidy = ret / nsamples;
         int i, j, nphased = 0;
         noneMissing = true;
@@ -477,6 +483,7 @@ type as noted in the other overloading function.
                 if(bcf_gt_is_missing(ptr[j]))
                 {
                     noneMissing = false;
+                    isGenoMissing[i] = true;
                     v[i * nploidy + j] = -9;
                     continue;
                 }

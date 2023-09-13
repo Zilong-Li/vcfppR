@@ -168,6 +168,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// summaryVariants
+List summaryVariants(std::string vcffile, std::string region, std::string samples);
+RcppExport SEXP _vcfppR_summaryVariants(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
+    Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
+    Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    rcpp_result_gen = Rcpp::wrap(summaryVariants(vcffile, region, samples));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_vcfppR_getDSskipInfoTagFloat", (DL_FUNC) &_vcfppR_getDSskipInfoTagFloat, 5},
@@ -182,6 +195,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfppR_tableDP", (DL_FUNC) &_vcfppR_tableDP, 3},
     {"_vcfppR_tableMQ", (DL_FUNC) &_vcfppR_tableMQ, 3},
     {"_vcfppR_tablePQ", (DL_FUNC) &_vcfppR_tablePQ, 3},
+    {"_vcfppR_summaryVariants", (DL_FUNC) &_vcfppR_summaryVariants, 3},
     {NULL, NULL, 0}
 };
 

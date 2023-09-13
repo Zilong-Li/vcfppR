@@ -2,6 +2,7 @@
 
 export(getDSskipInfoTagFloat)
 export(heterozygosity)
+export(summaryVariants)
 export(tableDP)
 export(tableDS)
 export(tableGL)

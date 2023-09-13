@@ -123,3 +123,13 @@ tablePQ <- function(vcffile, region, samples = "-") {
     .Call(`_vcfppR_tablePQ`, vcffile, region, samples)
 }
 
+#' report the stats of variants
+#' @param vcffile path to the VCF file with index
+#' @param region  region to extract, default "" for all
+#' @param samples samples to extract, default "-" for all
+#' @return the counts of each type of variant
+#' @export
+summaryVariants <- function(vcffile, region = "", samples = "-") {
+    .Call(`_vcfppR_summaryVariants`, vcffile, region, samples)
+}
+
