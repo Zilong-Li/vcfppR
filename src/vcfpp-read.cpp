@@ -14,7 +14,7 @@ using namespace std;
 List tableGT(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getRegionIndex(region);
+    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -49,7 +49,7 @@ List tableGT(std::string vcffile, std::string region, std::string samples = "-")
 List tableGP(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getRegionIndex(region);
+    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -84,7 +84,7 @@ List tableGP(std::string vcffile, std::string region, std::string samples = "-")
 List tableDS(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getRegionIndex(region);
+    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -119,7 +119,7 @@ List tableDS(std::string vcffile, std::string region, std::string samples = "-")
 List tableGL(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getRegionIndex(region);
+    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -154,7 +154,7 @@ List tableGL(std::string vcffile, std::string region, std::string samples = "-")
 List tablePL(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getRegionIndex(region);
+    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -189,7 +189,7 @@ List tablePL(std::string vcffile, std::string region, std::string samples = "-")
 List tableGQ(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getRegionIndex(region);
+    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -224,7 +224,7 @@ List tableGQ(std::string vcffile, std::string region, std::string samples = "-")
 List tableHQ(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getRegionIndex(region);
+    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -259,7 +259,7 @@ List tableHQ(std::string vcffile, std::string region, std::string samples = "-")
 List tableDP(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getRegionIndex(region);
+    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -294,7 +294,7 @@ List tableDP(std::string vcffile, std::string region, std::string samples = "-")
 List tableMQ(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getRegionIndex(region);
+    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -329,7 +329,7 @@ List tableMQ(std::string vcffile, std::string region, std::string samples = "-")
 List tablePQ(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getRegionIndex(region);
+    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);

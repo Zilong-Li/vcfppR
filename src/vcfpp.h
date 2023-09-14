@@ -358,7 +358,7 @@ class BcfRecord
     int nvalues = 0; // the number of values for a tag in FORMAT
 
   public:
-    std::vector<bool> isGenoMissing; // if a sample has missing genotype or not
+    std::vector<char> isGenoMissing; // if a sample has missing genotype or not
 
   public:
     /** @brief initilize a BcfRecord object using a given BcfHeader object. */
@@ -418,7 +418,7 @@ type as noted in the other overloading function.
             nploidy = ret / nsamples;
         }
         // work with nploidy == 1, haploid?
-        isGenoMissing.resize(nsamples, false);
+        isGenoMissing.resize(nsamples, 0);
         int i, j, nphased = 0;
         noneMissing = true;
         fmt = bcf_get_fmt(header.hdr, line, "GT");
@@ -430,7 +430,7 @@ type as noted in the other overloading function.
             if(typeOfGT[i] == GT_UNKN)
             {
                 noneMissing = false; // set missing as het, user should check if isNoneMissing();
-                isGenoMissing[i] = true;
+                isGenoMissing[i] = 1;
                 v[i * nploidy + 0] = 1;
                 for(j = 1; j < nploidy_cur; j++) v[i * nploidy + j] = 0;
                 continue;
@@ -467,7 +467,7 @@ type as noted in the other overloading function.
         ret = bcf_get_genotypes(header.hdr, line, &gts, &ndst);
         if(ret <= 0) return false; // gt not present
         v.resize(ret);
-        isGenoMissing.resize(nsamples, false);
+        isGenoMissing.resize(nsamples, 0);
         nploidy = ret / nsamples;
         int i, j, nphased = 0;
         noneMissing = true;
@@ -483,7 +483,7 @@ type as noted in the other overloading function.
                 if(bcf_gt_is_missing(ptr[j]))
                 {
                     noneMissing = false;
-                    isGenoMissing[i] = true;
+                    isGenoMissing[i] = 1;
                     v[i * nploidy + j] = -9;
                     continue;
                 }
@@ -1257,27 +1257,13 @@ class BcfReader
         return hts_set_threads(fp, n);
     }
 
-    /** @brief get the number of records of given region from index file */
-    uint64_t getRegionIndex(const std::string & region)
+    /** @brief get the number of records of given region */
+    uint64_t getVariantsCount(BcfRecord & r, const std::string & region)
     {
-        setRegion(region); // only one chromosome
-        int tid = 0, ret = 0, nseq = 0;
-        uint64_t records, v;
-        if(tidx)
-        {
-            tbx_seqnames(tidx, &nseq);
-        }
-        else
-        {
-            nseq = hts_idx_nseq(hidx);
-        }
-        for(tid = 0; tid < nseq; tid++)
-        {
-            ret = hts_idx_get_stat(tidx ? tidx->idx : hidx, tid, &records, &v);
-            // printf("%" PRIu64 "\n", records);
-            if(ret >= 0 && records > 0) return records;
-        }
-        return 0;
+        uint64_t c{0};
+        while(getNextVariant(r)) c++;
+        setRegion(region);  // reset the region
+        return c;
     }
 
     /**
