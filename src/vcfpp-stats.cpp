@@ -17,7 +17,12 @@ List summaryVariants(std::string vcffile, std::string region = "", std::string s
     vector<int> snp_count(vcf.nsamples, 0), sv_count(vcf.nsamples, 0), indel_count(vcf.nsamples, 0),
         multi_count(vcf.nsamples, 0);
     vector<int> gt;
+    int snp{0}, indel{0}, sv{0}, multiallelic{0};
     while (vcf.getNextVariant(var)) {
+        if (var.isSNP()) snp += 1;
+        if (var.isIndel()) indel += 1;
+        if (var.isSV()) sv += 1;
+        if (var.isMultiAllelic()) multiallelic += 1;
         var.getGenotypes(gt);
         for (int i = 0; i < vcf.nsamples; i++) {
             if (!var.isGenoMissing[i]) {
@@ -28,6 +33,11 @@ List summaryVariants(std::string vcffile, std::string region = "", std::string s
             }
         }
     }
-    return List::create(Named("SNP") = snp_count, Named("INDEL") = indel_count,
-                        Named("SV") = sv_count, Named("MultiAllelic") = multi_count);
+
+    IntegerVector stats =
+        IntegerVector::create(Named("SNP", snp), Named("INDEL", indel), Named("SV", sv),
+                              Named("MultiAllelic", multiallelic));
+    return List::create(Named("summary") = stats, Named("SNP") = snp_count,
+                        Named("INDEL") = indel_count, Named("SV") = sv_count,
+                        Named("MultiAllelic") = multi_count);
 }
