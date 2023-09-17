@@ -358,7 +358,7 @@ class BcfRecord
     int nvalues = 0; // the number of values for a tag in FORMAT
 
   public:
-    std::vector<char> isGenoMissing; // if a sample has missing genotype or not
+    std::vector<bool> isGenoMissing; // if a sample has missing genotype or not
 
   public:
     /** @brief initilize a BcfRecord object using a given BcfHeader object. */
@@ -418,7 +418,7 @@ type as noted in the other overloading function.
             nploidy = ret / nsamples;
         }
         // work with nploidy == 1, haploid?
-        isGenoMissing.resize(nsamples, 0);
+        isGenoMissing.assign(nsamples, 0);
         int i, j, nphased = 0;
         noneMissing = true;
         fmt = bcf_get_fmt(header.hdr, line, "GT");
@@ -467,7 +467,7 @@ type as noted in the other overloading function.
         ret = bcf_get_genotypes(header.hdr, line, &gts, &ndst);
         if(ret <= 0) return false; // gt not present
         v.resize(ret);
-        isGenoMissing.resize(nsamples, 0);
+        isGenoMissing.assign(nsamples, 0);
         nploidy = ret / nsamples;
         int i, j, nphased = 0;
         noneMissing = true;
