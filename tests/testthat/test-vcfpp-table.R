@@ -16,7 +16,7 @@ vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_25
 
 region <- "chr21:1-6030300"
 region <- "chr21:10000000-11030300"
-region <- "chr21:1-5030300"
+region <- "chr21:1-5130300"
 res <- summaryVariants(vcffile, region)
 
 str(res)

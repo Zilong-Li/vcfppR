@@ -358,7 +358,7 @@ class BcfRecord
     int nvalues = 0; // the number of values for a tag in FORMAT
 
   public:
-    std::vector<bool> isGenoMissing; // if a sample has missing genotype or not
+    std::vector<char> isGenoMissing; // if a sample has missing genotype or not
 
   public:
     /** @brief initilize a BcfRecord object using a given BcfHeader object. */
@@ -881,28 +881,22 @@ type as noted in the other overloading function.
         return false;
     }
 
-    /** @brief return boolean value indicates if current variant is INDEL and DELETION or not */
-    inline bool isDeletion() const
+    /** @brief return boolean value indicates if current variant is multiallelic sites */
+    inline bool isMultiAllelics() const
     {
-        if(ALT().length() > 1) return false;
-        if(!isIndel()) return false;
-        if(ALT().length() == 0)
-            return true;
-        else if(ALT()[0] == '.')
-            return true;
-        if(REF().length() > ALT().length()) return true;
-        return false;
+        if(line->n_allele <= 2) return false;
+        return true;
     }
 
-    /** @brief return boolean value indicates if current variant is multi allelic or not */
-    inline bool isMultiAllelic() const
+    /** @brief return boolean value indicates if current variant is multiallelic SNP sites */
+    inline bool isMultiAllelicSNP() const
     {
-        // REF has multiple allels
+        // skip REF with length > 1, i.e. INDEL
         if(REF().length() > 1 || line->n_allele <= 2) return false;
         for(int i = 1; i < line->n_allele; i++)
         {
             std::string snp(line->d.allele[i]);
-            if(!(snp == "A" || snp == "C" || snp == "G" || snp == "T"))
+            if(snp.length() != 1)
             {
                 return false;
             }
@@ -910,7 +904,7 @@ type as noted in the other overloading function.
         return true;
     }
 
-    /** @brief return boolean value indicates if current variant is SNP (biallelic) or not */
+    /** @brief return boolean value indicates if current variant is biallelic SNP. Note ALT=* are skipped */
     inline bool isSNP() const
     {
         // REF and ALT have multiple allels
@@ -920,6 +914,64 @@ type as noted in the other overloading function.
         {
             return false;
         }
+        return true;
+    }
+
+    /** @brief return boolean value indicates if current variant has SNP type defined in vcf.h */
+    inline bool hasSNP() const
+    {
+        int type = bcf_has_variant_types(line, VCF_SNP, bcf_match_overlap);
+        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if (type == 0) return false;
+        return true;
+    }
+
+    /// return boolean value indicates if current variant has SNP type defined in vcf.h (htslib>=1.16)
+    inline bool hasINDEL() const
+    {
+        int type = bcf_has_variant_types(line, VCF_INDEL, bcf_match_overlap);
+        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if (type == 0) return false;
+        return true;
+    }
+
+    inline bool hasINS() const
+    {
+        int type = bcf_has_variant_types(line, VCF_INS, bcf_match_overlap);
+        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if (type == 0) return false;
+        return true;
+    }
+
+    inline bool hasDEL() const
+    {
+        int type = bcf_has_variant_types(line, VCF_DEL, bcf_match_overlap);
+        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if (type == 0) return false;
+        return true;
+    }
+
+    inline bool hasMNP() const
+    {
+        int type = bcf_has_variant_types(line, VCF_MNP, bcf_match_overlap);
+        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if (type == 0) return false;
+        return true;
+    }
+
+    inline bool hasBND() const
+    {
+        int type = bcf_has_variant_types(line, VCF_BND, bcf_match_overlap);
+        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if (type == 0) return false;
+        return true;
+    }
+
+    inline bool hasOVERLAP() const
+    {
+        int type = bcf_has_variant_types(line, VCF_OVERLAP, bcf_match_overlap);
+        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if (type == 0) return false;
         return true;
     }
 
@@ -977,10 +1029,10 @@ type as noted in the other overloading function.
         return std::string(line->d.allele[0]);
     }
 
-    /** @brief swap REF and ALT for biallelic */
+    /** @brief swap REF and ALT for biallelic SNP */
     inline void swap_REF_ALT()
     {
-        if(!isMultiAllelic()) std::swap(line->d.allele[0], line->d.allele[1]);
+        if(!isMultiAllelicSNP()) std::swap(line->d.allele[0], line->d.allele[1]);
     }
 
     /** @brief return raw ALT alleles as string */

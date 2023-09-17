@@ -14,30 +14,41 @@ using namespace std;
 List summaryVariants(std::string vcffile, std::string region = "", std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    vector<int> snp_count(vcf.nsamples, 0), sv_count(vcf.nsamples, 0), indel_count(vcf.nsamples, 0),
-        multi_count(vcf.nsamples, 0);
+    int nsamples = vcf.nsamples;
+    vector<int> snp_count(nsamples, 0), sv_count(nsamples, 0), indel_count(nsamples, 0),
+        multi_count(vcf.nsamples, 0), ins_count(nsamples, 0), del_count(nsamples, 0),
+        mnp_count(nsamples, 0);
     vector<int> gt;
-    int snp{0}, indel{0}, sv{0}, multiallelic{0};
+    int snp{0}, indel{0}, ins{0}, del{0}, sv{0}, multiallelic{0}, mnp{0}, all{0};
     while (vcf.getNextVariant(var)) {
-        if (var.isSNP()) snp += 1;
-        if (var.isIndel()) indel += 1;
+        all++;
+        if (var.hasSNP()) snp += 1;
+        if (var.hasMNP()) mnp += 1;
+        if (var.hasINDEL()) indel += 1;
+        if (var.hasINS()) ins += 1;
+        if (var.hasDEL()) del += 1;
         if (var.isSV()) sv += 1;
-        if (var.isMultiAllelic()) multiallelic += 1;
+        if (var.isMultiAllelics()) multiallelic += 1;
         var.getGenotypes(gt);
         for (int i = 0; i < vcf.nsamples; i++) {
             if (!var.isGenoMissing[i]) {
-                if (var.isSNP()) snp_count[i] += 1;
-                if (var.isIndel()) indel_count[i] += 1;
+                if (var.hasSNP()) snp_count[i] += 1;
+                if (var.hasMNP()) mnp_count[i] += 1;
+                if (var.hasINDEL()) indel_count[i] += 1;
+                if (var.hasINS()) ins_count[i] += 1;
+                if (var.hasDEL()) del_count[i] += 1;
                 if (var.isSV()) sv_count[i] += 1;
-                if (var.isMultiAllelic()) multi_count[i] += 1;
+                if (var.isMultiAllelics()) multi_count[i] += 1;
             }
         }
     }
 
     IntegerVector stats =
-        IntegerVector::create(Named("SNP", snp), Named("INDEL", indel), Named("SV", sv),
-                              Named("MultiAllelic", multiallelic));
+        IntegerVector::create(Named("ALL", all), Named("SNP", snp), Named("MNP", mnp),
+                              Named("INDEL", indel), Named("INS", ins), Named("DEL", del),
+                              Named("SV", sv), Named("MultiAllelics", multiallelic));
     return List::create(Named("summary") = stats, Named("SNP") = snp_count,
-                        Named("INDEL") = indel_count, Named("SV") = sv_count,
-                        Named("MultiAllelic") = multi_count);
+                        Named("MNP") = mnp_count, Named("INDEL") = indel_count,
+                        Named("INS") = ins_count, Named("DEL") = del_count, Named("SV") = sv_count,
+                        Named("MultiAllelics") = multi_count);
 }
