@@ -967,6 +967,14 @@ type as noted in the other overloading function.
         return true;
     }
 
+    inline bool hasOTHER() const
+    {
+        int type = bcf_has_variant_types(line, VCF_OTHER, bcf_match_overlap);
+        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if (type == 0) return false;
+        return true;
+    }
+
     inline bool hasOVERLAP() const
     {
         int type = bcf_has_variant_types(line, VCF_OVERLAP, bcf_match_overlap);
