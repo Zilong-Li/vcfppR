@@ -133,3 +133,13 @@ summaryVariants <- function(vcffile, region = "", samples = "-") {
     .Call(`_vcfppR_summaryVariants`, vcffile, region, samples)
 }
 
+#' report the stats of structure variants
+#' @param vcffile path to the VCF file with index
+#' @param region  region to extract, default "" for all
+#' @param samples samples to extract, default "-" for all
+#' @return the counts of each type of structure variant
+#' @export
+summarySVs <- function(vcffile, region = "", samples = "-") {
+    .Call(`_vcfppR_summarySVs`, vcffile, region, samples)
+}
+
