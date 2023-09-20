@@ -24,6 +24,9 @@ List summaryVariants(std::string vcffile, std::string region = "", std::string s
     bool hassnp, hasmnp, hasindel, hasins, hasdel, hasother, ismulti, issv, issnpmulti;
     while (vcf.getNextVariant(var)) {
         all++;
+        if ((ismulti = var.isMultiAllelics())) multiallelic += 1;
+        if ((issnpmulti = var.isMultiAllelicSNP())) multisnp += 1;
+        if (ismulti) continue;
         if ((hassnp = var.hasSNP())) snp += 1;
         if ((hasmnp = var.hasMNP())) mnp += 1;
         if ((hasindel = var.hasINDEL())) indel += 1;
@@ -31,8 +34,6 @@ List summaryVariants(std::string vcffile, std::string region = "", std::string s
         if ((hasdel = var.hasDEL())) del += 1;
         if ((hasother = var.hasOTHER())) other += 1;
         if ((issv = var.isSV())) sv += 1;
-        if ((ismulti = var.isMultiAllelics())) multiallelic += 1;
-        if ((issnpmulti = var.isMultiAllelicSNP())) multisnp += 1;
         var.getGenotypes(gt);
         for (int i = 0; i < vcf.nsamples; i++) {
             if (!var.isGenoMissing[i]) {
@@ -43,8 +44,6 @@ List summaryVariants(std::string vcffile, std::string region = "", std::string s
                 if (hasdel) del_count[i] += 1;
                 if (hasother) other_count[i] += 1;
                 if (issv) sv_count[i] += 1;
-                if (ismulti) multi_count[i] += 1;
-                if (issnpmulti) multisnp_count[i] += 1;
             }
         }
     }
@@ -58,6 +57,5 @@ List summaryVariants(std::string vcffile, std::string region = "", std::string s
                         Named("SNP") = snp_count, Named("MNP") = mnp_count,
                         Named("INDEL") = indel_count, Named("INS") = ins_count,
                         Named("DEL") = del_count, Named("SV") = sv_count,
-                        Named("MultiAllelics") = multi_count,
-                        Named("MultiAllelicSNP") = multisnp_count, Named("Other") = other_count);
+                        Named("Other") = other_count);
 }
