@@ -1,11 +1,13 @@
 library(vcfppR)
 
 vcffile <- system.file("extdata", "test-GL.vcf.gz", package="vcfppR")
-(gt <- tableGT(vcffile,"chr20"))
-(gl <- tableGL(vcffile,"chr20"))
+
+(res <- vcftable(vcffile,"chr20"))
+str(res)
+
 
 vcffile <- system.file("extdata", "test-PL.vcf.gz", package="vcfppR")
-(pl <- tablePL(vcffile,"chr20"))
+(res <- vcftable(vcffile,"chr20", format = "PL"))
 
 (hets <- heterozygosity(vcffile))
 
@@ -26,5 +28,6 @@ svfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_250
 res <- summarySVs(svfile)
 str(res)
 res$summary
+
 summary(res$CTX)
 
