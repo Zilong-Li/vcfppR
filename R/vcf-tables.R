@@ -15,6 +15,8 @@
 #'
 #' @param samples samples to subset like bcftools
 #'
+#' @param vartype restrict to specific type of variants, "snps","indels", "multisnps","multiallelics"
+#'
 #' @param format the FORMAT tag to extract, valid values are
 #'               "GT","GP", "DP","DS","GL","PL","GQ","HQ","MQ","PQ"
 #'
@@ -70,20 +72,31 @@
 #' (res <- vcftable(vcffile,"chr20"))
 #' vcffile <- system.file("extdata", "test-PL.vcf.gz", package="vcfppR")
 #' (res <- vcftable(vcffile,"chr20", format = "PL"))
+#' vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
+#' res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps")
 #' str(res)
 #' @export
-vcftable <- function(vcffile, region = "", samples = "-", format = "GT", ploidy = 2) {
+vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", format = "GT", ploidy = 2) {
+  snps <- FALSE
+  indels <- FALSE
+  multiallelics <- FALSE
+  multisnps <- FALSE
+  if(vartype == "snps") snps <- TRUE
+  else if(vartype == "indels") indels <- TRUE
+  else if(vartype == "multisnps") multisnps <- TRUE
+  else if(vartype == "multiallelics") multiallelics <- TRUE
+  else if(vartype != "all") stop("Invaild variant type!")
   res <- switch(format,
-                GT = tableGT(vcffile, region, samples),
-                GP = tableGP(vcffile, region, samples),
-                GQ = tableGQ(vcffile, region, samples),
-                DS = tableDS(vcffile, region, samples),
-                DP = tableDP(vcffile, region, samples),
-                PL = tablePL(vcffile, region, samples),
-                GL = tableGL(vcffile, region, samples),
-                HQ = tableHQ(vcffile, region, samples),
-                MQ = tableMQ(vcffile, region, samples),
-                PQ = tablePQ(vcffile, region, samples),
+                GT = tableGT(vcffile, region, samples, snps, indels, multiallelics, multisnps),
+                GP = tableGP(vcffile, region, samples, snps, indels, multiallelics, multisnps),
+                GQ = tableGQ(vcffile, region, samples, snps, indels, multiallelics, multisnps),
+                DS = tableDS(vcffile, region, samples, snps, indels, multiallelics, multisnps),
+                DP = tableDP(vcffile, region, samples, snps, indels, multiallelics, multisnps),
+                PL = tablePL(vcffile, region, samples, snps, indels, multiallelics, multisnps),
+                GL = tableGL(vcffile, region, samples, snps, indels, multiallelics, multisnps),
+                HQ = tableHQ(vcffile, region, samples, snps, indels, multiallelics, multisnps),
+                MQ = tableMQ(vcffile, region, samples, snps, indels, multiallelics, multisnps),
+                PQ = tablePQ(vcffile, region, samples, snps, indels, multiallelics, multisnps),
                 stop("Invaild tag in FORAMT column"))
   res[[10]] <- do.call("rbind", res[[10]])
   if(ploidy == 2 && format == "GT") {

@@ -9,6 +9,9 @@ str(res)
 vcffile <- system.file("extdata", "test-PL.vcf.gz", package="vcfppR")
 (res <- vcftable(vcffile,"chr20", format = "PL"))
 
+vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
+res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps")
+
 
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
 res <- popgen.heterozygosity(vcffile, "chr21:1-10000000")

@@ -4,11 +4,29 @@
 using namespace Rcpp;
 using namespace std;
 
-// [[Rcpp::export]]
-List tableGT(std::string vcffile, std::string region, std::string samples = "-") {
+int count_variants_restricted(std::string vcffile, std::string region, std::string samples = "-",
+                              bool snps = false, bool indels = false, bool multiallelics = false,
+                              bool multisnps = false) {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getVariantsCount(var, region);
+    int all{0};
+    while (vcf.getNextVariant(var)) {
+        if (multiallelics && (!var.isMultiAllelics())) continue;
+        if (multisnps && (!var.isMultiAllelicSNP())) continue;
+        if (snps && (!var.isSNP())) continue;
+        if (indels && (!var.isIndel())) continue;
+        all++;
+    }
+    return all;
+}
+
+// [[Rcpp::export]]
+List tableGT(std::string vcffile, std::string region, std::string samples = "-", bool snps = false,
+             bool indels = false, bool multiallelics = false, bool multisnps = false) {
+    int nsnps =
+        count_variants_restricted(vcffile, region, samples, snps, indels, multiallelics, multisnps);
+    vcfpp::BcfReader vcf(vcffile, region, samples);
+    vcfpp::BcfRecord var(vcf.header);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -16,6 +34,10 @@ List tableGT(std::string vcffile, std::string region, std::string samples = "-")
     vector<int> gt;
     for (int i = 0; i < nsnps; i++) {
         vcf.getNextVariant(var);
+        if (multiallelics && (!var.isMultiAllelics())) continue;
+        if (multisnps && (!var.isMultiAllelicSNP())) continue;
+        if (snps && (!var.isSNP())) continue;
+        if (indels && (!var.isIndel())) continue;
         pos(i) = var.POS();
         qual(i) = var.QUAL();
         chr(i) = var.CHROM();
@@ -34,10 +56,12 @@ List tableGT(std::string vcffile, std::string region, std::string samples = "-")
 }
 
 // [[Rcpp::export]]
-List tableGP(std::string vcffile, std::string region, std::string samples = "-") {
+List tableGP(std::string vcffile, std::string region, std::string samples = "-", bool snps = false,
+             bool indels = false, bool multiallelics = false, bool multisnps = false) {
+    int nsnps =
+        count_variants_restricted(vcffile, region, samples, snps, indels, multiallelics, multisnps);
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -63,10 +87,12 @@ List tableGP(std::string vcffile, std::string region, std::string samples = "-")
 }
 
 // [[Rcpp::export]]
-List tableDS(std::string vcffile, std::string region, std::string samples = "-") {
+List tableDS(std::string vcffile, std::string region, std::string samples = "-", bool snps = false,
+             bool indels = false, bool multiallelics = false, bool multisnps = false) {
+    int nsnps =
+        count_variants_restricted(vcffile, region, samples, snps, indels, multiallelics, multisnps);
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -92,10 +118,12 @@ List tableDS(std::string vcffile, std::string region, std::string samples = "-")
 }
 
 // [[Rcpp::export]]
-List tableGL(std::string vcffile, std::string region, std::string samples = "-") {
+List tableGL(std::string vcffile, std::string region, std::string samples = "-", bool snps = false,
+             bool indels = false, bool multiallelics = false, bool multisnps = false) {
+    int nsnps =
+        count_variants_restricted(vcffile, region, samples, snps, indels, multiallelics, multisnps);
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -121,10 +149,12 @@ List tableGL(std::string vcffile, std::string region, std::string samples = "-")
 }
 
 // [[Rcpp::export]]
-List tablePL(std::string vcffile, std::string region, std::string samples = "-") {
+List tablePL(std::string vcffile, std::string region, std::string samples = "-", bool snps = false,
+             bool indels = false, bool multiallelics = false, bool multisnps = false) {
+    int nsnps =
+        count_variants_restricted(vcffile, region, samples, snps, indels, multiallelics, multisnps);
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -150,10 +180,12 @@ List tablePL(std::string vcffile, std::string region, std::string samples = "-")
 }
 
 // [[Rcpp::export]]
-List tableGQ(std::string vcffile, std::string region, std::string samples = "-") {
+List tableGQ(std::string vcffile, std::string region, std::string samples = "-", bool snps = false,
+             bool indels = false, bool multiallelics = false, bool multisnps = false) {
+    int nsnps =
+        count_variants_restricted(vcffile, region, samples, snps, indels, multiallelics, multisnps);
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -179,10 +211,12 @@ List tableGQ(std::string vcffile, std::string region, std::string samples = "-")
 }
 
 // [[Rcpp::export]]
-List tableHQ(std::string vcffile, std::string region, std::string samples = "-") {
+List tableHQ(std::string vcffile, std::string region, std::string samples = "-", bool snps = false,
+             bool indels = false, bool multiallelics = false, bool multisnps = false) {
+    int nsnps =
+        count_variants_restricted(vcffile, region, samples, snps, indels, multiallelics, multisnps);
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -208,10 +242,12 @@ List tableHQ(std::string vcffile, std::string region, std::string samples = "-")
 }
 
 // [[Rcpp::export]]
-List tableDP(std::string vcffile, std::string region, std::string samples = "-") {
+List tableDP(std::string vcffile, std::string region, std::string samples = "-", bool snps = false,
+             bool indels = false, bool multiallelics = false, bool multisnps = false) {
+    int nsnps =
+        count_variants_restricted(vcffile, region, samples, snps, indels, multiallelics, multisnps);
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -237,10 +273,12 @@ List tableDP(std::string vcffile, std::string region, std::string samples = "-")
 }
 
 // [[Rcpp::export]]
-List tableMQ(std::string vcffile, std::string region, std::string samples = "-") {
+List tableMQ(std::string vcffile, std::string region, std::string samples = "-", bool snps = false,
+             bool indels = false, bool multiallelics = false, bool multisnps = false) {
+    int nsnps =
+        count_variants_restricted(vcffile, region, samples, snps, indels, multiallelics, multisnps);
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
@@ -266,10 +304,12 @@ List tableMQ(std::string vcffile, std::string region, std::string samples = "-")
 }
 
 // [[Rcpp::export]]
-List tablePQ(std::string vcffile, std::string region, std::string samples = "-") {
+List tablePQ(std::string vcffile, std::string region, std::string samples = "-", bool snps = false,
+             bool indels = false, bool multiallelics = false, bool multisnps = false) {
+    int nsnps =
+        count_variants_restricted(vcffile, region, samples, snps, indels, multiallelics, multisnps);
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    int nsnps = vcf.getVariantsCount(var, region);
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);

@@ -4,7 +4,14 @@
 \alias{vcftable}
 \title{read VCF/BCF contents into R data structure}
 \usage{
-vcftable(vcffile, region = "", samples = "-", format = "GT", ploidy = 2)
+vcftable(
+  vcffile,
+  region = "",
+  samples = "-",
+  vartype = "all",
+  format = "GT",
+  ploidy = 2
+)
 }
 \arguments{
 \item{vcffile}{path to the VCF/BCF file}
@@ -12,6 +19,8 @@ vcftable(vcffile, region = "", samples = "-", format = "GT", ploidy = 2)
 \item{region}{region to subset like bcftools}
 
 \item{samples}{samples to subset like bcftools}
+
+\item{vartype}{restrict to specific type of variants, "snps","indels", "multisnps","multiallelics"}
 
 \item{format}{the FORMAT tag to extract, valid values are
 "GT","GP", "DP","DS","GL","PL","GQ","HQ","MQ","PQ"}
@@ -76,6 +85,8 @@ vcffile <- system.file("extdata", "test-GL.vcf.gz", package="vcfppR")
 (res <- vcftable(vcffile,"chr20"))
 vcffile <- system.file("extdata", "test-PL.vcf.gz", package="vcfppR")
 (res <- vcftable(vcffile,"chr20", format = "PL"))
+vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
+res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps")
 str(res)
 }
 \author{
