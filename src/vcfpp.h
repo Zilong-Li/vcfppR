@@ -1334,20 +1334,27 @@ class BcfReader
     {
         // 1. check and load index first
         // 2. query iterval region
+        // 3. if region is empty, use "."
         if(isEndWith(fname, "bcf") || isEndWith(fname, "bcf.gz"))
         {
             isBcf = true;
             hidx = bcf_index_load(fname.c_str());
             if(itr) bcf_itr_destroy(itr); // reset current region.
-            itr = bcf_itr_querys(hidx, header.hdr, region.c_str());
+            if (region.empty())
+                itr = bcf_itr_querys(hidx, header.hdr, ".");
+            else
+                itr = bcf_itr_querys(hidx, header.hdr, region.c_str());
         }
         else
         {
             isBcf = false;
             tidx = tbx_index_load(fname.c_str());
             assert(tidx != NULL && "error loading tabix index!");
-            if(itr) tbx_itr_destroy(itr); // reset current region.
-            itr = tbx_itr_querys(tidx, region.c_str());
+            if (itr) tbx_itr_destroy(itr);  // reset current region.
+            if (region.empty())
+                itr = tbx_itr_querys(tidx, ".");
+            else
+                itr = tbx_itr_querys(tidx, region.c_str());
             assert(itr != NULL && "no interval region found.failed!");
         }
     }
