@@ -21,51 +21,53 @@ vcftable(vcffile, region = "", samples = "-", format = "GT", ploidy = 2)
 \value{
 \code{vcftable} a list containing the following components:
 \describe{
-\item{samples}{  character vector; \cr
+\item{samples}{: character vector; \cr
 the samples ids in the VCF file after subsetting
 }
 
-\item{chr}{  character vector; \cr
+\item{chr}{: character vector; \cr
 the CHR column in the VCF file
 }
 
-\item{pos}{  character vector; \cr
+\item{pos}{: character vector; \cr
 the POS column in the VCF file
 }
 
-\item{id}{  character vector; \cr
+\item{id}{: character vector; \cr
 the ID column in the VCF file
 }
 
-\item{ref}{  character vector; \cr
+\item{ref}{: character vector; \cr
 the REF column in the VCF file
 }
 
-\item{alt}{  character vector; \cr
+\item{alt}{: character vector; \cr
 the ALT column in the VCF file
 }
 
-\item{qual}{  character vector; \cr
+\item{qual}{: character vector; \cr
 the QUAL column in the VCF file
 }
 
-\item{filter}{  character vector; \cr
+\item{filter}{: character vector; \cr
 the FILTER column in the VCF file
 }
 
-\item{info}{  character vector; \cr
+\item{info}{: character vector; \cr
 the INFO column in the VCF file
 }
 
-\item{format}{  matrix of either integer of numberic values depending on the tag to extract; \cr
+\item{format}{: matrix of either integer of numberic values depending on the tag to extract; \cr
 a specifiy tag in the FORMAT column to be extracted
 }
 }
 }
 \description{
-If you want to read VCF/BCF into R data types fast and simplely, this is the swiss army knife
+The swiss army knife to read VCF/BCF into R data types rapidly and easily.
 }
 \details{
+vcftable("input.vcf.gz", "chr21:1-60000000", "id01, id02")
+the similar interface in bcftools is =>
 bcftools view -s "id01,id02" input.bcf.gz chr1:100000-20000
 }
 \examples{

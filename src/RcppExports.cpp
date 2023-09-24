@@ -26,15 +26,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // heterozygosity
-List heterozygosity(std::string vcffile, std::string region, std::string samples);
-RcppExport SEXP _vcfppR_heterozygosity(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP) {
+List heterozygosity(std::string vcffile, std::string region, std::string samples, bool filter_pass, double qual);
+RcppExport SEXP _vcfppR_heterozygosity(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP filter_passSEXP, SEXP qualSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
-    rcpp_result_gen = Rcpp::wrap(heterozygosity(vcffile, region, samples));
+    Rcpp::traits::input_parameter< bool >::type filter_pass(filter_passSEXP);
+    Rcpp::traits::input_parameter< double >::type qual(qualSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterozygosity(vcffile, region, samples, filter_pass, qual));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -169,35 +171,39 @@ BEGIN_RCPP
 END_RCPP
 }
 // summaryVariants
-List summaryVariants(std::string vcffile, std::string region, std::string samples);
-RcppExport SEXP _vcfppR_summaryVariants(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP) {
+List summaryVariants(std::string vcffile, std::string region, std::string samples, bool filter_pass, double qual);
+RcppExport SEXP _vcfppR_summaryVariants(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP filter_passSEXP, SEXP qualSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
-    rcpp_result_gen = Rcpp::wrap(summaryVariants(vcffile, region, samples));
+    Rcpp::traits::input_parameter< bool >::type filter_pass(filter_passSEXP);
+    Rcpp::traits::input_parameter< double >::type qual(qualSEXP);
+    rcpp_result_gen = Rcpp::wrap(summaryVariants(vcffile, region, samples, filter_pass, qual));
     return rcpp_result_gen;
 END_RCPP
 }
 // summarySVs
-List summarySVs(std::string vcffile, std::string region, std::string samples);
-RcppExport SEXP _vcfppR_summarySVs(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP) {
+List summarySVs(std::string vcffile, std::string region, std::string samples, bool filter_pass, double qual);
+RcppExport SEXP _vcfppR_summarySVs(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP filter_passSEXP, SEXP qualSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
-    rcpp_result_gen = Rcpp::wrap(summarySVs(vcffile, region, samples));
+    Rcpp::traits::input_parameter< bool >::type filter_pass(filter_passSEXP);
+    Rcpp::traits::input_parameter< double >::type qual(qualSEXP);
+    rcpp_result_gen = Rcpp::wrap(summarySVs(vcffile, region, samples, filter_pass, qual));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_vcfppR_getDSskipInfoTagFloat", (DL_FUNC) &_vcfppR_getDSskipInfoTagFloat, 5},
-    {"_vcfppR_heterozygosity", (DL_FUNC) &_vcfppR_heterozygosity, 3},
+    {"_vcfppR_heterozygosity", (DL_FUNC) &_vcfppR_heterozygosity, 5},
     {"_vcfppR_tableGT", (DL_FUNC) &_vcfppR_tableGT, 3},
     {"_vcfppR_tableGP", (DL_FUNC) &_vcfppR_tableGP, 3},
     {"_vcfppR_tableDS", (DL_FUNC) &_vcfppR_tableDS, 3},
@@ -208,8 +214,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfppR_tableDP", (DL_FUNC) &_vcfppR_tableDP, 3},
     {"_vcfppR_tableMQ", (DL_FUNC) &_vcfppR_tableMQ, 3},
     {"_vcfppR_tablePQ", (DL_FUNC) &_vcfppR_tablePQ, 3},
-    {"_vcfppR_summaryVariants", (DL_FUNC) &_vcfppR_summaryVariants, 3},
-    {"_vcfppR_summarySVs", (DL_FUNC) &_vcfppR_summarySVs, 3},
+    {"_vcfppR_summaryVariants", (DL_FUNC) &_vcfppR_summaryVariants, 5},
+    {"_vcfppR_summarySVs", (DL_FUNC) &_vcfppR_summarySVs, 5},
     {NULL, NULL, 0}
 };
 

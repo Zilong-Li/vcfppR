@@ -4,14 +4,9 @@
 using namespace Rcpp;
 using namespace std;
 
-//' report the stats of variants
-//' @param vcffile path to the VCF file with index
-//' @param region  region to extract, default "" for all
-//' @param samples samples to extract, default "-" for all
-//' @return the counts of each type of variant
-//' @export
 // [[Rcpp::export]]
-List summaryVariants(std::string vcffile, std::string region = "", std::string samples = "-") {
+List summaryVariants(std::string vcffile, std::string region = "", std::string samples = "-",
+                     bool filter_pass = false, double qual = 0) {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
     int nsamples = vcf.nsamples;
@@ -24,6 +19,8 @@ List summaryVariants(std::string vcffile, std::string region = "", std::string s
     vector<int> gt;
     while (vcf.getNextVariant(var)) {
         all++;
+        if (filter_pass && (var.FILTER() != "PASS")) continue;
+        if ((qual > 0) && (var.QUAL() < qual)) continue;
         if ((ismulti = var.isMultiAllelics())) multiallelic += 1;
         if ((issnpmulti = var.isMultiAllelicSNP())) multisnp += 1;
         if (ismulti) continue;
@@ -64,14 +61,9 @@ List summaryVariants(std::string vcffile, std::string region = "", std::string s
                         Named("Other") = other_count);
 }
 
-//' report the stats of structure variants
-//' @param vcffile path to the VCF file with index
-//' @param region  region to extract, default "" for all
-//' @param samples samples to extract, default "-" for all
-//' @return the counts of each type of structure variant
-//' @export
 // [[Rcpp::export]]
-List summarySVs(std::string vcffile, std::string region = "", std::string samples = "-") {
+List summarySVs(std::string vcffile, std::string region = "", std::string samples = "-",
+                bool filter_pass = false, double qual = 0) {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
     int nsamples = vcf.nsamples;
@@ -84,6 +76,8 @@ List summarySVs(std::string vcffile, std::string region = "", std::string sample
     vector<int> gt;
     while (vcf.getNextVariant(var)) {
         all++;
+        if (filter_pass && (var.FILTER() != "PASS")) continue;
+        if ((qual > 0) && (var.QUAL() < qual)) continue;
         if ((issv = var.isSV())) sv += 1;
         if (!issv) continue;
         var.getINFO("SVTYPE", svtype);

@@ -13,133 +13,55 @@ getDSskipInfoTagFloat <- function(cutoff, tag, vcffile, region = "", samples = "
     .Call(`_vcfppR_getDSskipInfoTagFloat`, cutoff, tag, vcffile, region, samples)
 }
 
-#' calculate the number of heterozygous SNPs for each sample
-#' @param vcffile path to the VCF file with index
-#' @param region  region to extract, default "" for all
-#' @param samples samples to extract, default "-" for all
-#' @return A list of heterozygosity couts for each sample along with its id in the vcf header
-#' @export
-heterozygosity <- function(vcffile, region = "", samples = "-") {
-    .Call(`_vcfppR_heterozygosity`, vcffile, region, samples)
+heterozygosity <- function(vcffile, region = "", samples = "-", filter_pass = FALSE, qual = 0) {
+    .Call(`_vcfppR_heterozygosity`, vcffile, region, samples, filter_pass, qual)
 }
 
-#' parse GT FORMAT of the VCF file into tables in R
-#' @param vcffile path to the VCF file with index
-#' @param region  region to extract
-#' @param samples samples to extract
-#' @return A list of genotypes for each sample along with variant information in VCF
-#' @export
 tableGT <- function(vcffile, region, samples = "-") {
     .Call(`_vcfppR_tableGT`, vcffile, region, samples)
 }
 
-#' parse GP FORMAT of the VCF file into tables in R
-#' @param vcffile path to the VCF file with index
-#' @param region  region to extract
-#' @param samples samples to extract
-#' @return A list of genotype posterior probabilites for each sample along with variant information in VCF
-#' @export
 tableGP <- function(vcffile, region, samples = "-") {
     .Call(`_vcfppR_tableGP`, vcffile, region, samples)
 }
 
-#' parse DS FORMAT of the VCF file into tables in R
-#' @param vcffile path to the VCF file with index
-#' @param region  region to extract
-#' @param samples samples to extract
-#' @return A list of genotype dosages for each sample along with variant information in VCF
-#' @export
 tableDS <- function(vcffile, region, samples = "-") {
     .Call(`_vcfppR_tableDS`, vcffile, region, samples)
 }
 
-#' parse GL FORMAT of the VCF file into tables in R
-#' @param vcffile path to the VCF file with index
-#' @param region  region to extract
-#' @param samples samples to extract
-#' @return A list of log-scaled genotype likelihoods for each sample along with variant information in VCF
-#' @export
 tableGL <- function(vcffile, region, samples = "-") {
     .Call(`_vcfppR_tableGL`, vcffile, region, samples)
 }
 
-#' parse PL FORMAT of the VCF file into tables in R
-#' @param vcffile path to the VCF file with index
-#' @param region  region to extract
-#' @param samples samples to extract
-#' @return A list of phred-scaled genotype likelihoods for each sample along with variant information in VCF
-#' @export
 tablePL <- function(vcffile, region, samples = "-") {
     .Call(`_vcfppR_tablePL`, vcffile, region, samples)
 }
 
-#' parse GQ FORMAT of the VCF file into tables in R
-#' @param vcffile path to the VCF file with index
-#' @param region  region to extract
-#' @param samples samples to extract
-#' @return A list of phred-scaled genotype quality for each sample along with variant information in VCF
-#' @export
 tableGQ <- function(vcffile, region, samples = "-") {
     .Call(`_vcfppR_tableGQ`, vcffile, region, samples)
 }
 
-#' parse HQ FORMAT of the VCF file into tables in R
-#' @param vcffile path to the VCF file with index
-#' @param region  region to extract
-#' @param samples samples to extract
-#' @return A list of phred-scaled haplotype quality for each sample along with variant information in VCF
-#' @export
 tableHQ <- function(vcffile, region, samples = "-") {
     .Call(`_vcfppR_tableHQ`, vcffile, region, samples)
 }
 
-#' parse DP FORMAT of the VCF file into tables in R
-#' @param vcffile path to the VCF file with index
-#' @param region  region to extract
-#' @param samples samples to extract
-#' @return A list of read depths for each sample along with variant information in VCF
-#' @export
 tableDP <- function(vcffile, region, samples = "-") {
     .Call(`_vcfppR_tableDP`, vcffile, region, samples)
 }
 
-#' parse MQ FORMAT of the VCF file into tables in R
-#' @param vcffile path to the VCF file with index
-#' @param region  region to extract
-#' @param samples samples to extract
-#' @return A list of RMS mapping quality for each sample along with variant information in VCF
-#' @export
 tableMQ <- function(vcffile, region, samples = "-") {
     .Call(`_vcfppR_tableMQ`, vcffile, region, samples)
 }
 
-#' parse PQ FORMAT of the VCF file into tables in R
-#' @param vcffile path to the VCF file with index
-#' @param region  region to extract
-#' @param samples samples to extract
-#' @return A list of phasing quality for each sample along with variant information in VCF
-#' @export
 tablePQ <- function(vcffile, region, samples = "-") {
     .Call(`_vcfppR_tablePQ`, vcffile, region, samples)
 }
 
-#' report the stats of variants
-#' @param vcffile path to the VCF file with index
-#' @param region  region to extract, default "" for all
-#' @param samples samples to extract, default "-" for all
-#' @return the counts of each type of variant
-#' @export
-summaryVariants <- function(vcffile, region = "", samples = "-") {
-    .Call(`_vcfppR_summaryVariants`, vcffile, region, samples)
+summaryVariants <- function(vcffile, region = "", samples = "-", filter_pass = FALSE, qual = 0) {
+    .Call(`_vcfppR_summaryVariants`, vcffile, region, samples, filter_pass, qual)
 }
 
-#' report the stats of structure variants
-#' @param vcffile path to the VCF file with index
-#' @param region  region to extract, default "" for all
-#' @param samples samples to extract, default "-" for all
-#' @return the counts of each type of structure variant
-#' @export
-summarySVs <- function(vcffile, region = "", samples = "-") {
-    .Call(`_vcfppR_summarySVs`, vcffile, region, samples)
+summarySVs <- function(vcffile, region = "", samples = "-", filter_pass = FALSE, qual = 0) {
+    .Call(`_vcfppR_summarySVs`, vcffile, region, samples, filter_pass, qual)
 }
 

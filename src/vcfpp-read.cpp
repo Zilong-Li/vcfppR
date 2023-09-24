@@ -4,12 +4,6 @@
 using namespace Rcpp;
 using namespace std;
 
-//' parse GT FORMAT of the VCF file into tables in R
-//' @param vcffile path to the VCF file with index
-//' @param region  region to extract
-//' @param samples samples to extract
-//' @return A list of genotypes for each sample along with variant information in VCF
-//' @export
 // [[Rcpp::export]]
 List tableGT(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
@@ -39,12 +33,6 @@ List tableGT(std::string vcffile, std::string region, std::string samples = "-")
                         Named("info") = info, Named("gt") = GT);
 }
 
-//' parse GP FORMAT of the VCF file into tables in R
-//' @param vcffile path to the VCF file with index
-//' @param region  region to extract
-//' @param samples samples to extract
-//' @return A list of genotype posterior probabilites for each sample along with variant information in VCF
-//' @export
 // [[Rcpp::export]]
 List tableGP(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
@@ -74,12 +62,6 @@ List tableGP(std::string vcffile, std::string region, std::string samples = "-")
                         Named("info") = info, Named("gp") = GP);
 }
 
-//' parse DS FORMAT of the VCF file into tables in R
-//' @param vcffile path to the VCF file with index
-//' @param region  region to extract
-//' @param samples samples to extract
-//' @return A list of genotype dosages for each sample along with variant information in VCF
-//' @export
 // [[Rcpp::export]]
 List tableDS(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
@@ -109,12 +91,6 @@ List tableDS(std::string vcffile, std::string region, std::string samples = "-")
                         Named("info") = info, Named("ds") = DS);
 }
 
-//' parse GL FORMAT of the VCF file into tables in R
-//' @param vcffile path to the VCF file with index
-//' @param region  region to extract
-//' @param samples samples to extract
-//' @return A list of log-scaled genotype likelihoods for each sample along with variant information in VCF
-//' @export
 // [[Rcpp::export]]
 List tableGL(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
@@ -144,12 +120,6 @@ List tableGL(std::string vcffile, std::string region, std::string samples = "-")
                         Named("info") = info, Named("gl") = GL);
 }
 
-//' parse PL FORMAT of the VCF file into tables in R
-//' @param vcffile path to the VCF file with index
-//' @param region  region to extract
-//' @param samples samples to extract
-//' @return A list of phred-scaled genotype likelihoods for each sample along with variant information in VCF
-//' @export
 // [[Rcpp::export]]
 List tablePL(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
@@ -179,12 +149,6 @@ List tablePL(std::string vcffile, std::string region, std::string samples = "-")
                         Named("info") = info, Named("pl") = PL);
 }
 
-//' parse GQ FORMAT of the VCF file into tables in R
-//' @param vcffile path to the VCF file with index
-//' @param region  region to extract
-//' @param samples samples to extract
-//' @return A list of phred-scaled genotype quality for each sample along with variant information in VCF
-//' @export
 // [[Rcpp::export]]
 List tableGQ(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
@@ -214,12 +178,6 @@ List tableGQ(std::string vcffile, std::string region, std::string samples = "-")
                         Named("info") = info, Named("gq") = GQ);
 }
 
-//' parse HQ FORMAT of the VCF file into tables in R
-//' @param vcffile path to the VCF file with index
-//' @param region  region to extract
-//' @param samples samples to extract
-//' @return A list of phred-scaled haplotype quality for each sample along with variant information in VCF
-//' @export
 // [[Rcpp::export]]
 List tableHQ(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
@@ -249,12 +207,6 @@ List tableHQ(std::string vcffile, std::string region, std::string samples = "-")
                         Named("info") = info, Named("hq") = HQ);
 }
 
-//' parse DP FORMAT of the VCF file into tables in R
-//' @param vcffile path to the VCF file with index
-//' @param region  region to extract
-//' @param samples samples to extract
-//' @return A list of read depths for each sample along with variant information in VCF
-//' @export
 // [[Rcpp::export]]
 List tableDP(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
@@ -284,12 +236,6 @@ List tableDP(std::string vcffile, std::string region, std::string samples = "-")
                         Named("info") = info, Named("dp") = DP);
 }
 
-//' parse MQ FORMAT of the VCF file into tables in R
-//' @param vcffile path to the VCF file with index
-//' @param region  region to extract
-//' @param samples samples to extract
-//' @return A list of RMS mapping quality for each sample along with variant information in VCF
-//' @export
 // [[Rcpp::export]]
 List tableMQ(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
@@ -319,12 +265,6 @@ List tableMQ(std::string vcffile, std::string region, std::string samples = "-")
                         Named("info") = info, Named("mq") = MQ);
 }
 
-//' parse PQ FORMAT of the VCF file into tables in R
-//' @param vcffile path to the VCF file with index
-//' @param region  region to extract
-//' @param samples samples to extract
-//' @return A list of phasing quality for each sample along with variant information in VCF
-//' @export
 // [[Rcpp::export]]
 List tablePQ(std::string vcffile, std::string region, std::string samples = "-") {
     vcfpp::BcfReader vcf(vcffile, region, samples);
