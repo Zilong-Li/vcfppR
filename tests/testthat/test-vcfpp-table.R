@@ -19,6 +19,7 @@ str(res)
 
 ped <- read.table("https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/20130606_g1k_3202_samples_ped_population.txt", h=T)
 ped <- ped[order(ped$Superpopulation),]
+
 out <- sapply(unique(ped$Superpopulation), function(pop) {
   id <- subset(ped, Superpopulation == pop)[,"SampleID"]
   ord <- match(id, res$samples)
@@ -41,10 +42,30 @@ gt <- vt$gt
 
 
 svfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20210124.SV_Illumina_Integration/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz"
-res <- vcfsummary(svfile, "chr21", svtype = TRUE)
-str(res)
+sv <- vcfsummary(svfile, svtype = TRUE)
+str(sv)
 
-res$summary
+save.image("~/tmp/vcfppR.RData")
 
-summary(res$CTX)
+load("~/tmp/vcfppR.RData")
+ls()
+
+samples <- sv$samples
+supers <- unique(ped$Superpopulation)
+o <- lapply(supers, function(pop) {
+  id <- subset(ped, Superpopulation == pop)[,"SampleID"]
+  ord <- match(id, samples)
+  sapply(sv[-c(1,2)], "[", ord)
+})
+names(o) <- supers
+
+s <- as.data.frame(lapply(o, colMeans))
+
+## s[, c("AFR", "EUR", "SAS", "EAS", "AMR")]
+
+s <- as.data.frame(formatC(as.matrix(s), digits = 2, format = "fg"))
+
+barplot(as.matrix(s))
+
+dev.off()
 

@@ -35,7 +35,9 @@ List summaryVariants(std::string vcffile, std::string region = "", std::string s
             other += 1;
         var.getGenotypes(gt);
         for (int i = 0; i < vcf.nsamples; i++) {
-            if (!var.isGenoMissing[i]) {
+            int m = 0;
+            for(int j = 0; j < var.ploidy(); j++) m += gt[i * var.ploidy() + j];
+            if (m > 0) {
                 if (hassnp) snp_count[i] += 1;
                 if (hasmnp) mnp_count[i] += 1;
                 if (hasindel) indel_count[i] += 1;
@@ -91,7 +93,9 @@ List summarySVs(std::string vcffile, std::string region = "", std::string sample
         if ((isinv = (svtype == "INV"))) inv += 1;
         var.getGenotypes(gt);
         for (int i = 0; i < vcf.nsamples; i++) {
-            if (!var.isGenoMissing[i]) {
+            int m = 0;
+            for(int j = 0; j < var.ploidy(); j++) m += gt[i * var.ploidy() + j];
+            if (m > 0) {
                 if (isins) ins_count[i] += 1;
                 if (isdel) del_count[i] += 1;
                 if (iscnv) cnv_count[i] += 1;

@@ -402,7 +402,7 @@ type as noted in the other overloading function.
     {
         ndst = 0;
         ret = bcf_get_genotypes(header.hdr, line, &gts, &ndst);
-        if(ret <= 0) return false; // gt not present
+        if(ret <= 0) throw std::runtime_error("genotypes not present");
         // if nploidy is not set manually. find the max nploidy using the first variant (eg. 2) resize v as
         // max(nploidy)
         // * nsamples (ret) NOTE: if ret == nsamples and only one sample then haploid
@@ -465,7 +465,7 @@ type as noted in the other overloading function.
     {
         ndst = 0;
         ret = bcf_get_genotypes(header.hdr, line, &gts, &ndst);
-        if(ret <= 0) return false; // gt not present
+        if(ret <= 0) throw std::runtime_error("genotypes not present");
         v.resize(ret);
         isGenoMissing.assign(nsamples, 0);
         nploidy = ret / nsamples;
