@@ -149,6 +149,37 @@ List tableGL(std::string vcffile, std::string region, std::string samples = "-",
 }
 
 // [[Rcpp::export]]
+List tableAD(std::string vcffile, std::string region, std::string samples = "-", bool snps = false,
+             bool indels = false, bool multiallelics = false, bool multisnps = false) {
+    int nsnps =
+        count_variants_restricted(vcffile, region, samples, snps, indels, multiallelics, multisnps);
+    vcfpp::BcfReader vcf(vcffile, region, samples);
+    vcfpp::BcfRecord var(vcf.header);
+    CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
+    IntegerVector pos(nsnps);
+    NumericVector qual(nsnps);
+    vector<vector<int>> AD(nsnps);
+    vector<int> ad;
+    for (int i = 0; i < nsnps; i++) {
+        vcf.getNextVariant(var);
+        pos(i) = var.POS();
+        qual(i) = var.QUAL();
+        chr(i) = var.CHROM();
+        id(i) = var.ID();
+        ref(i) = var.REF();
+        alt(i) = var.ALT();
+        filter(i) = var.FILTER();
+        info(i) = var.INFO();
+        var.getFORMAT("AD", ad);
+        AD[i] = ad;
+    }
+    return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
+                        Named("pos") = pos, Named("id") = id, Named("ref") = ref,
+                        Named("alt") = alt, Named("qual") = qual, Named("filter") = filter,
+                        Named("info") = info, Named("ad") = AD);
+}
+
+// [[Rcpp::export]]
 List tablePL(std::string vcffile, std::string region, std::string samples = "-", bool snps = false,
              bool indels = false, bool multiallelics = false, bool multisnps = false) {
     int nsnps =

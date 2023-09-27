@@ -33,6 +33,10 @@ tableGL <- function(vcffile, region, samples = "-", snps = FALSE, indels = FALSE
     .Call(`_vcfppR_tableGL`, vcffile, region, samples, snps, indels, multiallelics, multisnps)
 }
 
+tableAD <- function(vcffile, region, samples = "-", snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
+    .Call(`_vcfppR_tableAD`, vcffile, region, samples, snps, indels, multiallelics, multisnps)
+}
+
 tablePL <- function(vcffile, region, samples = "-", snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
     .Call(`_vcfppR_tablePL`, vcffile, region, samples, snps, indels, multiallelics, multisnps)
 }

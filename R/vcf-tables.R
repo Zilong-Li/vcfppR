@@ -2,25 +2,27 @@
 #' read VCF/BCF contents into R data structure
 #'
 #' @description
-#' The swiss army knife to read VCF/BCF into R data types rapidly and easily.
+#' The swiss army knife for reading VCF/BCF into R data types rapidly and easily.
 #'
 #' @details
-#' vcftable("input.vcf.gz", "chr21:1-60000000", "id01, id02")
-#' the similar interface in bcftools is =>
-#' bcftools view -s "id01,id02" input.bcf.gz chr1:100000-20000
+#' \code{vcftable} uses the C++ API of vcfpp, which is a wrapper of htslib, to read VCF/BCF files.
+#' Thus, it has the full functionalities of htslib, such as restrict to specific variant types,
+#' samples and regions. For the memory efficiency reason, the \code{vcftable} is designed
+#' to parse only one tag at a time in the FORMAT column of the VCF. In default, only the matrix of genotypes,
+#' i.e. "GT" tag, are returned by \code{vcftable}, but there are many other tags supported by the \code{format} option.
 #'
 #' @param vcffile path to the VCF/BCF file
 #'
-#' @param region region to subset like bcftools
+#' @param region region to subset in bcftools-like style: "chr1", "chr1:1-10000000"
 #'
-#' @param samples samples to subset like bcftools
+#' @param samples samples to subset in bcftools-like style.
+#'                comma separated list of samples to include (or exclude with "^" prefix).
+#'                e.g. "id01,id02", "^id01,id02".
 #'
-#' @param vartype restrict to specific type of variants, "snps","indels", "multisnps","multiallelics"
+#' @param vartype restrict to specific type of variants. supports "snps","indels", "multisnps","multiallelics"
 #'
 #' @param format the FORMAT tag to extract, valid values are
 #'               "GT","GP", "DP","DS","GL","PL","GQ","HQ","MQ","PQ"
-#'
-#' @param ploidy the ploidy of the organism if it is not diploidy
 #'
 #' @return \code{vcftable} a list containing the following components:
 #'\describe{
@@ -76,7 +78,7 @@
 #' res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps")
 #' str(res)
 #' @export
-vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", format = "GT", ploidy = 2) {
+vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", format = "GT") {
   snps <- FALSE
   indels <- FALSE
   multiallelics <- FALSE
@@ -90,6 +92,7 @@ vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", forma
                 GT = tableGT(vcffile, region, samples, snps, indels, multiallelics, multisnps),
                 GP = tableGP(vcffile, region, samples, snps, indels, multiallelics, multisnps),
                 GQ = tableGQ(vcffile, region, samples, snps, indels, multiallelics, multisnps),
+                AD = tableAD(vcffile, region, samples, snps, indels, multiallelics, multisnps),
                 DS = tableDS(vcffile, region, samples, snps, indels, multiallelics, multisnps),
                 DP = tableDP(vcffile, region, samples, snps, indels, multiallelics, multisnps),
                 PL = tablePL(vcffile, region, samples, snps, indels, multiallelics, multisnps),
@@ -99,12 +102,15 @@ vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", forma
                 PQ = tablePQ(vcffile, region, samples, snps, indels, multiallelics, multisnps),
                 stop("Invaild tag in FORAMT column"))
   res[[10]] <- do.call("rbind", res[[10]])
-  if(ploidy == 2 && format == "GT") {
+  if(format == "GT") {
     n <- ncol(res$gt)
-    res$gt <- res$gt[, seq(1, n, 2)] + res$gt[, seq(2, n, 2)]
-    res$gt[res$gt < 0] <- NA
-  } else if (format == "GT") {
-    res$gt[res$gt < 0] <- NA
+    ploidy <- n / length(res$samples)
+    if(ploidy == 2) {
+      res$gt <- res$gt[, seq(1, n, 2)] + res$gt[, seq(2, n, 2)]
+      res$gt[res$gt < 0] <- NA
+    } else {
+      res$gt[res$gt < 0] <- NA
+    }
   }
   return(res)
 }

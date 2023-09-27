@@ -108,6 +108,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// tableAD
+List tableAD(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
+RcppExport SEXP _vcfppR_tableAD(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
+    Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
+    Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< bool >::type snps(snpsSEXP);
+    Rcpp::traits::input_parameter< bool >::type indels(indelsSEXP);
+    Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
+    Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
+    rcpp_result_gen = Rcpp::wrap(tableAD(vcffile, region, samples, snps, indels, multiallelics, multisnps));
+    return rcpp_result_gen;
+END_RCPP
+}
 // tablePL
 List tablePL(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
 RcppExport SEXP _vcfppR_tablePL(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
@@ -248,6 +265,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfppR_tableGP", (DL_FUNC) &_vcfppR_tableGP, 7},
     {"_vcfppR_tableDS", (DL_FUNC) &_vcfppR_tableDS, 7},
     {"_vcfppR_tableGL", (DL_FUNC) &_vcfppR_tableGL, 7},
+    {"_vcfppR_tableAD", (DL_FUNC) &_vcfppR_tableAD, 7},
     {"_vcfppR_tablePL", (DL_FUNC) &_vcfppR_tablePL, 7},
     {"_vcfppR_tableGQ", (DL_FUNC) &_vcfppR_tableGQ, 7},
     {"_vcfppR_tableHQ", (DL_FUNC) &_vcfppR_tableHQ, 7},

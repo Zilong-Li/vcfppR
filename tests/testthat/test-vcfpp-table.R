@@ -25,24 +25,30 @@ out <- sapply(unique(ped$Superpopulation), function(pop) {
   ord <- match(id, res$samples)
   res$hets[ord]
 })
-boxplot(out)
+boxplot(out, main = "Heterozygous variants")
 
 
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_raw_GT_with_annot/20201028_CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.recalibrated_variants.vcf.gz"
+ped <- read.table("https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/20130606_g1k_3202_samples_ped_population.txt", h=T)
+ped <- ped[order(ped$Superpopulation),]
 
-region <- "chr21:1-5130300"
-region <- "chr21:1-6030300"
-region <- "chr21:10000000-11030300"
+region <- "chr21:10000000-10500000"
 res <- vcfsummary(vcffile, region)
 str(res)
+out <- sapply(unique(ped$Superpopulation), function(pop) {
+  id <- subset(ped, Superpopulation == pop)[,"SampleID"]
+  ord <- match(id, res$samples)
+  res$SNP[ord] + res$INDEL[ord]
+})
 
-vt <- vcftable(vcffile, region)
-gt <- vt$gt
-1 - sum(is.na(gt)) / length(gt)
+devtools::build_readme()
 
+boxplot(out, main = paste0("Average number of SNP & INDEL variants\nin region ", region))
+
+dev.off()
 
 svfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20210124.SV_Illumina_Integration/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz"
-sv <- vcfsummary(svfile, svtype = TRUE)
+res <- vcfsummary(svfile, svtype = TRUE)
 str(sv)
 
 save.image("~/tmp/vcfppR.RData")

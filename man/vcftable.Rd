@@ -4,28 +4,21 @@
 \alias{vcftable}
 \title{read VCF/BCF contents into R data structure}
 \usage{
-vcftable(
-  vcffile,
-  region = "",
-  samples = "-",
-  vartype = "all",
-  format = "GT",
-  ploidy = 2
-)
+vcftable(vcffile, region = "", samples = "-", vartype = "all", format = "GT")
 }
 \arguments{
 \item{vcffile}{path to the VCF/BCF file}
 
-\item{region}{region to subset like bcftools}
+\item{region}{region to subset in bcftools-like style: "chr1", "chr1:1-10000000"}
 
-\item{samples}{samples to subset like bcftools}
+\item{samples}{samples to subset in bcftools-like style.
+comma separated list of samples to include (or exclude with "^" prefix).
+e.g. "id01,id02", "^id01,id02".}
 
-\item{vartype}{restrict to specific type of variants, "snps","indels", "multisnps","multiallelics"}
+\item{vartype}{restrict to specific type of variants. supports "snps","indels", "multisnps","multiallelics"}
 
 \item{format}{the FORMAT tag to extract, valid values are
 "GT","GP", "DP","DS","GL","PL","GQ","HQ","MQ","PQ"}
-
-\item{ploidy}{the ploidy of the organism if it is not diploidy}
 }
 \value{
 \code{vcftable} a list containing the following components:
@@ -72,12 +65,14 @@ a specifiy tag in the FORMAT column to be extracted
 }
 }
 \description{
-The swiss army knife to read VCF/BCF into R data types rapidly and easily.
+The swiss army knife for reading VCF/BCF into R data types rapidly and easily.
 }
 \details{
-vcftable("input.vcf.gz", "chr21:1-60000000", "id01, id02")
-the similar interface in bcftools is =>
-bcftools view -s "id01,id02" input.bcf.gz chr1:100000-20000
+\code{vcftable} uses the C++ API of vcfpp, which is a wrapper of htslib, to read VCF/BCF files.
+Thus, it has the full functionalities of htslib, such as restrict to specific variant types,
+samples and regions. For the memory efficiency reason, the \code{vcftable} is designed
+to parse only one tag at a time in the FORMAT column of the VCF. In default, only the matrix of genotypes,
+i.e. "GT" tag, are returned by \code{vcftable}, but there are many other tags supported by the \code{format} option.
 }
 \examples{
 library('vcfppR')
