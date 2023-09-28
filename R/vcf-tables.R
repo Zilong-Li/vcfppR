@@ -24,6 +24,10 @@
 #' @param format the FORMAT tag to extract, valid values are
 #'               "GT","GP", "DP","DS","GL","PL","GQ","HQ","MQ","PQ"
 #'
+#' @param collapse logical. The dim of raw genotypes matrix of diploid is (M, 2 * N), where M is #markers and N is #samples.
+#'                 default TRUE will collapse the genotypes for each sample such that the matrix is (M, N).
+#'                 set this to false if one wants to maintain the phasing order, e.g. "1|0" is parsed as c(1, 0) with collapse=FALSE 
+#'
 #' @return \code{vcftable} a list containing the following components:
 #'\describe{
 #'\item{samples}{: character vector; \cr
@@ -78,7 +82,7 @@
 #' res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps")
 #' str(res)
 #' @export
-vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", format = "GT") {
+vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", format = "GT", collapse = TRUE) {
   snps <- FALSE
   indels <- FALSE
   multiallelics <- FALSE
@@ -105,7 +109,7 @@ vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", forma
   if(format == "GT") {
     n <- ncol(res$gt)
     ploidy <- n / length(res$samples)
-    if(ploidy == 2) {
+    if(ploidy == 2 && collapse) {
       res$gt <- res$gt[, seq(1, n, 2)] + res$gt[, seq(2, n, 2)]
       res$gt[res$gt < 0] <- NA
     } else {

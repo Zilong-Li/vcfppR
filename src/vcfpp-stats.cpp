@@ -18,9 +18,9 @@ List summaryVariants(std::string vcffile, std::string region = "", std::string s
     bool hassnp, hasmnp, hasindel, hasins, hasdel, hasother, ismulti, issv, issnpmulti;
     vector<int> gt;
     while (vcf.getNextVariant(var)) {
-        all++;
         if (filter_pass && (var.FILTER() != "PASS")) continue;
         if ((qual > 0) && (var.QUAL() < qual)) continue;
+        all++;
         if ((ismulti = var.isMultiAllelics())) multiallelic += 1;
         if ((issnpmulti = var.isMultiAllelicSNP())) multisnp += 1;
         if (ismulti) continue;
@@ -77,9 +77,9 @@ List summarySVs(std::string vcffile, std::string region = "", std::string sample
     std::string svtype;
     vector<int> gt;
     while (vcf.getNextVariant(var)) {
-        all++;
         if (filter_pass && (var.FILTER() != "PASS")) continue;
         if ((qual > 0) && (var.QUAL() < qual)) continue;
+        all++;
         if ((issv = var.isSV())) sv += 1;
         if (!issv) continue;
         var.getINFO("SVTYPE", svtype);

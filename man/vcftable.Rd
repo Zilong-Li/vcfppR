@@ -4,7 +4,14 @@
 \alias{vcftable}
 \title{read VCF/BCF contents into R data structure}
 \usage{
-vcftable(vcffile, region = "", samples = "-", vartype = "all", format = "GT")
+vcftable(
+  vcffile,
+  region = "",
+  samples = "-",
+  vartype = "all",
+  format = "GT",
+  collapse = TRUE
+)
 }
 \arguments{
 \item{vcffile}{path to the VCF/BCF file}
@@ -19,6 +26,10 @@ e.g. "id01,id02", "^id01,id02".}
 
 \item{format}{the FORMAT tag to extract, valid values are
 "GT","GP", "DP","DS","GL","PL","GQ","HQ","MQ","PQ"}
+
+\item{collapse}{logical. The dim of raw genotypes matrix of diploid is (M, 2 * N), where M is #markers and N is #samples.
+default TRUE will collapse the genotypes for each sample such that the matrix is (M, N).
+set this to false if one wants to maintain the phasing order, e.g. "1|0" is parsed as c(1, 0) with collapse=FALSE}
 }
 \value{
 \code{vcftable} a list containing the following components:
