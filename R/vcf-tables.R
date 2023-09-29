@@ -22,7 +22,8 @@
 #' @param vartype restrict to specific type of variants. supports "snps","indels", "multisnps","multiallelics"
 #'
 #' @param format the FORMAT tag to extract, valid values are
-#'               "GT","GP", "DP","DS","GL","PL","GQ","HQ","MQ","PQ"
+#'               "GT","GP", "DP","DS","GL","PL","GQ","HQ","MQ","PQ", "na".
+#'               special case "na" for not extracting the FORMAT column.
 #'
 #' @param collapse logical. The dim of raw genotypes matrix of diploid is (M, 2 * N), where M is #markers and N is #samples.
 #'                 default TRUE will collapse the genotypes for each sample such that the matrix is (M, N).
@@ -104,8 +105,9 @@ vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", forma
                 HQ = tableHQ(vcffile, region, samples, snps, indels, multiallelics, multisnps),
                 MQ = tableMQ(vcffile, region, samples, snps, indels, multiallelics, multisnps),
                 PQ = tablePQ(vcffile, region, samples, snps, indels, multiallelics, multisnps),
+                na = tableNA(vcffile, region, samples, snps, indels, multiallelics, multisnps),
                 stop("Invaild tag in FORAMT column"))
-  res[[10]] <- do.call("rbind", res[[10]])
+  if(format != "na") res[[10]] <- do.call("rbind", res[[10]])
   if(format == "GT") {
     n <- ncol(res$gt)
     ploidy <- n / length(res$samples)

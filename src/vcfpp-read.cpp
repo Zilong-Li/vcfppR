@@ -21,6 +21,37 @@ int count_variants_restricted(std::string vcffile, std::string region, std::stri
 }
 
 // [[Rcpp::export]]
+List tableNA(std::string vcffile, std::string region, std::string samples = "-", bool snps = false,
+             bool indels = false, bool multiallelics = false, bool multisnps = false) {
+    int nsnps =
+        count_variants_restricted(vcffile, region, samples, snps, indels, multiallelics, multisnps);
+    vcfpp::BcfReader vcf(vcffile, region, samples);
+    vcfpp::BcfRecord var(vcf.header);
+    CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
+    IntegerVector pos(nsnps);
+    NumericVector qual(nsnps);
+    for (int i = 0; i < nsnps; i++) {
+        vcf.getNextVariant(var);
+        if (multiallelics && (!var.isMultiAllelics())) continue;
+        if (multisnps && (!var.isMultiAllelicSNP())) continue;
+        if (snps && (!var.isSNP())) continue;
+        if (indels && (!var.isIndel())) continue;
+        pos(i) = var.POS();
+        qual(i) = var.QUAL();
+        chr(i) = var.CHROM();
+        id(i) = var.ID();
+        ref(i) = var.REF();
+        alt(i) = var.ALT();
+        filter(i) = var.FILTER();
+        info(i) = var.INFO();
+    }
+    return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
+                        Named("pos") = pos, Named("id") = id, Named("ref") = ref,
+                        Named("alt") = alt, Named("qual") = qual, Named("filter") = filter,
+                        Named("info") = info);
+}
+
+// [[Rcpp::export]]
 List tableGT(std::string vcffile, std::string region, std::string samples = "-", bool snps = false,
              bool indels = false, bool multiallelics = false, bool multisnps = false) {
     int nsnps =

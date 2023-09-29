@@ -17,6 +17,10 @@ heterozygosity <- function(vcffile, region = "", samples = "-", filter_pass = FA
     .Call(`_vcfppR_heterozygosity`, vcffile, region, samples, filter_pass, qual)
 }
 
+tableNA <- function(vcffile, region, samples = "-", snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
+    .Call(`_vcfppR_tableNA`, vcffile, region, samples, snps, indels, multiallelics, multisnps)
+}
+
 tableGT <- function(vcffile, region, samples = "-", snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
     .Call(`_vcfppR_tableGT`, vcffile, region, samples, snps, indels, multiallelics, multisnps)
 }

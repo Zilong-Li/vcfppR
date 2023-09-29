@@ -25,7 +25,8 @@ e.g. "id01,id02", "^id01,id02".}
 \item{vartype}{restrict to specific type of variants. supports "snps","indels", "multisnps","multiallelics"}
 
 \item{format}{the FORMAT tag to extract, valid values are
-"GT","GP", "DP","DS","GL","PL","GQ","HQ","MQ","PQ"}
+"GT","GP", "DP","DS","GL","PL","GQ","HQ","MQ","PQ", "na".
+special case "na" for not extracting the FORMAT column.}
 
 \item{collapse}{logical. The dim of raw genotypes matrix of diploid is (M, 2 * N), where M is #markers and N is #samples.
 default TRUE will collapse the genotypes for each sample such that the matrix is (M, N).

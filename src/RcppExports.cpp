@@ -40,6 +40,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// tableNA
+List tableNA(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
+RcppExport SEXP _vcfppR_tableNA(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
+    Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
+    Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< bool >::type snps(snpsSEXP);
+    Rcpp::traits::input_parameter< bool >::type indels(indelsSEXP);
+    Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
+    Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
+    rcpp_result_gen = Rcpp::wrap(tableNA(vcffile, region, samples, snps, indels, multiallelics, multisnps));
+    return rcpp_result_gen;
+END_RCPP
+}
 // tableGT
 List tableGT(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
 RcppExport SEXP _vcfppR_tableGT(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
@@ -261,6 +278,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_vcfppR_getDSskipInfoTagFloat", (DL_FUNC) &_vcfppR_getDSskipInfoTagFloat, 5},
     {"_vcfppR_heterozygosity", (DL_FUNC) &_vcfppR_heterozygosity, 5},
+    {"_vcfppR_tableNA", (DL_FUNC) &_vcfppR_tableNA, 7},
     {"_vcfppR_tableGT", (DL_FUNC) &_vcfppR_tableGT, 7},
     {"_vcfppR_tableGP", (DL_FUNC) &_vcfppR_tableGP, 7},
     {"_vcfppR_tableDS", (DL_FUNC) &_vcfppR_tableDS, 7},
