@@ -4,15 +4,16 @@
 using namespace Rcpp;
 using namespace std;
 
+//' @export
 // [[Rcpp::export]]
 List heterozygosity(std::string vcffile, std::string region = "", std::string samples = "-",
-                    bool filter_pass = false, double qual = 0) {
+                    bool pass = false, double qual = 0) {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
     vector<int> gt;
     vector<int> hetsum(vcf.nsamples, 0);  // store the het counts
     while (vcf.getNextVariant(var)) {
-        if (filter_pass && (var.FILTER() != "PASS")) continue;
+        if (pass && (var.FILTER() != "PASS")) continue;
         if ((qual > 0) && (var.QUAL() < qual)) continue;
         var.getGenotypes(gt);
         // analyze SNP variant

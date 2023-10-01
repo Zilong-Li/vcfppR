@@ -20,6 +20,11 @@
 #'                e.g. "id01,id02", "^id01,id02".
 #'
 #' @param vartype restrict to specific type of variants. supports "snps","indels", "multisnps","multiallelics"
+#' @param qual logical. restrict to variants with QUAL > qual.
+#'
+#' @param pass logical. restrict to variants with FILTER = "PASS".
+#'
+#' @param info logical. drop INFO column in the returned list.
 #'
 #' @param format the FORMAT tag to extract, valid values are
 #'               "GT","GP", "DP","DS","GL","PL","GQ","HQ","MQ","PQ", "na".
@@ -83,7 +88,8 @@
 #' res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps")
 #' str(res)
 #' @export
-vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", format = "GT", collapse = TRUE) {
+vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", qual = 0,
+                     pass = FALSE, info = TRUE, format = "GT", collapse = TRUE) {
   snps <- FALSE
   indels <- FALSE
   multiallelics <- FALSE
@@ -94,18 +100,18 @@ vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", forma
   else if(vartype == "multiallelics") multiallelics <- TRUE
   else if(vartype != "all") stop("Invaild variant type!")
   res <- switch(format,
-                GT = tableGT(vcffile, region, samples, snps, indels, multiallelics, multisnps),
-                GP = tableGP(vcffile, region, samples, snps, indels, multiallelics, multisnps),
-                GQ = tableGQ(vcffile, region, samples, snps, indels, multiallelics, multisnps),
-                AD = tableAD(vcffile, region, samples, snps, indels, multiallelics, multisnps),
-                DS = tableDS(vcffile, region, samples, snps, indels, multiallelics, multisnps),
-                DP = tableDP(vcffile, region, samples, snps, indels, multiallelics, multisnps),
-                PL = tablePL(vcffile, region, samples, snps, indels, multiallelics, multisnps),
-                GL = tableGL(vcffile, region, samples, snps, indels, multiallelics, multisnps),
-                HQ = tableHQ(vcffile, region, samples, snps, indels, multiallelics, multisnps),
-                MQ = tableMQ(vcffile, region, samples, snps, indels, multiallelics, multisnps),
-                PQ = tablePQ(vcffile, region, samples, snps, indels, multiallelics, multisnps),
-                na = tableNA(vcffile, region, samples, snps, indels, multiallelics, multisnps),
+                GT = tableGT(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
+                GP = tableGP(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
+                GQ = tableGQ(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
+                AD = tableAD(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
+                DS = tableDS(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
+                DP = tableDP(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
+                PL = tablePL(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
+                GL = tableGL(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
+                HQ = tableHQ(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
+                MQ = tableMQ(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
+                PQ = tablePQ(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
+                na = tableNA(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
                 stop("Invaild tag in FORAMT column"))
   if(format != "na") res[[10]] <- do.call("rbind", res[[10]])
   if(format == "GT") {

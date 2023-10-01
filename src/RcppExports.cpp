@@ -26,221 +26,257 @@ BEGIN_RCPP
 END_RCPP
 }
 // heterozygosity
-List heterozygosity(std::string vcffile, std::string region, std::string samples, bool filter_pass, double qual);
-RcppExport SEXP _vcfppR_heterozygosity(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP filter_passSEXP, SEXP qualSEXP) {
+List heterozygosity(std::string vcffile, std::string region, std::string samples, bool pass, double qual);
+RcppExport SEXP _vcfppR_heterozygosity(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP passSEXP, SEXP qualSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
-    Rcpp::traits::input_parameter< bool >::type filter_pass(filter_passSEXP);
+    Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
     Rcpp::traits::input_parameter< double >::type qual(qualSEXP);
-    rcpp_result_gen = Rcpp::wrap(heterozygosity(vcffile, region, samples, filter_pass, qual));
+    rcpp_result_gen = Rcpp::wrap(heterozygosity(vcffile, region, samples, pass, qual));
     return rcpp_result_gen;
 END_RCPP
 }
 // tableNA
-List tableNA(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
-RcppExport SEXP _vcfppR_tableNA(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
+List tableNA(std::string vcffile, std::string region, std::string samples, double qualval, bool pass, bool INFO, bool snps, bool indels, bool multiallelics, bool multisnps);
+RcppExport SEXP _vcfppR_tableNA(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP INFOSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< double >::type qualval(qualvalSEXP);
+    Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
+    Rcpp::traits::input_parameter< bool >::type INFO(INFOSEXP);
     Rcpp::traits::input_parameter< bool >::type snps(snpsSEXP);
     Rcpp::traits::input_parameter< bool >::type indels(indelsSEXP);
     Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
     Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(tableNA(vcffile, region, samples, snps, indels, multiallelics, multisnps));
+    rcpp_result_gen = Rcpp::wrap(tableNA(vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps));
     return rcpp_result_gen;
 END_RCPP
 }
 // tableGT
-List tableGT(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
-RcppExport SEXP _vcfppR_tableGT(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
+List tableGT(std::string vcffile, std::string region, std::string samples, double qualval, bool pass, bool INFO, bool snps, bool indels, bool multiallelics, bool multisnps);
+RcppExport SEXP _vcfppR_tableGT(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP INFOSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< double >::type qualval(qualvalSEXP);
+    Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
+    Rcpp::traits::input_parameter< bool >::type INFO(INFOSEXP);
     Rcpp::traits::input_parameter< bool >::type snps(snpsSEXP);
     Rcpp::traits::input_parameter< bool >::type indels(indelsSEXP);
     Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
     Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(tableGT(vcffile, region, samples, snps, indels, multiallelics, multisnps));
+    rcpp_result_gen = Rcpp::wrap(tableGT(vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps));
     return rcpp_result_gen;
 END_RCPP
 }
 // tableGP
-List tableGP(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
-RcppExport SEXP _vcfppR_tableGP(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
+List tableGP(std::string vcffile, std::string region, std::string samples, double qualval, bool pass, bool INFO, bool snps, bool indels, bool multiallelics, bool multisnps);
+RcppExport SEXP _vcfppR_tableGP(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP INFOSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< double >::type qualval(qualvalSEXP);
+    Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
+    Rcpp::traits::input_parameter< bool >::type INFO(INFOSEXP);
     Rcpp::traits::input_parameter< bool >::type snps(snpsSEXP);
     Rcpp::traits::input_parameter< bool >::type indels(indelsSEXP);
     Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
     Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(tableGP(vcffile, region, samples, snps, indels, multiallelics, multisnps));
+    rcpp_result_gen = Rcpp::wrap(tableGP(vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps));
     return rcpp_result_gen;
 END_RCPP
 }
 // tableDS
-List tableDS(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
-RcppExport SEXP _vcfppR_tableDS(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
+List tableDS(std::string vcffile, std::string region, std::string samples, double qualval, bool pass, bool INFO, bool snps, bool indels, bool multiallelics, bool multisnps);
+RcppExport SEXP _vcfppR_tableDS(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP INFOSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< double >::type qualval(qualvalSEXP);
+    Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
+    Rcpp::traits::input_parameter< bool >::type INFO(INFOSEXP);
     Rcpp::traits::input_parameter< bool >::type snps(snpsSEXP);
     Rcpp::traits::input_parameter< bool >::type indels(indelsSEXP);
     Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
     Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(tableDS(vcffile, region, samples, snps, indels, multiallelics, multisnps));
+    rcpp_result_gen = Rcpp::wrap(tableDS(vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps));
     return rcpp_result_gen;
 END_RCPP
 }
 // tableGL
-List tableGL(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
-RcppExport SEXP _vcfppR_tableGL(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
+List tableGL(std::string vcffile, std::string region, std::string samples, double qualval, bool pass, bool INFO, bool snps, bool indels, bool multiallelics, bool multisnps);
+RcppExport SEXP _vcfppR_tableGL(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP INFOSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< double >::type qualval(qualvalSEXP);
+    Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
+    Rcpp::traits::input_parameter< bool >::type INFO(INFOSEXP);
     Rcpp::traits::input_parameter< bool >::type snps(snpsSEXP);
     Rcpp::traits::input_parameter< bool >::type indels(indelsSEXP);
     Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
     Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(tableGL(vcffile, region, samples, snps, indels, multiallelics, multisnps));
+    rcpp_result_gen = Rcpp::wrap(tableGL(vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps));
     return rcpp_result_gen;
 END_RCPP
 }
 // tableAD
-List tableAD(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
-RcppExport SEXP _vcfppR_tableAD(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
+List tableAD(std::string vcffile, std::string region, std::string samples, double qualval, bool pass, bool INFO, bool snps, bool indels, bool multiallelics, bool multisnps);
+RcppExport SEXP _vcfppR_tableAD(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP INFOSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< double >::type qualval(qualvalSEXP);
+    Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
+    Rcpp::traits::input_parameter< bool >::type INFO(INFOSEXP);
     Rcpp::traits::input_parameter< bool >::type snps(snpsSEXP);
     Rcpp::traits::input_parameter< bool >::type indels(indelsSEXP);
     Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
     Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(tableAD(vcffile, region, samples, snps, indels, multiallelics, multisnps));
+    rcpp_result_gen = Rcpp::wrap(tableAD(vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps));
     return rcpp_result_gen;
 END_RCPP
 }
 // tablePL
-List tablePL(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
-RcppExport SEXP _vcfppR_tablePL(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
+List tablePL(std::string vcffile, std::string region, std::string samples, double qualval, bool pass, bool INFO, bool snps, bool indels, bool multiallelics, bool multisnps);
+RcppExport SEXP _vcfppR_tablePL(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP INFOSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< double >::type qualval(qualvalSEXP);
+    Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
+    Rcpp::traits::input_parameter< bool >::type INFO(INFOSEXP);
     Rcpp::traits::input_parameter< bool >::type snps(snpsSEXP);
     Rcpp::traits::input_parameter< bool >::type indels(indelsSEXP);
     Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
     Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(tablePL(vcffile, region, samples, snps, indels, multiallelics, multisnps));
+    rcpp_result_gen = Rcpp::wrap(tablePL(vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps));
     return rcpp_result_gen;
 END_RCPP
 }
 // tableGQ
-List tableGQ(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
-RcppExport SEXP _vcfppR_tableGQ(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
+List tableGQ(std::string vcffile, std::string region, std::string samples, double qualval, bool pass, bool INFO, bool snps, bool indels, bool multiallelics, bool multisnps);
+RcppExport SEXP _vcfppR_tableGQ(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP INFOSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< double >::type qualval(qualvalSEXP);
+    Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
+    Rcpp::traits::input_parameter< bool >::type INFO(INFOSEXP);
     Rcpp::traits::input_parameter< bool >::type snps(snpsSEXP);
     Rcpp::traits::input_parameter< bool >::type indels(indelsSEXP);
     Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
     Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(tableGQ(vcffile, region, samples, snps, indels, multiallelics, multisnps));
+    rcpp_result_gen = Rcpp::wrap(tableGQ(vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps));
     return rcpp_result_gen;
 END_RCPP
 }
 // tableHQ
-List tableHQ(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
-RcppExport SEXP _vcfppR_tableHQ(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
+List tableHQ(std::string vcffile, std::string region, std::string samples, double qualval, bool pass, bool INFO, bool snps, bool indels, bool multiallelics, bool multisnps);
+RcppExport SEXP _vcfppR_tableHQ(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP INFOSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< double >::type qualval(qualvalSEXP);
+    Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
+    Rcpp::traits::input_parameter< bool >::type INFO(INFOSEXP);
     Rcpp::traits::input_parameter< bool >::type snps(snpsSEXP);
     Rcpp::traits::input_parameter< bool >::type indels(indelsSEXP);
     Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
     Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(tableHQ(vcffile, region, samples, snps, indels, multiallelics, multisnps));
+    rcpp_result_gen = Rcpp::wrap(tableHQ(vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps));
     return rcpp_result_gen;
 END_RCPP
 }
 // tableDP
-List tableDP(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
-RcppExport SEXP _vcfppR_tableDP(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
+List tableDP(std::string vcffile, std::string region, std::string samples, double qualval, bool pass, bool INFO, bool snps, bool indels, bool multiallelics, bool multisnps);
+RcppExport SEXP _vcfppR_tableDP(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP INFOSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< double >::type qualval(qualvalSEXP);
+    Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
+    Rcpp::traits::input_parameter< bool >::type INFO(INFOSEXP);
     Rcpp::traits::input_parameter< bool >::type snps(snpsSEXP);
     Rcpp::traits::input_parameter< bool >::type indels(indelsSEXP);
     Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
     Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(tableDP(vcffile, region, samples, snps, indels, multiallelics, multisnps));
+    rcpp_result_gen = Rcpp::wrap(tableDP(vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps));
     return rcpp_result_gen;
 END_RCPP
 }
 // tableMQ
-List tableMQ(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
-RcppExport SEXP _vcfppR_tableMQ(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
+List tableMQ(std::string vcffile, std::string region, std::string samples, double qualval, bool pass, bool INFO, bool snps, bool indels, bool multiallelics, bool multisnps);
+RcppExport SEXP _vcfppR_tableMQ(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP INFOSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< double >::type qualval(qualvalSEXP);
+    Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
+    Rcpp::traits::input_parameter< bool >::type INFO(INFOSEXP);
     Rcpp::traits::input_parameter< bool >::type snps(snpsSEXP);
     Rcpp::traits::input_parameter< bool >::type indels(indelsSEXP);
     Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
     Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(tableMQ(vcffile, region, samples, snps, indels, multiallelics, multisnps));
+    rcpp_result_gen = Rcpp::wrap(tableMQ(vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps));
     return rcpp_result_gen;
 END_RCPP
 }
 // tablePQ
-List tablePQ(std::string vcffile, std::string region, std::string samples, bool snps, bool indels, bool multiallelics, bool multisnps);
-RcppExport SEXP _vcfppR_tablePQ(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
+List tablePQ(std::string vcffile, std::string region, std::string samples, double qualval, bool pass, bool INFO, bool snps, bool indels, bool multiallelics, bool multisnps);
+RcppExport SEXP _vcfppR_tablePQ(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP INFOSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
     Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
     Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< double >::type qualval(qualvalSEXP);
+    Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
+    Rcpp::traits::input_parameter< bool >::type INFO(INFOSEXP);
     Rcpp::traits::input_parameter< bool >::type snps(snpsSEXP);
     Rcpp::traits::input_parameter< bool >::type indels(indelsSEXP);
     Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
     Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(tablePQ(vcffile, region, samples, snps, indels, multiallelics, multisnps));
+    rcpp_result_gen = Rcpp::wrap(tablePQ(vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -278,18 +314,18 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_vcfppR_getDSskipInfoTagFloat", (DL_FUNC) &_vcfppR_getDSskipInfoTagFloat, 5},
     {"_vcfppR_heterozygosity", (DL_FUNC) &_vcfppR_heterozygosity, 5},
-    {"_vcfppR_tableNA", (DL_FUNC) &_vcfppR_tableNA, 7},
-    {"_vcfppR_tableGT", (DL_FUNC) &_vcfppR_tableGT, 7},
-    {"_vcfppR_tableGP", (DL_FUNC) &_vcfppR_tableGP, 7},
-    {"_vcfppR_tableDS", (DL_FUNC) &_vcfppR_tableDS, 7},
-    {"_vcfppR_tableGL", (DL_FUNC) &_vcfppR_tableGL, 7},
-    {"_vcfppR_tableAD", (DL_FUNC) &_vcfppR_tableAD, 7},
-    {"_vcfppR_tablePL", (DL_FUNC) &_vcfppR_tablePL, 7},
-    {"_vcfppR_tableGQ", (DL_FUNC) &_vcfppR_tableGQ, 7},
-    {"_vcfppR_tableHQ", (DL_FUNC) &_vcfppR_tableHQ, 7},
-    {"_vcfppR_tableDP", (DL_FUNC) &_vcfppR_tableDP, 7},
-    {"_vcfppR_tableMQ", (DL_FUNC) &_vcfppR_tableMQ, 7},
-    {"_vcfppR_tablePQ", (DL_FUNC) &_vcfppR_tablePQ, 7},
+    {"_vcfppR_tableNA", (DL_FUNC) &_vcfppR_tableNA, 10},
+    {"_vcfppR_tableGT", (DL_FUNC) &_vcfppR_tableGT, 10},
+    {"_vcfppR_tableGP", (DL_FUNC) &_vcfppR_tableGP, 10},
+    {"_vcfppR_tableDS", (DL_FUNC) &_vcfppR_tableDS, 10},
+    {"_vcfppR_tableGL", (DL_FUNC) &_vcfppR_tableGL, 10},
+    {"_vcfppR_tableAD", (DL_FUNC) &_vcfppR_tableAD, 10},
+    {"_vcfppR_tablePL", (DL_FUNC) &_vcfppR_tablePL, 10},
+    {"_vcfppR_tableGQ", (DL_FUNC) &_vcfppR_tableGQ, 10},
+    {"_vcfppR_tableHQ", (DL_FUNC) &_vcfppR_tableHQ, 10},
+    {"_vcfppR_tableDP", (DL_FUNC) &_vcfppR_tableDP, 10},
+    {"_vcfppR_tableMQ", (DL_FUNC) &_vcfppR_tableMQ, 10},
+    {"_vcfppR_tablePQ", (DL_FUNC) &_vcfppR_tablePQ, 10},
     {"_vcfppR_summaryVariants", (DL_FUNC) &_vcfppR_summaryVariants, 5},
     {"_vcfppR_summarySVs", (DL_FUNC) &_vcfppR_summarySVs, 5},
     {NULL, NULL, 0}

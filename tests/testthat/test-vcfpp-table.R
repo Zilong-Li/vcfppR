@@ -3,8 +3,10 @@ library(vcfppR)
 
 vcffile <- system.file("extdata", "test-GL.vcf.gz", package="vcfppR")
 
-(res <- vcftable(vcffile,"chr20"))
+(res <- vcftable(vcffile,"chr20", info = FALSE, format = "na"))
 str(res)
+
+(res <- vcftable(vcffile,"chr20"))
 
 vcffile <- system.file("extdata", "test-PL.vcf.gz", package="vcfppR")
 (res <- vcftable(vcffile,"chr20", format = "PL"))
@@ -12,10 +14,12 @@ vcffile <- system.file("extdata", "test-PL.vcf.gz", package="vcfppR")
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
 res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps")
 
+q()
 
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
 res <- popgen.heterozygosity(vcffile, "chr21:1-10000000")
 str(res)
+
 
 ped <- read.table("https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/20130606_g1k_3202_samples_ped_population.txt", h=T)
 ped <- ped[order(ped$Superpopulation),]
@@ -41,15 +45,19 @@ out <- sapply(unique(ped$Superpopulation), function(pop) {
   res$SNP[ord] + res$INDEL[ord]
 })
 
-devtools::build_readme()
+## devtools::build_readme()
 
 boxplot(out, main = paste0("Average number of SNP & INDEL variants\nin region ", region))
 
 dev.off()
 
 svfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20210124.SV_Illumina_Integration/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz"
-res <- vcfsummary(svfile, svtype = TRUE)
+sv <- vcfsummary(svfile, svtype = TRUE)
 str(sv)
+
+allsvs <- sv$summary[-1]
+bar <- barplot(allsvs, ylim = c(0, 1.1*max(allsvs)), main = "Variant Count (all SVs)")
+text(bar, allsvs+4500, paste("n: ", allsvs, sep=""))
 
 save.image("~/tmp/vcfppR.RData")
 
@@ -65,7 +73,9 @@ o <- lapply(supers, function(pop) {
 })
 names(o) <- supers
 
+## s <- as.data.frame(lapply(o, colSums))
 s <- as.data.frame(lapply(o, colMeans))
+barplot(colSums(s))
 
 ## s[, c("AFR", "EUR", "SAS", "EAS", "AMR")]
 

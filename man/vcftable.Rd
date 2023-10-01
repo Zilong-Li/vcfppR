@@ -9,6 +9,9 @@ vcftable(
   region = "",
   samples = "-",
   vartype = "all",
+  qual = 0,
+  pass = FALSE,
+  info = TRUE,
   format = "GT",
   collapse = TRUE
 )
@@ -23,6 +26,12 @@ comma separated list of samples to include (or exclude with "^" prefix).
 e.g. "id01,id02", "^id01,id02".}
 
 \item{vartype}{restrict to specific type of variants. supports "snps","indels", "multisnps","multiallelics"}
+
+\item{qual}{logical. restrict to variants with QUAL > qual.}
+
+\item{pass}{logical. restrict to variants with FILTER = "PASS".}
+
+\item{info}{logical. drop INFO column in the returned list.}
 
 \item{format}{the FORMAT tag to extract, valid values are
 "GT","GP", "DP","DS","GL","PL","GQ","HQ","MQ","PQ", "na".
