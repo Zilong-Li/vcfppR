@@ -6,7 +6,7 @@
 \alias{vcfppR-package}
 \title{Imports}
 \description{
-This package demonstrates the usage of vcfpp in R
+The vcfpp is an easy-to-use API of htslib, offering the full functionlities as the htslib. Thus, this package is built upon the vcfpp to provide rapid access to the VCF/BCF file in R.
 }
 \seealso{
 Useful links:
@@ -17,6 +17,6 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Zilong Li \email{zilong.dk@gmail.com} (\href{https://orcid.org/0000-0001-5859-2078}{ORCID})
+\strong{Maintainer}: Zilong Li \email{zilong.dk@gmail.com} (\href{https://orcid.org/0000-0001-5859-2078}{ORCID}) [copyright holder]
 
 }

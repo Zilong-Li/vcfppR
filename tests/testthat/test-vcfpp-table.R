@@ -21,7 +21,7 @@ res <- popgen.heterozygosity(vcffile, "chr21:1-10000000")
 str(res)
 
 
-ped <- read.table("https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/20130606_g1k_3202_samples_ped_population.txt", h=T)
+ped <- read.table("https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/20130606_g1k_3202_samples_ped_population.txt", h=TRUE)
 ped <- ped[order(ped$Superpopulation),]
 
 out <- sapply(unique(ped$Superpopulation), function(pop) {

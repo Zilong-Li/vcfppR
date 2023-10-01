@@ -2,3 +2,6 @@
 ^README\.Rmd$
 ^\.clangd$
 ^\.clang-format$
+^.*\.tbi$
+^src/htslib/htscodecs/tests
+^cran-comments\.md$
