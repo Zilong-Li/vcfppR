@@ -1,5 +1,4 @@
 #!/bin/sh
 
 rm src/*.o src/*.so src/*.dll src/*.dylib
-rm *.tbi
-cd src/htslib && make clean && cd -
+cd src/htslib-1.18/ && make clean && cd -

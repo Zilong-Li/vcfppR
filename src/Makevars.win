@@ -1,6 +1,7 @@
 CXX_STD = CXX11
-PKG_CPPFLAGS = -I. -Ihtslib/
-PKG_LIBS = htslib/libhts.a -fPIC -lz -lbz2 -llzma -lcurl
+HTSLIB_DIR=htslib-1.18
+PKG_CPPFLAGS = -I. -I${HTSLIB_DIR}
+PKG_LIBS = ${HTSLIB_DIR}/libhts.a -fPIC -lz -lbz2 -llzma -lcurl
 
 .PHONY: all clean HTSLIB
 
@@ -14,7 +15,8 @@ $(SHLIB) : HTSLIB
 # LDFLAGS=$(shell "R CMD config LDFLAGS")
 
 HTSLIB:
-	(cd htslib && autoreconf -i && ./configure --with-libdeflate=no && $(MAKE) libhts.a CXX="$(CXX)" CC="$(CC)" CPPFLAGS="$(CPPFLAGS) -fPIC " && cd ..)
+	(cd ${HTSLIB_DIR} && $(MAKE) libhts.a CXX="$(CXX)" CC="$(CC)" CPPFLAGS="$(CPPFLAGS) -fPIC " && cd ..)
+
 
 clean:
 	$(RM) *.o
