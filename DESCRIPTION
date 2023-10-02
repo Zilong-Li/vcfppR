@@ -1,6 +1,6 @@
 Package: vcfppR
 Title: Rapid Manipulation of the VCF/BCF Format in R
-Version: 0.3.0
+Version: 0.3.1
 Authors@R: 
     person("Zilong", "Li", , "zilong.dk@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-5859-2078"))
@@ -12,7 +12,7 @@ RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-SystemRequirements: C++11
+SystemRequirements: libbz2 & liblzma & libcurl (with header files), GNU make
 Imports: 
     Rcpp
 LinkingTo:

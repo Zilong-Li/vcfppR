@@ -1,7 +1,7 @@
 CXX_STD = CXX11
 HTSLIB_DIR=htslib-1.18
-PKG_CPPFLAGS = -I. -I${HTSLIB_DIR}
-PKG_LIBS = ${HTSLIB_DIR}/libhts.a -fPIC -lz -lbz2 -llzma -lcurl
+PKG_CPPFLAGS = -I. -I${HTSLIB_DIR} -D_FILE_OFFSET_BITS=64
+PKG_LIBS+=${HTSLIB_DIR}/libhts.a -lz -lm -lbz2 -llzma -lcurl -lbcrypt -lidn2 -lunistring -liconv -lssl -lcrypto -lcrypt32 -lwsock32 -lwldap32 -lssh2 -lgcrypt -lgpg-error -lws2_32 -lzstd -lregex
 
 .PHONY: all clean HTSLIB
 
@@ -15,7 +15,7 @@ $(SHLIB) : HTSLIB
 # LDFLAGS=$(shell "R CMD config LDFLAGS")
 
 HTSLIB:
-	(cd ${HTSLIB_DIR} && $(MAKE) libhts.a CXX="$(CXX)" CC="$(CC)" CPPFLAGS="$(CPPFLAGS) -fPIC " && cd ..)
+	(cd ${HTSLIB_DIR} && $(MAKE) -f Makefile.win && cd ..)
 
 
 clean:
