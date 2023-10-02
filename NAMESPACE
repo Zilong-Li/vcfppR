@@ -2,7 +2,7 @@
 
 export(getDSskipInfoTagFloat)
 export(heterozygosity)
-export(popgen.heterozygosity)
+export(vcfpopgen)
 export(vcfsummary)
 export(vcftable)
 importFrom(Rcpp,sourceCpp)

@@ -51,8 +51,8 @@ bcftools view -s "id01,id02" input.bcf.gz chr1:100000-20000
 }
 \examples{
 library('vcfppR')
-svfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20210124.SV_Illumina_Integration/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz"
-res <- vcfsummary(svfile, region = "chr21", svtype = TRUE)
+svfile <- system.file("extdata", "sv.vcf.gz", package="vcfppR")
+res <- vcfsummary(svfile, region = "chr21:1-10000000", svtype = TRUE)
 str(res)
 }
 \author{

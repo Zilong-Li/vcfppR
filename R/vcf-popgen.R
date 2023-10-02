@@ -11,7 +11,10 @@
 #'
 #' @param qual restrict to variants with QUAL > qual.
 #'
-#' @return \code{popgen.heterozygosity} a list containing the following components:
+#' @param fun which popgen function to run. available functions are
+#'            "heterozygosity".
+#'
+#' @return \code{vcfpopgen} a list containing the following components:
 #'\describe{
 #'\item{samples}{: character vector; \cr
 #'                 the samples ids in the VCF file after subsetting
@@ -24,7 +27,13 @@
 #'}
 #' @author Zilong Li \email{zilong.dk@gmail.com}
 #'
+#' @examples
+#' library('vcfppR')
+#' vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
+#' res <- vcfpopgen(vcffile)
+#' str(res)
 #' @export
-popgen.heterozygosity <- function(vcffile, region = "", samples = "-", pass = FALSE, qual = 0) {
+vcfpopgen <- function(vcffile, region = "", samples = "-", pass = FALSE, qual = 0,
+                      fun = "heterozygosity") {
     return(heterozygosity(vcffile, region, samples, pass, qual))
 }
