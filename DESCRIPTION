@@ -4,7 +4,7 @@ Version: 0.3.0
 Authors@R: 
     person("Zilong", "Li", , "zilong.dk@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-5859-2078"))
-Description: The vcfpp is an easy-to-use API of htslib, offering the full functionlities as the htslib to manipulate the VCF/BCF. Thus, this package is built upon the vcfpp to provide rapid genomic variant analyses on the VCF/BCF file in R.
+Description: The vcfpp is an easy-to-use API of htslib, offering the full functionalities as the htslib to manipulate the VCF/BCF file. Thus, this package is built upon the vcfpp to provide rapid genomic variant analyses on the VCF/BCF file in R.
 Encoding: UTF-8
 Depends: R (>= 3.6.0)
 Roxygen: list(markdown = TRUE)

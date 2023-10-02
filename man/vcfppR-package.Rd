@@ -6,7 +6,7 @@
 \alias{vcfppR-package}
 \title{Imports}
 \description{
-The vcfpp is an easy-to-use API of htslib, offering the full functionlities as the htslib to manipulate the VCF/BCF. Thus, this package is built upon the vcfpp to provide rapid genomic variant analyses on the VCF/BCF file in R.
+The vcfpp is an easy-to-use API of htslib, offering the full functionalities as the htslib to manipulate the VCF/BCF file. Thus, this package is built upon the vcfpp to provide rapid genomic variant analyses on the VCF/BCF file in R.
 }
 \seealso{
 Useful links:
