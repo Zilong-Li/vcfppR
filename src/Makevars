@@ -9,13 +9,16 @@ all : $(SHLIB)
 
 $(SHLIB) : HTSLIB
 
-# CC=$(shell "R CMD config CC")
-# CXX=$(shell "R CMD config CXX")
-# CPPFLAGS=$(shell "R CMD config CPPFLAGS")
-# LDFLAGS=$(shell "R CMD config LDFLAGS")
+CC=$(shell "R CMD config CC")
+CXX=$(shell "R CMD config CXX")
+AR=$(shell "R CMD config AR")
+RANLIB=$(shell "R CMD config RANLIB")
+CFLAGS=$(shell "R CMD config CFLAGS")
+CPPFLAGS=$(shell "R CMD config CPPFLAGS")
+LDFLAGS=$(shell "R CMD config LDFLAGS")
 
 HTSLIB:
-	(cd ${HTSLIB_DIR} && $(MAKE) libhts.a CXX="$(CXX)" CC="$(CC)" CPPFLAGS="$(CPPFLAGS) -fPIC " && cd ..)
+	(cd ${HTSLIB_DIR} && $(MAKE) libhts.a CC="$(CC)" AR="$(AR)" RANLIB="$(RANLIB)" CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)" && cd ..)
 
 
 clean:
@@ -23,3 +26,4 @@ clean:
 	$(RM) *.dll
 	$(RM) *.so
 	$(RM) *.dylib
+	(cd "${HTSLIB_DIR}" && $(MAKE) clean && cd -)
