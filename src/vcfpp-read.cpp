@@ -34,20 +34,23 @@ List tableNA(std::string vcffile, std::string region, std::string samples = "-",
     CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
     IntegerVector pos(nsnps);
     NumericVector qual(nsnps);
-    for (int i = 0; i < nsnps; i++) {
-        vcf.getNextVariant(var);
+    int i{0};
+    while (vcf.getNextVariant(var)) {
+        if (pass && (var.FILTER() != "PASS")) continue;
+        if ((qualval > 0) && (var.QUAL() < qualval)) continue;
         if (multiallelics && (!var.isMultiAllelics())) continue;
         if (multisnps && (!var.isMultiAllelicSNP())) continue;
         if (snps && (!var.isSNP())) continue;
         if (indels && (!var.isIndel())) continue;
+        chr(i) = var.CHROM();
         pos(i) = var.POS();
         qual(i) = var.QUAL();
-        chr(i) = var.CHROM();
         id(i) = var.ID();
         ref(i) = var.REF();
         alt(i) = var.ALT();
         filter(i) = var.FILTER();
         if (INFO) info(i) = var.INFO();
+        i++;
     }
     return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                         Named("pos") = pos, Named("id") = id, Named("ref") = ref,
@@ -68,8 +71,10 @@ List tableGT(std::string vcffile, std::string region, std::string samples = "-",
     NumericVector qual(nsnps);
     vector<vector<int>> GT(nsnps);
     vector<int> gt;
-    for (int i = 0; i < nsnps; i++) {
-        vcf.getNextVariant(var);
+    int i{0};
+    while (vcf.getNextVariant(var)) {
+        if (pass && (var.FILTER() != "PASS")) continue;
+        if ((qualval > 0) && (var.QUAL() < qualval)) continue;
         if (multiallelics && (!var.isMultiAllelics())) continue;
         if (multisnps && (!var.isMultiAllelicSNP())) continue;
         if (snps && (!var.isSNP())) continue;
@@ -84,6 +89,7 @@ List tableGT(std::string vcffile, std::string region, std::string samples = "-",
         if (INFO) info(i) = var.INFO();
         var.getGenotypes(gt);
         GT[i] = gt;
+        i++;
     }
     return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                         Named("pos") = pos, Named("id") = id, Named("ref") = ref,
@@ -104,8 +110,14 @@ List tableGP(std::string vcffile, std::string region, std::string samples = "-",
     NumericVector qual(nsnps);
     vector<vector<float>> GP(nsnps);
     vector<float> gp;
-    for (int i = 0; i < nsnps; i++) {
-        vcf.getNextVariant(var);
+    int i{0};
+    while (vcf.getNextVariant(var)) {
+        if (pass && (var.FILTER() != "PASS")) continue;
+        if ((qualval > 0) && (var.QUAL() < qualval)) continue;
+        if (multiallelics && (!var.isMultiAllelics())) continue;
+        if (multisnps && (!var.isMultiAllelicSNP())) continue;
+        if (snps && (!var.isSNP())) continue;
+        if (indels && (!var.isIndel())) continue;
         pos(i) = var.POS();
         qual(i) = var.QUAL();
         chr(i) = var.CHROM();
@@ -116,6 +128,7 @@ List tableGP(std::string vcffile, std::string region, std::string samples = "-",
         if (INFO) info(i) = var.INFO();
         var.getFORMAT("GP", gp);
         GP[i] = gp;
+        i++;
     }
     return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                         Named("pos") = pos, Named("id") = id, Named("ref") = ref,
@@ -136,8 +149,14 @@ List tableDS(std::string vcffile, std::string region, std::string samples = "-",
     NumericVector qual(nsnps);
     vector<vector<float>> DS(nsnps);
     vector<float> ds;
-    for (int i = 0; i < nsnps; i++) {
-        vcf.getNextVariant(var);
+    int i{0};
+    while (vcf.getNextVariant(var)) {
+        if (pass && (var.FILTER() != "PASS")) continue;
+        if ((qualval > 0) && (var.QUAL() < qualval)) continue;
+        if (multiallelics && (!var.isMultiAllelics())) continue;
+        if (multisnps && (!var.isMultiAllelicSNP())) continue;
+        if (snps && (!var.isSNP())) continue;
+        if (indels && (!var.isIndel())) continue;
         pos(i) = var.POS();
         qual(i) = var.QUAL();
         chr(i) = var.CHROM();
@@ -148,6 +167,7 @@ List tableDS(std::string vcffile, std::string region, std::string samples = "-",
         if (INFO) info(i) = var.INFO();
         var.getFORMAT("DS", ds);
         DS[i] = ds;
+        i++;
     }
     return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                         Named("pos") = pos, Named("id") = id, Named("ref") = ref,
@@ -168,8 +188,14 @@ List tableGL(std::string vcffile, std::string region, std::string samples = "-",
     NumericVector qual(nsnps);
     vector<vector<float>> GL(nsnps);
     vector<float> gl;
-    for (int i = 0; i < nsnps; i++) {
-        vcf.getNextVariant(var);
+    int i{0};
+    while (vcf.getNextVariant(var)) {
+        if (pass && (var.FILTER() != "PASS")) continue;
+        if ((qualval > 0) && (var.QUAL() < qualval)) continue;
+        if (multiallelics && (!var.isMultiAllelics())) continue;
+        if (multisnps && (!var.isMultiAllelicSNP())) continue;
+        if (snps && (!var.isSNP())) continue;
+        if (indels && (!var.isIndel())) continue;
         pos(i) = var.POS();
         qual(i) = var.QUAL();
         chr(i) = var.CHROM();
@@ -180,6 +206,7 @@ List tableGL(std::string vcffile, std::string region, std::string samples = "-",
         if (INFO) info(i) = var.INFO();
         var.getFORMAT("GL", gl);
         GL[i] = gl;
+        i++;
     }
     return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                         Named("pos") = pos, Named("id") = id, Named("ref") = ref,
@@ -202,6 +229,12 @@ List tableAD(std::string vcffile, std::string region, std::string samples = "-",
     vector<int> ad;
     for (int i = 0; i < nsnps; i++) {
         vcf.getNextVariant(var);
+        if (pass && (var.FILTER() != "PASS")) continue;
+        if ((qualval > 0) && (var.QUAL() < qualval)) continue;
+        if (multiallelics && (!var.isMultiAllelics())) continue;
+        if (multisnps && (!var.isMultiAllelicSNP())) continue;
+        if (snps && (!var.isSNP())) continue;
+        if (indels && (!var.isIndel())) continue;
         pos(i) = var.POS();
         qual(i) = var.QUAL();
         chr(i) = var.CHROM();
@@ -212,6 +245,7 @@ List tableAD(std::string vcffile, std::string region, std::string samples = "-",
         if (INFO) info(i) = var.INFO();
         var.getFORMAT("AD", ad);
         AD[i] = ad;
+        i++;
     }
     return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                         Named("pos") = pos, Named("id") = id, Named("ref") = ref,
@@ -232,8 +266,14 @@ List tablePL(std::string vcffile, std::string region, std::string samples = "-",
     NumericVector qual(nsnps);
     vector<vector<int>> PL(nsnps);
     vector<int> pl;
-    for (int i = 0; i < nsnps; i++) {
-        vcf.getNextVariant(var);
+    int i{0};
+    while (vcf.getNextVariant(var)) {
+        if (pass && (var.FILTER() != "PASS")) continue;
+        if ((qualval > 0) && (var.QUAL() < qualval)) continue;
+        if (multiallelics && (!var.isMultiAllelics())) continue;
+        if (multisnps && (!var.isMultiAllelicSNP())) continue;
+        if (snps && (!var.isSNP())) continue;
+        if (indels && (!var.isIndel())) continue;
         pos(i) = var.POS();
         qual(i) = var.QUAL();
         chr(i) = var.CHROM();
@@ -244,6 +284,7 @@ List tablePL(std::string vcffile, std::string region, std::string samples = "-",
         if (INFO) info(i) = var.INFO();
         var.getFORMAT("PL", pl);
         PL[i] = pl;
+        i++;
     }
     return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                         Named("pos") = pos, Named("id") = id, Named("ref") = ref,
@@ -264,8 +305,14 @@ List tableGQ(std::string vcffile, std::string region, std::string samples = "-",
     NumericVector qual(nsnps);
     vector<vector<int>> GQ(nsnps);
     vector<int> gq;
-    for (int i = 0; i < nsnps; i++) {
-        vcf.getNextVariant(var);
+    int i{0};
+    while (vcf.getNextVariant(var)) {
+        if (pass && (var.FILTER() != "PASS")) continue;
+        if ((qualval > 0) && (var.QUAL() < qualval)) continue;
+        if (multiallelics && (!var.isMultiAllelics())) continue;
+        if (multisnps && (!var.isMultiAllelicSNP())) continue;
+        if (snps && (!var.isSNP())) continue;
+        if (indels && (!var.isIndel())) continue;
         pos(i) = var.POS();
         qual(i) = var.QUAL();
         chr(i) = var.CHROM();
@@ -276,6 +323,7 @@ List tableGQ(std::string vcffile, std::string region, std::string samples = "-",
         if (INFO) info(i) = var.INFO();
         var.getFORMAT("GQ", gq);
         GQ[i] = gq;
+        i++;
     }
     return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                         Named("pos") = pos, Named("id") = id, Named("ref") = ref,
@@ -296,8 +344,14 @@ List tableHQ(std::string vcffile, std::string region, std::string samples = "-",
     NumericVector qual(nsnps);
     vector<vector<int>> HQ(nsnps);
     vector<int> hq;
-    for (int i = 0; i < nsnps; i++) {
-        vcf.getNextVariant(var);
+    int i{0};
+    while (vcf.getNextVariant(var)) {
+        if (pass && (var.FILTER() != "PASS")) continue;
+        if ((qualval > 0) && (var.QUAL() < qualval)) continue;
+        if (multiallelics && (!var.isMultiAllelics())) continue;
+        if (multisnps && (!var.isMultiAllelicSNP())) continue;
+        if (snps && (!var.isSNP())) continue;
+        if (indels && (!var.isIndel())) continue;
         pos(i) = var.POS();
         qual(i) = var.QUAL();
         chr(i) = var.CHROM();
@@ -308,6 +362,7 @@ List tableHQ(std::string vcffile, std::string region, std::string samples = "-",
         if (INFO) info(i) = var.INFO();
         var.getFORMAT("HQ", hq);
         HQ[i] = hq;
+        i++;
     }
     return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                         Named("pos") = pos, Named("id") = id, Named("ref") = ref,
@@ -328,8 +383,14 @@ List tableDP(std::string vcffile, std::string region, std::string samples = "-",
     NumericVector qual(nsnps);
     vector<vector<int>> DP(nsnps);
     vector<int> dp;
-    for (int i = 0; i < nsnps; i++) {
-        vcf.getNextVariant(var);
+    int i{0};
+    while (vcf.getNextVariant(var)) {
+        if (pass && (var.FILTER() != "PASS")) continue;
+        if ((qualval > 0) && (var.QUAL() < qualval)) continue;
+        if (multiallelics && (!var.isMultiAllelics())) continue;
+        if (multisnps && (!var.isMultiAllelicSNP())) continue;
+        if (snps && (!var.isSNP())) continue;
+        if (indels && (!var.isIndel())) continue;
         pos(i) = var.POS();
         qual(i) = var.QUAL();
         chr(i) = var.CHROM();
@@ -340,6 +401,7 @@ List tableDP(std::string vcffile, std::string region, std::string samples = "-",
         if (INFO) info(i) = var.INFO();
         var.getFORMAT("DP", dp);
         DP[i] = dp;
+        i++;
     }
     return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                         Named("pos") = pos, Named("id") = id, Named("ref") = ref,
@@ -360,8 +422,14 @@ List tableMQ(std::string vcffile, std::string region, std::string samples = "-",
     NumericVector qual(nsnps);
     vector<vector<int>> MQ(nsnps);
     vector<int> mq;
-    for (int i = 0; i < nsnps; i++) {
-        vcf.getNextVariant(var);
+    int i{0};
+    while (vcf.getNextVariant(var)) {
+        if (pass && (var.FILTER() != "PASS")) continue;
+        if ((qualval > 0) && (var.QUAL() < qualval)) continue;
+        if (multiallelics && (!var.isMultiAllelics())) continue;
+        if (multisnps && (!var.isMultiAllelicSNP())) continue;
+        if (snps && (!var.isSNP())) continue;
+        if (indels && (!var.isIndel())) continue;
         pos(i) = var.POS();
         qual(i) = var.QUAL();
         chr(i) = var.CHROM();
@@ -372,6 +440,7 @@ List tableMQ(std::string vcffile, std::string region, std::string samples = "-",
         if (INFO) info(i) = var.INFO();
         var.getFORMAT("MQ", mq);
         MQ[i] = mq;
+        i++;
     }
     return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                         Named("pos") = pos, Named("id") = id, Named("ref") = ref,
@@ -392,8 +461,14 @@ List tablePQ(std::string vcffile, std::string region, std::string samples = "-",
     NumericVector qual(nsnps);
     vector<vector<int>> PQ(nsnps);
     vector<int> pq;
-    for (int i = 0; i < nsnps; i++) {
-        vcf.getNextVariant(var);
+    int i{0};
+    while (vcf.getNextVariant(var)) {
+        if (pass && (var.FILTER() != "PASS")) continue;
+        if ((qualval > 0) && (var.QUAL() < qualval)) continue;
+        if (multiallelics && (!var.isMultiAllelics())) continue;
+        if (multisnps && (!var.isMultiAllelicSNP())) continue;
+        if (snps && (!var.isSNP())) continue;
+        if (indels && (!var.isIndel())) continue;
         pos(i) = var.POS();
         qual(i) = var.QUAL();
         chr(i) = var.CHROM();
@@ -404,6 +479,7 @@ List tablePQ(std::string vcffile, std::string region, std::string samples = "-",
         if (INFO) info(i) = var.INFO();
         var.getFORMAT("PQ", pq);
         PQ[i] = pq;
+        i++;
     }
     return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                         Named("pos") = pos, Named("id") = id, Named("ref") = ref,

@@ -1,14 +1,16 @@
 library(vcfppR)
 
+vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
+res <- vcftable(vcffile, "chr21:1-5050000", vartype = "snps")
+str(res)
 
-vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
-res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps")
+sum(res$alt!="") == length(res$alt)
 
 q()
 
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
-res <- popgen.heterozygosity(vcffile, "chr21:1-10000000")
-str(res)
+res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps")
+
 
 
 ped <- read.table("https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/20130606_g1k_3202_samples_ped_population.txt", h=TRUE)

@@ -15,7 +15,7 @@ $(SHLIB) : HTSLIB
 # LDFLAGS=$(shell "R CMD config LDFLAGS")
 
 HTSLIB:
-	(cd ${HTSLIB_DIR} && $(MAKE) -f Makefile.win && cd ..)
+	(cd ${HTSLIB_DIR} && ./configure && $(MAKE) -f Makefile.win && cd ..)
 
 
 clean:
