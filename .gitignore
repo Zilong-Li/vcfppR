@@ -3,3 +3,4 @@
 .Rdata
 .httr-oauth
 .DS_Store
+src/htslib-1.18
