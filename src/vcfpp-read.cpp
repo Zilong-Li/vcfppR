@@ -62,15 +62,18 @@ List tableNA(std::string vcffile, std::string region, std::string samples = "-",
 List tableGT(std::string vcffile, std::string region, std::string samples = "-", double qualval = 0,
              bool pass = false, bool INFO = true, bool snps = false, bool indels = false,
              bool multiallelics = false, bool multisnps = false) {
-    int nsnps = count_variants_restricted(vcffile, region, samples, qualval, pass, snps, indels,
-                                          multiallelics, multisnps);
+    // int nsnps = count_variants_restricted(vcffile, region, samples, qualval, pass, snps, indels,
+    //                                       multiallelics, multisnps);
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
-    CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
-    IntegerVector pos(nsnps);
-    NumericVector qual(nsnps);
-    vector<vector<int>> GT(nsnps);
-    vector<int> gt;
+    // CharacterVector chr(nsnps), ref(nsnps), alt(nsnps), id(nsnps), filter(nsnps), info(nsnps);
+    // IntegerVector pos(nsnps);
+    // NumericVector qual(nsnps);
+    // vector<vector<int>> GT(nsnps);
+    vector<vector<int>> GT;
+    vector<int> gt, pos;
+    vector<double> qual;
+    vector<std::string> chr, ref, alt, id, filter, info;
     int i{0};
     while (vcf.getNextVariant(var)) {
         if (pass && (var.FILTER() != "PASS")) continue;
@@ -79,16 +82,16 @@ List tableGT(std::string vcffile, std::string region, std::string samples = "-",
         if (multisnps && (!var.isMultiAllelicSNP())) continue;
         if (snps && (!var.isSNP())) continue;
         if (indels && (!var.isIndel())) continue;
-        pos(i) = var.POS();
-        qual(i) = var.QUAL();
-        chr(i) = var.CHROM();
-        id(i) = var.ID();
-        ref(i) = var.REF();
-        alt(i) = var.ALT();
-        filter(i) = var.FILTER();
-        if (INFO) info(i) = var.INFO();
+        pos.push_back(var.POS());
+        qual.push_back(var.QUAL());
+        chr.push_back(var.CHROM());
+        id.push_back(var.ID());
+        ref.push_back(var.REF());
+        alt.push_back(var.ALT());
+        filter.push_back(var.FILTER());
+        if (INFO) info.push_back(var.INFO());
         var.getGenotypes(gt);
-        GT[i] = gt;
+        GT.push_back(gt);
         i++;
     }
     return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
