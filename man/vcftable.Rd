@@ -33,13 +33,13 @@ e.g. "id01,id02", "^id01,id02".}
 
 \item{info}{logical. drop INFO column in the returned list.}
 
-\item{format}{the FORMAT tag to extract, valid values are
-"GT","GP", "DP","DS","GL","PL","GQ","HQ","MQ","PQ", "na".
-special case "na" for not extracting the FORMAT column.}
+\item{format}{the FORMAT tag to extract.}
 
-\item{collapse}{logical. The dim of raw genotypes matrix of diploid is (M, 2 * N), where M is #markers and N is #samples.
-default TRUE will collapse the genotypes for each sample such that the matrix is (M, N).
-set this to false if one wants to maintain the phasing order, e.g. "1|0" is parsed as c(1, 0) with collapse=FALSE}
+\item{collapse}{logical. It acts on the FORMAT. If the FORMAT is GT, the dim of raw genotypes matrix of diploid is (M, 2 * N),
+where M is #markers and N is #samples. default TRUE will collapse the genotypes for each sample such that the matrix is (M, N).
+set this to false if one wants to maintain the phasing order, e.g. "1|0" is parsed as c(1, 0) with collapse=FALSE.
+If the FORMAT is not GT, then it will turn a list of the format vector into a matrix with collapse=TRUE. However, this raises issues
+when the variant is mutliallelic because it has more vaules for this row.}
 }
 \value{
 \code{vcftable} a list containing the following components:

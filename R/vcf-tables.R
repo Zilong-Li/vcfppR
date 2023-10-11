@@ -26,13 +26,13 @@
 #'
 #' @param info logical. drop INFO column in the returned list.
 #'
-#' @param format the FORMAT tag to extract, valid values are
-#'               "GT","GP", "DP","DS","GL","PL","GQ","HQ","MQ","PQ", "na".
-#'               special case "na" for not extracting the FORMAT column.
+#' @param format the FORMAT tag to extract.
 #'
-#' @param collapse logical. The dim of raw genotypes matrix of diploid is (M, 2 * N), where M is #markers and N is #samples.
-#'                 default TRUE will collapse the genotypes for each sample such that the matrix is (M, N).
-#'                 set this to false if one wants to maintain the phasing order, e.g. "1|0" is parsed as c(1, 0) with collapse=FALSE 
+#' @param collapse logical. It acts on the FORMAT. If the FORMAT is GT, the dim of raw genotypes matrix of diploid is (M, 2 * N),
+#'                 where M is #markers and N is #samples. default TRUE will collapse the genotypes for each sample such that the matrix is (M, N).
+#'                 set this to false if one wants to maintain the phasing order, e.g. "1|0" is parsed as c(1, 0) with collapse=FALSE.
+#'                 If the FORMAT is not GT, then it will turn a list of the format vector into a matrix with collapse=TRUE. However, this raises issues
+#'                 when the variant is mutliallelic because it has more vaules for this row.
 #'
 #' @return \code{vcftable} a list containing the following components:
 #'\describe{
@@ -95,22 +95,10 @@ vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", qual 
   else if(vartype == "multisnps") multisnps <- TRUE
   else if(vartype == "multiallelics") multiallelics <- TRUE
   else if(vartype != "all") stop("Invaild variant type!")
-  res <- switch(format,
-                GT = tableGT(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
-                GP = tableGP(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
-                GQ = tableGQ(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
-                AD = tableAD(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
-                DS = tableDS(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
-                DP = tableDP(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
-                PL = tablePL(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
-                GL = tableGL(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
-                HQ = tableHQ(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
-                MQ = tableMQ(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
-                PQ = tablePQ(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
-                na = tableNA(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps),
-                stop("Invaild tag in FORAMT column"))
-  if(format != "na") res[[10]] <- do.call("rbind", res[[10]])
+  res <- NULL
   if(format == "GT") {
+    res <- tableGT(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps)
+    res[[10]] <- do.call("rbind", res[[10]])
     n <- ncol(res$gt)
     ploidy <- n / length(res$samples)
     if(ploidy == 2 && collapse) {
@@ -119,6 +107,9 @@ vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", qual 
     } else {
       res$gt[res$gt < 0] <- NA
     }
+  } else {
+    res <- tableOther(format, vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps)
+    if(collapse) res[[10]] <- do.call("rbind", res[[10]])
   }
   return(res)
 }

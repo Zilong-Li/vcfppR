@@ -1,6 +1,6 @@
 Package: vcfppR
 Title: Rapid Manipulation of the VCF/BCF Format in R
-Version: 0.3.2
+Version: 0.3.3
 Authors@R: 
     person("Zilong", "Li", , "zilong.dk@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-5859-2078"))

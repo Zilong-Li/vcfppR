@@ -25,52 +25,12 @@ heterozygosity <- function(vcffile, region = "", samples = "-", pass = FALSE, qu
     .Call(`_vcfppR_heterozygosity`, vcffile, region, samples, pass, qual)
 }
 
-tableNA <- function(vcffile, region, samples = "-", qualval = 0, pass = FALSE, INFO = TRUE, snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
-    .Call(`_vcfppR_tableNA`, vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
-}
-
 tableGT <- function(vcffile, region, samples = "-", qualval = 0, pass = FALSE, INFO = TRUE, snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
     .Call(`_vcfppR_tableGT`, vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
 }
 
-tableGP <- function(vcffile, region, samples = "-", qualval = 0, pass = FALSE, INFO = TRUE, snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
-    .Call(`_vcfppR_tableGP`, vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
-}
-
-tableDS <- function(vcffile, region, samples = "-", qualval = 0, pass = FALSE, INFO = TRUE, snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
-    .Call(`_vcfppR_tableDS`, vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
-}
-
-tableGL <- function(vcffile, region, samples = "-", qualval = 0, pass = FALSE, INFO = TRUE, snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
-    .Call(`_vcfppR_tableGL`, vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
-}
-
-tableAD <- function(vcffile, region, samples = "-", qualval = 0, pass = FALSE, INFO = TRUE, snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
-    .Call(`_vcfppR_tableAD`, vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
-}
-
-tablePL <- function(vcffile, region, samples = "-", qualval = 0, pass = FALSE, INFO = TRUE, snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
-    .Call(`_vcfppR_tablePL`, vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
-}
-
-tableGQ <- function(vcffile, region, samples = "-", qualval = 0, pass = FALSE, INFO = TRUE, snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
-    .Call(`_vcfppR_tableGQ`, vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
-}
-
-tableHQ <- function(vcffile, region, samples = "-", qualval = 0, pass = FALSE, INFO = TRUE, snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
-    .Call(`_vcfppR_tableHQ`, vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
-}
-
-tableDP <- function(vcffile, region, samples = "-", qualval = 0, pass = FALSE, INFO = TRUE, snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
-    .Call(`_vcfppR_tableDP`, vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
-}
-
-tableMQ <- function(vcffile, region, samples = "-", qualval = 0, pass = FALSE, INFO = TRUE, snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
-    .Call(`_vcfppR_tableMQ`, vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
-}
-
-tablePQ <- function(vcffile, region, samples = "-", qualval = 0, pass = FALSE, INFO = TRUE, snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
-    .Call(`_vcfppR_tablePQ`, vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
+tableOther <- function(format, vcffile, region, samples = "-", qualval = 0, pass = FALSE, INFO = TRUE, snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
+    .Call(`_vcfppR_tableOther`, format, vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
 }
 
 summaryVariants <- function(vcffile, region = "", samples = "-", filter_pass = FALSE, qual = 0) {

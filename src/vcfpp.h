@@ -2,7 +2,7 @@
  * @file        https://github.com/Zilong-Li/vcfpp/vcfpp.h
  * @author      Zilong Li
  * @email       zilong.dk@gmail.com
- * @version     v0.3.0
+ * @version     v0.3.1
  * @breif       a single C++ file for manipulating VCF
  * Copyright (C) 2022-2023.The use of this code is governed by the LICENSE file.
  ******************************************************************************/
@@ -280,6 +280,25 @@ class BcfHeader
         return vec;
     }
 
+    /**
+     *  @brief get the type of a given tag
+     *  @param tag in the FORMAT
+     *  @return 1: int; 2: float; 3: string; 0: error;
+     */
+    inline int getFormatType(std::string tag) const
+    {
+        int tag_id = bcf_hdr_id2int(hdr, BCF_DT_ID, tag.c_str());
+        if(tag_id < 0) return 0;
+        if(bcf_hdr_id2type(hdr, BCF_HL_FMT, tag_id) == (BCF_HT_INT & 0xff))
+            return 1;
+        else if(bcf_hdr_id2type(hdr, BCF_HL_FMT, tag_id) == (BCF_HT_REAL & 0xff))
+            return 2;
+        else if(bcf_hdr_id2type(hdr, BCF_HL_FMT, tag_id) == (BCF_HT_STR & 0xff))
+            return 3;
+        else
+            return 0;
+    }
+
     /** @brief remove a contig tag from header */
     inline void removeContig(std::string tag) const
     {
@@ -358,7 +377,8 @@ class BcfRecord
     int nvalues = 0; // the number of values for a tag in FORMAT
 
   public:
-    std::vector<char> isGenoMissing; // if a sample has missing genotype or not
+    /// if there is "." in GT for the sample, then it's coded as missing (TRUE)
+    std::vector<char> isGenoMissing;
 
   public:
     /** @brief initilize a BcfRecord object using a given BcfHeader object. */
@@ -517,13 +537,15 @@ type as noted in the other overloading function.
         nvalues = fmt->n;
         ndst = 0;
         S * dst = NULL;
-        int tag_id = bcf_hdr_id2int(header.hdr, BCF_DT_ID, tag.c_str());
-        if(bcf_hdr_id2type(header.hdr, BCF_HL_FMT, tag_id) == (BCF_HT_INT & 0xff))
+        int tagid = header.getFormatType(tag);
+        if(tagid == 1)
             ret = bcf_get_format_int32(header.hdr, line, tag.c_str(), &dst, &ndst);
-        else if(bcf_hdr_id2type(header.hdr, BCF_HL_FMT, tag_id) == (BCF_HT_REAL & 0xff))
+        else if(tagid == 2)
             ret = bcf_get_format_float(header.hdr, line, tag.c_str(), &dst, &ndst);
-        else if(bcf_hdr_id2type(header.hdr, BCF_HL_FMT, tag_id) == (BCF_HT_STR & 0xff))
+        else if(tagid == 3)
             ret = bcf_get_format_char(header.hdr, line, tag.c_str(), &dst, &ndst);
+        else
+            throw std::runtime_error("can not find the type of " + tag + " in the header file.\n");
         if(ret >= 0)
         {
             // user have to check if there is missing in the return v;
@@ -550,8 +572,7 @@ type as noted in the other overloading function.
         // if ndst < (fmt->n+1)*nsmpl; then realloc is involved
         ret = -1, ndst = 0;
         char ** dst = NULL;
-        int tag_id = bcf_hdr_id2int(header.hdr, BCF_DT_ID, tag.c_str());
-        if(bcf_hdr_id2type(header.hdr, BCF_HL_FMT, tag_id) == (BCF_HT_STR & 0xff))
+        if(header.getFormatType(tag) == 3)
             ret = bcf_get_format_string(header.hdr, line, tag.c_str(), &dst, &ndst);
         if(ret > 0)
         {
@@ -867,7 +888,7 @@ type as noted in the other overloading function.
             return true;
     }
 
-    /** @brief return boolean value indicates if current variant is INDEL or not */
+    /** @brief return boolean value indicates if current variant is exclusively INDEL */
     inline bool isIndel() const
     {
         // REF has multiple allels
@@ -888,7 +909,7 @@ type as noted in the other overloading function.
         return true;
     }
 
-    /** @brief return boolean value indicates if current variant is multiallelic SNP sites */
+    /** @brief return boolean value indicates if current variant is exclusively multiallelic SNP sites */
     inline bool isMultiAllelicSNP() const
     {
         // skip REF with length > 1, i.e. INDEL
@@ -904,7 +925,8 @@ type as noted in the other overloading function.
         return true;
     }
 
-    /** @brief return boolean value indicates if current variant is biallelic SNP. Note ALT=* are skipped */
+    /** @brief return boolean value indicates if current variant is exclusively biallelic SNP. Note ALT=* are
+     * skipped */
     inline bool isSNP() const
     {
         // REF and ALT have multiple allels
@@ -917,69 +939,76 @@ type as noted in the other overloading function.
         return true;
     }
 
-    /** @brief return boolean value indicates if current variant has SNP type defined in vcf.h */
+    /** @brief return boolean value indicates if current variant has SNP type defined in vcf.h (htslib>=1.16)
+     */
     inline bool hasSNP() const
     {
         int type = bcf_has_variant_types(line, VCF_SNP, bcf_match_overlap);
-        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
-        if (type == 0) return false;
+        if(type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if(type == 0) return false;
         return true;
     }
 
-    /// return boolean value indicates if current variant has SNP type defined in vcf.h (htslib>=1.16)
+    /// return boolean value indicates if current variant has INDEL type defined in vcf.h (htslib>=1.16)
     inline bool hasINDEL() const
     {
         int type = bcf_has_variant_types(line, VCF_INDEL, bcf_match_overlap);
-        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
-        if (type == 0) return false;
+        if(type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if(type == 0) return false;
         return true;
     }
 
+    /// return boolean value indicates if current variant has INS type defined in vcf.h (htslib>=1.16)
     inline bool hasINS() const
     {
         int type = bcf_has_variant_types(line, VCF_INS, bcf_match_overlap);
-        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
-        if (type == 0) return false;
+        if(type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if(type == 0) return false;
         return true;
     }
 
+    /// return boolean value indicates if current variant has DEL type defined in vcf.h (htslib>=1.16)
     inline bool hasDEL() const
     {
         int type = bcf_has_variant_types(line, VCF_DEL, bcf_match_overlap);
-        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
-        if (type == 0) return false;
+        if(type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if(type == 0) return false;
         return true;
     }
 
+    /// return boolean value indicates if current variant has MNP type defined in vcf.h (htslib>=1.16)
     inline bool hasMNP() const
     {
         int type = bcf_has_variant_types(line, VCF_MNP, bcf_match_overlap);
-        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
-        if (type == 0) return false;
+        if(type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if(type == 0) return false;
         return true;
     }
 
+    /// return boolean value indicates if current variant has BND type defined in vcf.h (htslib>=1.16)
     inline bool hasBND() const
     {
         int type = bcf_has_variant_types(line, VCF_BND, bcf_match_overlap);
-        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
-        if (type == 0) return false;
+        if(type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if(type == 0) return false;
         return true;
     }
 
+    /// return boolean value indicates if current variant has OTHER type defined in vcf.h (htslib>=1.16)
     inline bool hasOTHER() const
     {
         int type = bcf_has_variant_types(line, VCF_OTHER, bcf_match_overlap);
-        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
-        if (type == 0) return false;
+        if(type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if(type == 0) return false;
         return true;
     }
 
+    /// return boolean value indicates if current variant has OVERLAP type defined in vcf.h (htslib>=1.16)
     inline bool hasOVERLAP() const
     {
         int type = bcf_has_variant_types(line, VCF_OVERLAP, bcf_match_overlap);
-        if (type < 0) throw std::runtime_error("something wrong with variant type\n");
-        if (type == 0) return false;
+        if(type < 0) throw std::runtime_error("something wrong with variant type\n");
+        if(type == 0) return false;
         return true;
     }
 
@@ -1322,7 +1351,7 @@ class BcfReader
     {
         uint64_t c{0};
         while(getNextVariant(r)) c++;
-        setRegion(region);  // reset the region
+        setRegion(region); // reset the region
         return c;
     }
 
@@ -1340,7 +1369,7 @@ class BcfReader
             isBcf = true;
             hidx = bcf_index_load(fname.c_str());
             if(itr) bcf_itr_destroy(itr); // reset current region.
-            if (region.empty())
+            if(region.empty())
                 itr = bcf_itr_querys(hidx, header.hdr, ".");
             else
                 itr = bcf_itr_querys(hidx, header.hdr, region.c_str());
@@ -1350,8 +1379,8 @@ class BcfReader
             isBcf = false;
             tidx = tbx_index_load(fname.c_str());
             assert(tidx != NULL && "error loading tabix index!");
-            if (itr) tbx_itr_destroy(itr);  // reset current region.
-            if (region.empty())
+            if(itr) tbx_itr_destroy(itr); // reset current region.
+            if(region.empty())
                 itr = tbx_itr_querys(tidx, ".");
             else
                 itr = tbx_itr_querys(tidx, region.c_str());
@@ -1506,7 +1535,7 @@ class BcfWriter
     {
         if(!isHeaderWritten) writeHeader();
         if(b) bcf_destroy(b);
-        if(fp) hts_close(fp);  // be careful of double free
+        if(fp) hts_close(fp); // be careful of double free
         isClosed = true;
     }
 
