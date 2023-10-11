@@ -109,7 +109,7 @@ vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", qual 
     }
   } else {
     res <- tableOther(format, vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps)
-    if(collapse) res[[10]] <- do.call("rbind", res[[10]])
+    if(is.list(res[[10]]) && collapse) res[[10]] <- do.call("rbind", res[[10]])
   }
   return(res)
 }
