@@ -20,19 +20,21 @@
 #'                e.g. "id01,id02", "^id01,id02".
 #'
 #' @param vartype restrict to specific type of variants. supports "snps","indels", "multisnps","multiallelics"
+#' @param format the FORMAT tag to extract. default "GT" is extracted.
+#'
+#' @param ids  character vector. restrict to sites with ID in the given vector. default NULL won't filter any sites.
+#'
 #' @param qual logical. restrict to variants with QUAL > qual.
 #'
 #' @param pass logical. restrict to variants with FILTER = "PASS".
 #'
 #' @param info logical. drop INFO column in the returned list.
 #'
-#' @param format the FORMAT tag to extract.
-#'
-#' @param collapse logical. It acts on the FORMAT. If the FORMAT is GT, the dim of raw genotypes matrix of diploid is (M, 2 * N),
+#' @param collapse logical. It acts on the FORMAT. If the FORMAT to extract is "GT", the dim of raw genotypes matrix of diploid is (M, 2 * N),
 #'                 where M is #markers and N is #samples. default TRUE will collapse the genotypes for each sample such that the matrix is (M, N).
-#'                 set this to false if one wants to maintain the phasing order, e.g. "1|0" is parsed as c(1, 0) with collapse=FALSE.
-#'                 If the FORMAT is not GT, then it will turn a list of the format vector into a matrix with collapse=TRUE. However, this raises issues
-#'                 when the variant is mutliallelic because it has more vaules for this row.
+#'                 Set this to FALSE if one wants to maintain the phasing order, e.g. "1|0" is parsed as c(1, 0) with collapse=FALSE.
+#'                 If the FORMAT to extract is not "GT", then with collapse=TRUE it will try to turn a list of the extracted vector into a matrix.
+#'                 However, this raises issues when one variant is mutliallelic resulting in more vaules than others.
 #'
 #' @return \code{vcftable} a list containing the following components:
 #'\describe{
@@ -84,8 +86,8 @@
 #' res <- vcftable(vcffile, "chr21:1-5050000", vartype = "snps")
 #' str(res)
 #' @export
-vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", qual = 0,
-                     pass = FALSE, info = TRUE, format = "GT", collapse = TRUE) {
+vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", format = "GT", ids = NULL,
+                     qual = 0, pass = FALSE, info = TRUE, collapse = TRUE) {
   snps <- FALSE
   indels <- FALSE
   multiallelics <- FALSE
@@ -95,9 +97,10 @@ vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", qual 
   else if(vartype == "multisnps") multisnps <- TRUE
   else if(vartype == "multiallelics") multiallelics <- TRUE
   else if(vartype != "all") stop("Invaild variant type!")
+  if(is.null(ids)) ids <- c("")
   res <- NULL
   if(format == "GT") {
-    res <- tableGT(vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps)
+    res <- tableGT(vcffile, region, samples, "GT", ids, qual, pass, info, snps, indels, multiallelics, multisnps)
     res[[10]] <- do.call("rbind", res[[10]])
     n <- ncol(res$gt)
     ploidy <- n / length(res$samples)
@@ -108,7 +111,7 @@ vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", qual 
       res$gt[res$gt < 0] <- NA
     }
   } else {
-    res <- tableOther(format, vcffile, region, samples, qual, pass, info, snps, indels, multiallelics, multisnps)
+    res <- tableFormat(vcffile, region, samples, format, ids, qual, pass, info, snps, indels, multiallelics, multisnps)
     if(is.list(res[[10]]) && collapse) res[[10]] <- do.call("rbind", res[[10]])
   }
   return(res)

@@ -8,6 +8,10 @@ sum(res$alt!="") == length(res$alt)
 
 q()
 
+vcffile <- "inst/extdata/raw.gt.vcf.gz"
+res <- vcftable(vcffile, "chr21:1-5050000", vartype = "snps", ids = c("chr21:5030866:A:G"))
+str(res)
+
 res <- vcftable(vcffile, "chr21:1-5050000", format = "PL", vartype = "snps")
 str(res)
 

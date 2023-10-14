@@ -9,10 +9,11 @@ vcftable(
   region = "",
   samples = "-",
   vartype = "all",
+  format = "GT",
+  ids = NULL,
   qual = 0,
   pass = FALSE,
   info = TRUE,
-  format = "GT",
   collapse = TRUE
 )
 }
@@ -27,19 +28,21 @@ e.g. "id01,id02", "^id01,id02".}
 
 \item{vartype}{restrict to specific type of variants. supports "snps","indels", "multisnps","multiallelics"}
 
+\item{format}{the FORMAT tag to extract. default "GT" is extracted.}
+
+\item{ids}{character vector. restrict to sites with ID in the given vector. default NULL won't filter any sites.}
+
 \item{qual}{logical. restrict to variants with QUAL > qual.}
 
 \item{pass}{logical. restrict to variants with FILTER = "PASS".}
 
 \item{info}{logical. drop INFO column in the returned list.}
 
-\item{format}{the FORMAT tag to extract.}
-
-\item{collapse}{logical. It acts on the FORMAT. If the FORMAT is GT, the dim of raw genotypes matrix of diploid is (M, 2 * N),
+\item{collapse}{logical. It acts on the FORMAT. If the FORMAT to extract is "GT", the dim of raw genotypes matrix of diploid is (M, 2 * N),
 where M is #markers and N is #samples. default TRUE will collapse the genotypes for each sample such that the matrix is (M, N).
-set this to false if one wants to maintain the phasing order, e.g. "1|0" is parsed as c(1, 0) with collapse=FALSE.
-If the FORMAT is not GT, then it will turn a list of the format vector into a matrix with collapse=TRUE. However, this raises issues
-when the variant is mutliallelic because it has more vaules for this row.}
+Set this to FALSE if one wants to maintain the phasing order, e.g. "1|0" is parsed as c(1, 0) with collapse=FALSE.
+If the FORMAT to extract is not "GT", then with collapse=TRUE it will try to turn a list of the extracted vector into a matrix.
+However, this raises issues when one variant is mutliallelic resulting in more vaules than others.}
 }
 \value{
 \code{vcftable} a list containing the following components:

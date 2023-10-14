@@ -25,12 +25,12 @@ heterozygosity <- function(vcffile, region = "", samples = "-", pass = FALSE, qu
     .Call(`_vcfppR_heterozygosity`, vcffile, region, samples, pass, qual)
 }
 
-tableGT <- function(vcffile, region, samples = "-", qualval = 0, pass = FALSE, INFO = TRUE, snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
-    .Call(`_vcfppR_tableGT`, vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
+tableGT <- function(vcffile, region, samples, format, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps) {
+    .Call(`_vcfppR_tableGT`, vcffile, region, samples, format, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
 }
 
-tableOther <- function(format, vcffile, region, samples = "-", qualval = 0, pass = FALSE, INFO = TRUE, snps = FALSE, indels = FALSE, multiallelics = FALSE, multisnps = FALSE) {
-    .Call(`_vcfppR_tableOther`, format, vcffile, region, samples, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
+tableFormat <- function(vcffile, region, samples, format, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps) {
+    .Call(`_vcfppR_tableFormat`, vcffile, region, samples, format, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
 }
 
 summaryVariants <- function(vcffile, region = "", samples = "-", filter_pass = FALSE, qual = 0) {
