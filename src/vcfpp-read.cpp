@@ -12,7 +12,7 @@ List tableGT(std::string vcffile, std::string region, std::string samples = "-",
     vcfpp::BcfRecord var(vcf.header);
     vector<vector<int>> GT;
     vector<int> gt, pos;
-    vector<double> qual;
+    vector<float> qual;
     vector<std::string> chr, ref, alt, id, filter, info;
     while (vcf.getNextVariant(var)) {
         if (pass && (var.FILTER() != "PASS")) continue;
@@ -46,7 +46,7 @@ List tableOther(std::string format, std::string vcffile, std::string region,
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
     vector<int> pos;
-    vector<double> qual;
+    vector<float> qual;
     vector<std::string> chr, ref, alt, id, filter, info;
     int tagtype = vcf.header.getFormatType(format);
     if (tagtype == 1) {
@@ -72,8 +72,9 @@ List tableOther(std::string format, std::string vcffile, std::string region,
             for (int i = 0; i < vcf.nsamples; i++) {
                 for (int j = 0; j < nvals; j++)
                     // hit the end, set it to NA == bcf_int32_missing
-                    if (vec[i * nvals + j] == bcf_int32_vector_end)
-                        vec[i * nvals + j] = bcf_int32_missing;
+                    if (vec[i * nvals + j] == bcf_int32_vector_end ||
+                        vec[i * nvals + j] == bcf_int32_missing)
+                        vec[i * nvals + j] = NA_INTEGER;
             }
             mat.push_back(vec);
         }
@@ -82,8 +83,9 @@ List tableOther(std::string format, std::string vcffile, std::string region,
                             Named("alt") = alt, Named("qual") = qual, Named("filter") = filter,
                             Named("info") = info, Named(format) = mat);
     } else if (tagtype == 2) {
-        vector<vector<float>> mat;
-        vector<float> vec;
+        vector<vector<double>> mat;
+        vector<float> vecf;
+        vector<double> vecd;
         while (vcf.getNextVariant(var)) {
             if (pass && (var.FILTER() != "PASS")) continue;
             if ((qualval > 0) && (var.QUAL() < qualval)) continue;
@@ -99,8 +101,18 @@ List tableOther(std::string format, std::string vcffile, std::string region,
             alt.push_back(var.ALT());
             filter.push_back(var.FILTER());
             if (INFO) info.push_back(var.INFO());
-            var.getFORMAT(format, vec);
-            mat.push_back(vec);
+            var.getFORMAT(format, vecf);
+            int nvals = vecf.size() / vcf.nsamples;  // how many values per sample
+            vecd.resize(vecf.size());
+            for (int i = 0; i < vcf.nsamples; i++) {
+                for (int j = 0; j < nvals; j++)
+                    if (bcf_float_is_missing(vecf[i * nvals + j]) ||
+                        bcf_float_is_vector_end(vecf[i * nvals + j]))
+                        vecd[i * nvals + j] = NA_REAL;
+                    else
+                        vecd[i * nvals + j] = vecf[i * nvals + j];
+            }
+            mat.push_back(vecd);
         }
         return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                             Named("pos") = pos, Named("id") = id, Named("ref") = ref,
