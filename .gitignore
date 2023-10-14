@@ -4,3 +4,14 @@
 .httr-oauth
 .DS_Store
 src/htslib-1.18
+*.tar.gz
+vignettes/*_cache
+
+## lsp
+.clangd
+.clang-format
+
+## R check
+src/symbols.rds
+*.Rcheck
+CRAN-SUBMISSION

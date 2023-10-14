@@ -12,7 +12,7 @@ RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-SystemRequirements: libbz2 & liblzma & libcurl (with header files), GNU make
+SystemRequirements: libcurl: libcurl-devel (rpm) or libcurl4-openssl-dev (deb), libdeflate: libdeflate-devel (rpm), libdeflate-dev(deb), GNU make.
 Imports: 
     Rcpp
 LinkingTo:

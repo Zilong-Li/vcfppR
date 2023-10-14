@@ -6,3 +6,5 @@
 ^src/htslib-1.18/htscodecs/tests
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+\.github
+.*\.tar\.gz$
