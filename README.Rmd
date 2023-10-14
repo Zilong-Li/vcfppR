@@ -22,7 +22,7 @@ The vcfppR package implements various useful functions for manipulating the VCF/
 
 ## Installation
 
-You can install the development version of vcfppR like so:
+You can install the development version of vcfppR with the system dependencies of `libcurl` and `libdeflate`.
 
 ``` r
 devtools::install_github("Zilong-Li/vcfppR")

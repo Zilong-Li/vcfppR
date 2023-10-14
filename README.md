@@ -11,7 +11,8 @@ the VCF/BCF files in R using the C++ API of vcfpp.
 
 ## Installation
 
-You can install the development version of vcfppR like so:
+You can install the development version of vcfppR with the system
+dependencies of `libcurl` and `libdeflate`.
 
 ``` r
 devtools::install_github("Zilong-Li/vcfppR")

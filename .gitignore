@@ -15,3 +15,4 @@ vignettes/*_cache
 src/symbols.rds
 *.Rcheck
 CRAN-SUBMISSION
+README.html

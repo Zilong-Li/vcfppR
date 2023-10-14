@@ -7,4 +7,6 @@
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
 \.github
+^Makefile
+^README.html
 .*\.tar\.gz$
