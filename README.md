@@ -4,6 +4,8 @@
 # vcfppR
 
 <!-- badges: start -->
+
+[R-CMD-check](https://github.com/Zilong-Li/vcfppR/actions/workflows/check-release.yaml/badge.svg)
 <!-- badges: end -->
 
 The vcfppR package implements various useful functions for manipulating
