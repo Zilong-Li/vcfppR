@@ -6,6 +6,7 @@
 src/htslib-1.18
 *.tar.gz
 vignettes/*_cache
+test-random.R
 
 ## lsp
 .clangd

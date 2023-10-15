@@ -17,10 +17,10 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 ![R-CMD-check](https://github.com/Zilong-Li/vcfppR/actions/workflows/check-release.yaml/badge.svg)
-<a href="https://github.com/Zilong-Li/vcfppR"><img src="https://raw.githubusercontent.com/Zilong-Li/random/main/vcfppR.png" height="200" align="right" /></a> 
+<a href="https://github.com/Zilong-Li/random/blob/main/vcfppR.png"><img src="https://raw.githubusercontent.com/Zilong-Li/random/main/vcfppR.png" height="200" align="right" /></a> 
 <!-- badges: end -->
 
-The vcfppR package implements various useful functions for manipulating the VCF/BCF files in R using the C++ API of vcfpp.
+The vcfppR package implements various useful functions for manipulating the VCF/BCF files in R using the C++ API of [vcfpp.h](https://github.com/Zilong-Li/vcfpp).
 
 ## Installation
 
