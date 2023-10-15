@@ -1,11 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# vcfppR
+# vcfppR: rapid manipulation of the VCF/BCF files
 
 <!-- badges: start -->
 
-[R-CMD-check](https://github.com/Zilong-Li/vcfppR/actions/workflows/check-release.yaml/badge.svg)
+![R-CMD-check](https://github.com/Zilong-Li/vcfppR/actions/workflows/check-release.yaml/badge.svg)
+<a href="https://github.com/Zilong-Li/vcfppR"><img src="https://raw.githubusercontent.com/Zilong-Li/random/main/vcfppR.png" height="200" align="right" /></a>
 <!-- badges: end -->
 
 The vcfppR package implements various useful functions for manipulating
