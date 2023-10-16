@@ -3,7 +3,6 @@
 *.Rdata
 .httr-oauth
 .DS_Store
-src/htslib-1.18
 *.tar.gz
 vignettes/*_cache
 test-random.R

@@ -270,7 +270,7 @@ static void dump_map(unsigned int *map, int size, char *name) {
     fprintf(stderr, "}\n");
 }
 
-#pragma GCC diagnostic ignored "-Wunused-function"
+/* #pragma GCC diagnostic ignored "-Wunused-function" */
 static void dump_params(fqz_gparams *gp) {
     fprintf(stderr, "Global params = {\n");
     fprintf(stderr, "\tvers\t%d\n", gp->vers);
