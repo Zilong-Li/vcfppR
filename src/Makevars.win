@@ -14,7 +14,7 @@ $(SHLIB) : HTSLIB
 # LDFLAGS=$(shell "R CMD config LDFLAGS")
 
 HTSLIB:
-	(cd ${HTSLIB_DIR} && ./configure && $(MAKE) -f Makefile.win && cd ..)
+	(cd ${HTSLIB_DIR} && $(MAKE) -f Makefile.win libhts.a && cd ..)
 
 
 clean:
@@ -22,3 +22,4 @@ clean:
 	$(RM) *.dll
 	$(RM) *.so
 	$(RM) *.dylib
+	(cd "${HTSLIB_DIR}" && $(MAKE) clean && cd -)
