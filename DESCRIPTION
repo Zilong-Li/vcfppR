@@ -1,10 +1,10 @@
 Package: vcfppR
-Title: Rapid Manipulation of the VCF/BCF Format in R
-Version: 0.3.4
+Title: Rapid Manipulation of The VCF/BCF Format in R
+Version: 0.3.5
 Authors@R: 
     person("Zilong", "Li", , "zilong.dk@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-5859-2078"))
-Description: The vcfpp is an easy-to-use API of htslib, offering the full functionalities as the htslib to manipulate the VCF/BCF file. Thus, this package is built upon the vcfpp to provide rapid genomic variant analyses on the VCF/BCF file in R.
+Description: The https://github.com/Zilong-Li/vcfpp is an easy-to-use C++ API of htslib, offering the full functionalities as the htslib to manipulate the VCF/BCF file. Thus, this package is built upon the vcfpp.h to provide rapid genomic variant analyses on the VCF/BCF file in R.
 Encoding: UTF-8
 Depends: R (>= 3.6.0)
 Roxygen: list(markdown = TRUE)
@@ -12,7 +12,7 @@ RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-SystemRequirements: libcurl: libcurl-devel (rpm) or libcurl4-openssl-dev (deb), libdeflate: libdeflate-dev(deb), GNU make.
+SystemRequirements: libcurl: libcurl-devel (rpm) or libcurl4-openssl-dev (deb), GNU make.
 Imports: 
     Rcpp
 LinkingTo:
