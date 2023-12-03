@@ -115,6 +115,8 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP _rcpp_module_boot_vcfreader();
+
 static const R_CallMethodDef CallEntries[] = {
     {"_vcfppR_getDSskipInfoTagFloat", (DL_FUNC) &_vcfppR_getDSskipInfoTagFloat, 5},
     {"_vcfppR_heterozygosity", (DL_FUNC) &_vcfppR_heterozygosity, 5},
@@ -122,6 +124,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfppR_tableFormat", (DL_FUNC) &_vcfppR_tableFormat, 12},
     {"_vcfppR_summaryVariants", (DL_FUNC) &_vcfppR_summaryVariants, 5},
     {"_vcfppR_summarySVs", (DL_FUNC) &_vcfppR_summarySVs, 5},
+    {"_rcpp_module_boot_vcfreader", (DL_FUNC) &_rcpp_module_boot_vcfreader, 0},
     {NULL, NULL, 0}
 };
 

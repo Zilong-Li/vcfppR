@@ -5,6 +5,7 @@
 .DS_Store
 *.tar.gz
 vignettes/*_cache
+src/htslib-1.18
 test-random.R
 
 ## lsp

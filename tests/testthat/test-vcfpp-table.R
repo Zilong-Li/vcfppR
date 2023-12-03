@@ -1,7 +1,7 @@
 library(vcfppR)
+library(testthat)
 
 vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
-
 
 test_that("extract GT for all SNPs", {
   res <- vcftable(vcffile, vartype = "snps")
@@ -15,3 +15,5 @@ test_that("extract GT for variant with ID=chr21:5030516:G:A", {
   expect_equal(res$ref, "G")
   expect_equal(res$alt, "A")
 })
+
+
