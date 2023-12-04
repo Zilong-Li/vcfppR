@@ -102,7 +102,7 @@ class vcfreader {
                 if (v_int[i + 1] < 0) v_int[i + 1] = NA_INTEGER;
             }
             for (size_t i = 0; 2 * i + 1 < v_int.size(); i++) {
-                swap(v_int[i], v_int[2 * i + 1]);
+                std::swap(v_int[i], v_int[2 * i + 1]);
             }
             v_int.resize(v_int.size() / 2);
         } else {
