@@ -50,18 +50,6 @@
 #' @field hasOVERLAP Test if current variant has a OVERLAP or not
 NULL
 
-#' get DS (dosage) of each sample and skip variants given a INFO tag of Float type and a cutoff
-#' @param cutoff  skip variants with tag value smaller than this cutoff
-#' @param tag     tag exists in INFO column
-#' @param vcffile path to the VCF file with index
-#' @param region  region to extract
-#' @param samples samples to extract
-#' @return A list of genotype dosages for each sample along with variant information in VCF
-#' @export
-getDSskipInfoTagFloat <- function(cutoff, tag, vcffile, region = "", samples = "-") {
-    .Call(`_vcfppR_getDSskipInfoTagFloat`, cutoff, tag, vcffile, region, samples)
-}
-
 #' calculate the number of heterozygous SNPs for each sample
 #' @param vcffile path to the VCF file with index
 #' @param region  region to extract, default "" for all

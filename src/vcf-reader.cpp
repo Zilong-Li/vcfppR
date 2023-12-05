@@ -160,7 +160,7 @@ class vcfreader {
         return v_str;
     }
 
-    inline bool nsamples() const { return br.nsamples; }
+    inline int nsamples() const { return br.nsamples; }
     inline bool isSNP() const { return var.isSNP(); }
     inline bool isIndel() const { return var.isIndel(); }
     inline bool isSV() const { return var.isSV(); }
