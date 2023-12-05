@@ -1,4 +1,4 @@
 
 CompileFlags:                     # Tweak the parse settings
-  Add: [-std=c++11, -I/Library/Frameworks/R.framework/Versions/4.1/Resources/include, -I/Library/Frameworks/R.framework/Versions/4.1/Resources/library/Rcpp/include]
+  Add: [-std=c++11, -I/usr/include/c++/11, -I/usr/include/x86_64-linux-gnu/c++/11, -I/usr/share/R/include, -I/home/zilong/R/x86_64-pc-linux-gnu-library/4.3/Rcpp/include, -I./htslib-1.18]
   Remove: -W*                     # strip all other warning-related flags
