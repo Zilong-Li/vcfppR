@@ -37,6 +37,19 @@ using namespace std;
 //' @field formatFloat Return the tag value of float type for each sample in FORAMT field of current variant \itemize{ \item Parameter: tag - The tag name to retrieve in FORAMT}
 //' @field formatStr Return the tag value of string type for each sample in FORAMT field of current variant \itemize{ \item Parameter: tag - The tag name to retrieve in FORAMT}
 //' @field nsamples Return the number of samples
+//' @field isSNP Test if current variant is exculsively a SNP or not
+//' @field isIndel Test if current variant is exculsively a INDEL or not
+//' @field isSV Test if current variant is exculsively a SV or not
+//' @field isMultiAllelics Test if current variant is exculsively a Multi Allelics or not
+//' @field isMultiAllelicSNP Test if current variant is exculsively a Multi Biallelics (SNPs) or not
+//' @field hasSNP Test if current variant has a SNP or not
+//' @field hasINDEL Test if current variant has a INDEL or not
+//' @field hasINS Test if current variant has a INS or not
+//' @field hasDEL Test if current variant has a DEL or not
+//' @field hasMNP Test if current variant has a MNP or not
+//' @field hasBND Test if current variant has a BND or not
+//' @field hasOTHER Test if current variant has a OTHER or not
+//' @field hasOVERLAP Test if current variant has a OVERLAP or not
 class vcfreader {
    public:
     vcfreader(std::string vcffile) {
@@ -147,7 +160,20 @@ class vcfreader {
         return v_str;
     }
 
-    inline int nsamples() const { return br.nsamples; }
+    inline bool nsamples() const { return br.nsamples; }
+    inline bool isSNP() const { return var.isSNP(); }
+    inline bool isIndel() const { return var.isIndel(); }
+    inline bool isSV() const { return var.isSV(); }
+    inline bool isMultiAllelics() const { return var.isMultiAllelics(); }
+    inline bool isMultiAllelicSNP() const { return var.isMultiAllelicSNP(); }
+    inline bool hasSNP() const { return var.hasSNP(); }
+    inline bool hasINDEL() const { return var.hasINDEL(); }
+    inline bool hasINS() const { return var.hasINS(); }
+    inline bool hasDEL() const { return var.hasDEL(); }
+    inline bool hasMNP() const { return var.hasMNP(); }
+    inline bool hasBND() const { return var.hasBND(); }
+    inline bool hasOTHER() const { return var.hasOTHER(); }
+    inline bool hasOVERLAP() const { return var.hasOVERLAP(); }
 
    private:
     vcfpp::BcfReader br;
@@ -185,5 +211,19 @@ RCPP_MODULE(vcfreader) {
         .method("infoStr", &vcfreader::infoStr, "get tag value of string type in INFO")
         .method("formatInt", &vcfreader::formatInt, "get tag value of int type in FORMAT")
         .method("formatFloat", &vcfreader::formatFloat, "get tag value of float type in FORMAT")
-        .method("formatStr", &vcfreader::formatStr, "get tag value of string type in FORMAT");
+        .method("formatStr", &vcfreader::formatStr, "get tag value of string type in FORMAT")
+        .method("isSNP", &vcfreader::isSNP)
+        .method("isIndel", &vcfreader::isIndel)
+        .method("isSV", &vcfreader::isSV)
+        .method("isMultiAllelics", &vcfreader::isMultiAllelics)
+        .method("isMultiAllelicSNP", &vcfreader::isMultiAllelicSNP)
+        .method("hasSNP", &vcfreader::hasSNP)
+        .method("hasINDEL", &vcfreader::hasINDEL)
+        .method("hasINS", &vcfreader::hasINS)
+        .method("hasDEL", &vcfreader::hasDEL)
+        .method("hasMNP", &vcfreader::hasMNP)
+        .method("hasBND", &vcfreader::hasBND)
+        .method("hasOTHER", &vcfreader::hasOTHER)
+        .method("hasOVERLAP", &vcfreader::hasOVERLAP)
+        ;
 }

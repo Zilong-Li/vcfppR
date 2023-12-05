@@ -61,5 +61,31 @@ Type the name of the class to see its methods
 \item{\code{formatStr}}{Return the tag value of string type for each sample in FORAMT field of current variant \itemize{ \item Parameter: tag - The tag name to retrieve in FORAMT}}
 
 \item{\code{nsamples}}{Return the number of samples}
+
+\item{\code{isSNP}}{Test if current variant is exculsively a SNP or not}
+
+\item{\code{isIndel}}{Test if current variant is exculsively a INDEL or not}
+
+\item{\code{isSV}}{Test if current variant is exculsively a SV or not}
+
+\item{\code{isMultiAllelics}}{Test if current variant is exculsively a Multi Allelics or not}
+
+\item{\code{isMultiAllelicSNP}}{Test if current variant is exculsively a Multi Biallelics (SNPs) or not}
+
+\item{\code{hasSNP}}{Test if current variant has a SNP or not}
+
+\item{\code{hasINDEL}}{Test if current variant has a INDEL or not}
+
+\item{\code{hasINS}}{Test if current variant has a INS or not}
+
+\item{\code{hasDEL}}{Test if current variant has a DEL or not}
+
+\item{\code{hasMNP}}{Test if current variant has a MNP or not}
+
+\item{\code{hasBND}}{Test if current variant has a BND or not}
+
+\item{\code{hasOTHER}}{Test if current variant has a OTHER or not}
+
+\item{\code{hasOVERLAP}}{Test if current variant has a OVERLAP or not}
 }}
 

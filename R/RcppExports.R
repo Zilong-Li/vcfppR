@@ -35,6 +35,19 @@
 #' @field formatFloat Return the tag value of float type for each sample in FORAMT field of current variant \itemize{ \item Parameter: tag - The tag name to retrieve in FORAMT}
 #' @field formatStr Return the tag value of string type for each sample in FORAMT field of current variant \itemize{ \item Parameter: tag - The tag name to retrieve in FORAMT}
 #' @field nsamples Return the number of samples
+#' @field isSNP Test if current variant is exculsively a SNP or not
+#' @field isIndel Test if current variant is exculsively a INDEL or not
+#' @field isSV Test if current variant is exculsively a SV or not
+#' @field isMultiAllelics Test if current variant is exculsively a Multi Allelics or not
+#' @field isMultiAllelicSNP Test if current variant is exculsively a Multi Biallelics (SNPs) or not
+#' @field hasSNP Test if current variant has a SNP or not
+#' @field hasINDEL Test if current variant has a INDEL or not
+#' @field hasINS Test if current variant has a INS or not
+#' @field hasDEL Test if current variant has a DEL or not
+#' @field hasMNP Test if current variant has a MNP or not
+#' @field hasBND Test if current variant has a BND or not
+#' @field hasOTHER Test if current variant has a OTHER or not
+#' @field hasOVERLAP Test if current variant has a OVERLAP or not
 NULL
 
 #' get DS (dosage) of each sample and skip variants given a INFO tag of Float type and a cutoff
