@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{vcfreader}
 \alias{vcfreader}
-\title{API for reading read the VCF/BCF.}
+\title{API for reading the VCF/BCF.}
 \description{
 Type the name of the class to see its methods
 }

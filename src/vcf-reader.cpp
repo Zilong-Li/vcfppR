@@ -4,7 +4,7 @@
 using namespace std;
 
 //' @name vcfreader
-//' @title API for reading read the VCF/BCF.
+//' @title API for reading the VCF/BCF.
 //' @description Type the name of the class to see its methods
 //' @field new Constructor given a vcf file \itemize{
 //' \item Parameter: vcffile - The path of a vcf file
@@ -175,9 +175,23 @@ class vcfreader {
     inline bool hasOTHER() const { return var.hasOTHER(); }
     inline bool hasOVERLAP() const { return var.hasOVERLAP(); }
 
+    // WRITE
+    inline void output(std::string vcffile) {
+        bw.open(vcffile);
+        bw.initalHeader(br.header);
+    }
+    inline void write() { bw.writeRecord(var); }
+    inline void close() { bw.close(); }
+    
+    inline void setCHR(std::string s) { var.setCHR(s.c_str()); }
+    inline void setID(std::string s) { var.setID(s.c_str()); }
+    inline void setPOS(int pos) { var.setPOS(pos); }
+    inline void setRefAlt(std::string s) { var.setRefAlt(s.c_str()); }
+
    private:
     vcfpp::BcfReader br;
     vcfpp::BcfRecord var;
+    vcfpp::BcfWriter bw;
     vector<int> v_int;
     vector<float> v_float;
     vector<std::string> v_str;
@@ -224,6 +238,5 @@ RCPP_MODULE(vcfreader) {
         .method("hasMNP", &vcfreader::hasMNP)
         .method("hasBND", &vcfreader::hasBND)
         .method("hasOTHER", &vcfreader::hasOTHER)
-        .method("hasOVERLAP", &vcfreader::hasOVERLAP)
-        ;
+        .method("hasOVERLAP", &vcfreader::hasOVERLAP);
 }

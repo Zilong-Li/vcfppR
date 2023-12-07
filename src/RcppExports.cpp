@@ -101,6 +101,7 @@ END_RCPP
 }
 
 RcppExport SEXP _rcpp_module_boot_vcfreader();
+RcppExport SEXP _rcpp_module_boot_vcfwriter();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_vcfppR_heterozygosity", (DL_FUNC) &_vcfppR_heterozygosity, 5},
@@ -109,6 +110,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfppR_summaryVariants", (DL_FUNC) &_vcfppR_summaryVariants, 5},
     {"_vcfppR_summarySVs", (DL_FUNC) &_vcfppR_summarySVs, 5},
     {"_rcpp_module_boot_vcfreader", (DL_FUNC) &_rcpp_module_boot_vcfreader, 0},
+    {"_rcpp_module_boot_vcfwriter", (DL_FUNC) &_rcpp_module_boot_vcfwriter, 0},
     {NULL, NULL, 0}
 };
 

@@ -2,7 +2,7 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @name vcfreader
-#' @title API for reading read the VCF/BCF.
+#' @title API for reading the VCF/BCF.
 #' @description Type the name of the class to see its methods
 #' @field new Constructor given a vcf file \itemize{
 #' \item Parameter: vcffile - The path of a vcf file
@@ -48,6 +48,15 @@
 #' @field hasBND Test if current variant has a BND or not
 #' @field hasOTHER Test if current variant has a OTHER or not
 #' @field hasOVERLAP Test if current variant has a OVERLAP or not
+NULL
+
+#' @name vcfwriter
+#' @title API for writing the VCF/BCF.
+#' @description Type the name of the class to see its methods
+#' @field new Constructor given a vcf file \itemize{
+#' \item Parameter: vcffile - The path of a vcf file. don't start with "~"
+#' \item Parameter: version - The version of VCF specification
+#' }
 NULL
 
 #' calculate the number of heterozygous SNPs for each sample
