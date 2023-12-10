@@ -13,26 +13,35 @@ knitr::opts_chunk$set(
 )
 ```
 
-# vcfppR: rapid manipulation of the VCF/BCF files
+# vcfppR: rapid manipulation of the VCF/BCF file
 
 <!-- badges: start -->
 ![R-CMD-check](https://github.com/Zilong-Li/vcfppR/actions/workflows/check-release.yaml/badge.svg)
 <a href="https://github.com/Zilong-Li/random/blob/main/vcfppR.png"><img src="https://raw.githubusercontent.com/Zilong-Li/random/main/vcfppR.png" height="200" align="right" /></a> 
 <!-- badges: end -->
 
-The vcfppR package implements various useful functions for manipulating the VCF/BCF files in R using the C++ API of [vcfpp.h](https://github.com/Zilong-Li/vcfpp).
+The vcfppR package implements various useful functions for manipulating the VCF/BCF file in R using the C++ API of [vcfpp.h](https://github.com/Zilong-Li/vcfpp).
 
 ## Installation
 
 You can install the development version of vcfppR with the system dependencies of `libcurl`.
 
 ``` r
+## install.package("vcfppR")
 devtools::install_github("Zilong-Li/vcfppR")
 ```
 
-## Examples
+## API
 
-In the examples, we use the URL link as filename, which can be directly fed to vcfppR, and the performance will depend on your connection to the servers.
+There are two classes i.e. ***vcfreader*** and ***vcfwriter*** offering the full R-bindings of vcfpp.h. Check out the examples in the [tests](tests/testthat) folder or refer to the manual.
+
+```r
+?vcfppR::vcfreader
+```
+
+In addtion to two classes for R-bindings of vcfpp.h, there are some useful functions in the package, e.g. ***vcftable***, ***vcfsummary*** and ***vcfpopgen***. In the following examples, we use the URL link as filename, which can be directly fed to vcfppR, and the performance will depend on your connection to the servers.
+
+## Read VCF as tabular data in R
  
 This example shows how to read only SNP variants with FILTER="PASS" and GT format in the VCF/BCF into R tables:
 ```r

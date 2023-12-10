@@ -112,6 +112,20 @@ Type the name of the class to see its methods
 
 \item{\code{setInfoStr}}{Modify the given tag of STRING type in the INFO of current variant}
 
+\item{\code{setGenotypes}}{Modify the genotypes of current variant}
+
+\item{\code{setFormatInt}}{Modify the given tag of INT type in the FORMAT of current variant}
+
+\item{\code{setFormatFloat}}{Modify the given tag of FLOAT type in the FORMAT of current variant}
+
+\item{\code{setFormatStr}}{Modify the given tag of STRING type in the FORMAT of current variant}
+
 \item{\code{rmInfoTag}}{Remove the given tag from the INFO of current variant}
+
+\item{\code{setVariant}}{Modify current variant by adding a vcf line}
+
+\item{\code{addINFO}}{Add a INFO in the header of the vcf}
+
+\item{\code{addFORMAT}}{Add a FORMAT in the header of the vcf}
 }}
 

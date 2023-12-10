@@ -62,7 +62,14 @@ using namespace std;
 //' @field setInfoInt Modify the given tag of INT type in the INFO of current variant
 //' @field setInfoFloat Modify the given tag of FLOAT type in the INFO of current variant
 //' @field setInfoStr Modify the given tag of STRING type in the INFO of current variant
+//' @field setGenotypes Modify the genotypes of current variant
+//' @field setFormatInt Modify the given tag of INT type in the FORMAT of current variant
+//' @field setFormatFloat Modify the given tag of FLOAT type in the FORMAT of current variant
+//' @field setFormatStr Modify the given tag of STRING type in the FORMAT of current variant
 //' @field rmInfoTag Remove the given tag from the INFO of current variant
+//' @field setVariant Modify current variant by adding a vcf line
+//' @field addINFO Add a INFO in the header of the vcf
+//' @field addFORMAT Add a FORMAT in the header of the vcf
 class vcfreader {
    public:
     vcfreader(const std::string& vcffile) {
@@ -204,9 +211,25 @@ class vcfreader {
     inline void setRefAlt(const std::string& s) { var.setRefAlt(s.c_str()); }
     inline void setInfoInt(std::string tag, int v) { var.setINFO(tag, v); }
     inline void setInfoFloat(std::string tag, double v) { var.setINFO(tag, v); }
-    inline void setInfoStr(std::string tag, const std::string& v) { var.setINFO(tag, v); }
+    inline void setInfoStr(std::string tag, const std::string& s) { var.setINFO(tag, s); }
+    inline void setGenotypes(std::string tag, const vector<int>& v) { var.setGenotypes(v); }
+    inline void setFormatInt(std::string tag, const vector<int>& v) { var.setFORMAT(tag, v); }
+    inline void setFormatFloat(std::string tag, const vector<double>& v) {
+        vector<float> f(v.begin(), v.end());
+        var.setFORMAT(tag, f);
+    }
+    inline void setFormatStr(std::string tag, const std::string& s) { var.setINFO(tag, s); }
     inline void rmInfoTag(std::string s) { var.removeINFO(s); }
-    
+    inline void setVariant(const std::string& s) { var.addLineFromString(s); }
+    inline void addINFO(const std::string& id, const std::string& number, const std::string& type,
+                        const std::string& desc) {
+        bw.header.addINFO(id, number, type, desc);
+    }
+    inline void addFORMAT(const std::string& id, const std::string& number, const std::string& type,
+                          const std::string& desc) {
+        bw.header.addFORMAT(id, number, type, desc);
+    }
+
    private:
     vcfpp::BcfReader br;
     vcfpp::BcfRecord var;
@@ -270,5 +293,12 @@ RCPP_MODULE(vcfreader) {
         .method("setInfoInt", &vcfreader::setInfoInt)
         .method("setInfoFloat", &vcfreader::setInfoFloat)
         .method("setInfoStr", &vcfreader::setInfoStr)
+        .method("setGenotypes", &vcfreader::setGenotypes)
+        .method("setFormatInt", &vcfreader::setFormatInt)
+        .method("setFormatFloat", &vcfreader::setFormatFloat)
+        .method("setFormatStr", &vcfreader::setFormatStr)
+        .method("setVariant", &vcfreader::setVariant)
+        .method("addINFO", &vcfreader::addINFO)
+        .method("addFORMAT", &vcfreader::addFORMAT)
         .method("rmInfoTag", &vcfreader::rmInfoTag);
 }

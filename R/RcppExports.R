@@ -60,7 +60,14 @@
 #' @field setInfoInt Modify the given tag of INT type in the INFO of current variant
 #' @field setInfoFloat Modify the given tag of FLOAT type in the INFO of current variant
 #' @field setInfoStr Modify the given tag of STRING type in the INFO of current variant
+#' @field setGenotypes Modify the genotypes of current variant
+#' @field setFormatInt Modify the given tag of INT type in the FORMAT of current variant
+#' @field setFormatFloat Modify the given tag of FLOAT type in the FORMAT of current variant
+#' @field setFormatStr Modify the given tag of STRING type in the FORMAT of current variant
 #' @field rmInfoTag Remove the given tag from the INFO of current variant
+#' @field setVariant Modify current variant by adding a vcf line
+#' @field addINFO Add a INFO in the header of the vcf
+#' @field addFORMAT Add a FORMAT in the header of the vcf
 NULL
 
 #' @name vcfwriter
