@@ -13,5 +13,21 @@ Type the name of the class to see its methods
 \item Parameter: vcffile - The path of a vcf file. don't start with "~"
 \item Parameter: version - The version of VCF specification
 }}
+
+\item{\code{addContig}}{Add a Contig in the header of the vcf}
+
+\item{\code{addFILTER}}{Add a FILTER in the header of the vcf}
+
+\item{\code{addINFO}}{Add a INFO in the header of the vcf}
+
+\item{\code{addFORMAT}}{Add a FORMAT in the header of the vcf}
+
+\item{\code{addSample}}{Add a SAMPLE in the header of the vcf}
+
+\item{\code{addLine}}{Add a line in the header of the vcf}
+
+\item{\code{writeline}}{Write a variant record given a line}
+
+\item{\code{close}}{Close and save the vcf file}
 }}
 

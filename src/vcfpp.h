@@ -818,7 +818,7 @@ type as noted in the other overloading function.
      * */
     void setPhasing(const std::vector<char> & v)
     {
-        assert(v.size() == nsamples);
+        assert((int)v.size() == nsamples);
         gtPhase = v;
     }
 

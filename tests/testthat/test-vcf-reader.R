@@ -1,8 +1,9 @@
 library(testthat)
 library(vcfppR)
+
 vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
 
-test_that("vcfreader works", {
+test_that("vcfreader: reading variant works", {
   br <- vcfreader$new(vcffile)
   br$variant()
   expect_identical(br$chr(), "chr21")
@@ -25,4 +26,38 @@ test_that("vcfreader works", {
   pl <- br$formatInt("PL")
   expect_identical(length(pl), 9606L)
 })
+
+test_that("vcfreader: writing variant works", {
+  br <- vcfreader$new(vcffile)
+  br$variant()
+  br$setCHR("chr22")
+  expect_identical(br$chr(), "chr22")
+  br$setPOS(9999L)
+  expect_identical(br$pos(), 9999L)
+  br$setID("rs122334")
+  expect_identical(br$id(), "rs122334")
+  expect_identical(br$ref(), "G")
+  expect_identical(br$alt(), "A")
+  br$setRefAlt("A,GA")
+  expect_identical(br$ref(), "A")
+  expect_identical(br$alt(), "GA")
+  expect_identical(br$infoInt("AC"), 2L)
+  br$setInfoInt("AC", 3L)
+  expect_identical(br$infoInt("AC"), 3L)
+  br$setInfoFloat("AF", 0.3)
+  expect_equal(br$infoFloat("AF"), 0.3, tolerance  = 1e-6)
+  br$setInfoStr("VariantType", "indel")
+  expect_identical(br$infoStr("VariantType" ), "indel")
+  ## output current variant to another vcf
+  s1 <- br$string()
+  outvcf <- paste0(tempfile(), ".vcf.gz")
+  br$output(outvcf)
+  br$write()
+  br$close()
+  br <- vcfreader$new(outvcf)
+  br$variant()
+  s2 <- br$string()
+  expect_identical(s1, s2)
+})
+
 

@@ -34,7 +34,6 @@
 #' @field formatInt Return the tag value of integer type for each sample in FORAMT field of current variant \itemize{ \item Parameter: tag - The tag name to retrieve in FORAMT}
 #' @field formatFloat Return the tag value of float type for each sample in FORAMT field of current variant \itemize{ \item Parameter: tag - The tag name to retrieve in FORAMT}
 #' @field formatStr Return the tag value of string type for each sample in FORAMT field of current variant \itemize{ \item Parameter: tag - The tag name to retrieve in FORAMT}
-#' @field nsamples Return the number of samples
 #' @field isSNP Test if current variant is exculsively a SNP or not
 #' @field isIndel Test if current variant is exculsively a INDEL or not
 #' @field isSV Test if current variant is exculsively a SV or not
@@ -48,6 +47,20 @@
 #' @field hasBND Test if current variant has a BND or not
 #' @field hasOTHER Test if current variant has a OTHER or not
 #' @field hasOVERLAP Test if current variant has a OVERLAP or not
+#' @field nsamples Return the number of samples
+#' @field string Return the raw string of current variant
+#' @field header Return the raw string of the vcf header
+#' @field output Init an output object for streaming out the variants to another vcf
+#' @field write Streaming out current variant the output vcf
+#' @field close Close the connection to the output vcf
+#' @field setCHR Modify the CHR of current variant
+#' @field setID Modify the ID of current variant
+#' @field setPOS Modify the POS of current variant
+#' @field setRefAlt Modify the REF and ALT of current variant given a string seperated by comma
+#' @field setInfoInt Modify the given tag of INT type in the INFO of current variant
+#' @field setInfoFloat Modify the given tag of FLOAT type in the INFO of current variant
+#' @field setInfoStr Modify the given tag of STRING type in the INFO of current variant
+#' @field rmInfoTag Remove the given tag from the INFO of current variant
 NULL
 
 #' @name vcfwriter
@@ -57,6 +70,14 @@ NULL
 #' \item Parameter: vcffile - The path of a vcf file. don't start with "~"
 #' \item Parameter: version - The version of VCF specification
 #' }
+#' @field addContig Add a Contig in the header of the vcf
+#' @field addFILTER Add a FILTER in the header of the vcf
+#' @field addINFO Add a INFO in the header of the vcf
+#' @field addFORMAT Add a FORMAT in the header of the vcf
+#' @field addSample Add a SAMPLE in the header of the vcf
+#' @field addLine Add a line in the header of the vcf
+#' @field writeline Write a variant record given a line
+#' @field close Close and save the vcf file
 NULL
 
 #' calculate the number of heterozygous SNPs for each sample

@@ -36,7 +36,6 @@ using namespace std;
 //' @field formatInt Return the tag value of integer type for each sample in FORAMT field of current variant \itemize{ \item Parameter: tag - The tag name to retrieve in FORAMT}
 //' @field formatFloat Return the tag value of float type for each sample in FORAMT field of current variant \itemize{ \item Parameter: tag - The tag name to retrieve in FORAMT}
 //' @field formatStr Return the tag value of string type for each sample in FORAMT field of current variant \itemize{ \item Parameter: tag - The tag name to retrieve in FORAMT}
-//' @field nsamples Return the number of samples
 //' @field isSNP Test if current variant is exculsively a SNP or not
 //' @field isIndel Test if current variant is exculsively a INDEL or not
 //' @field isSV Test if current variant is exculsively a SV or not
@@ -50,20 +49,34 @@ using namespace std;
 //' @field hasBND Test if current variant has a BND or not
 //' @field hasOTHER Test if current variant has a OTHER or not
 //' @field hasOVERLAP Test if current variant has a OVERLAP or not
+//' @field nsamples Return the number of samples
+//' @field string Return the raw string of current variant
+//' @field header Return the raw string of the vcf header
+//' @field output Init an output object for streaming out the variants to another vcf
+//' @field write Streaming out current variant the output vcf
+//' @field close Close the connection to the output vcf
+//' @field setCHR Modify the CHR of current variant
+//' @field setID Modify the ID of current variant
+//' @field setPOS Modify the POS of current variant
+//' @field setRefAlt Modify the REF and ALT of current variant given a string seperated by comma
+//' @field setInfoInt Modify the given tag of INT type in the INFO of current variant
+//' @field setInfoFloat Modify the given tag of FLOAT type in the INFO of current variant
+//' @field setInfoStr Modify the given tag of STRING type in the INFO of current variant
+//' @field rmInfoTag Remove the given tag from the INFO of current variant
 class vcfreader {
    public:
-    vcfreader(std::string vcffile) {
+    vcfreader(const std::string& vcffile) {
         br.open(vcffile);
         var.init(br.header);
     }
 
-    vcfreader(std::string vcffile, std::string region) {
+    vcfreader(const std::string& vcffile, const std::string& region) {
         br.open(vcffile);
         if (!region.empty()) br.setRegion(region);
         var.init(br.header);
     }
 
-    vcfreader(std::string vcffile, std::string region, std::string samples) {
+    vcfreader(const std::string& vcffile, const std::string& region, const std::string& samples) {
         br.open(vcffile);
         if (!samples.empty()) br.setSamples(samples);
         if (!region.empty()) br.setRegion(region);
@@ -160,7 +173,6 @@ class vcfreader {
         return v_str;
     }
 
-    inline int nsamples() const { return br.nsamples; }
     inline bool isSNP() const { return var.isSNP(); }
     inline bool isIndel() const { return var.isIndel(); }
     inline bool isSV() const { return var.isSV(); }
@@ -174,20 +186,27 @@ class vcfreader {
     inline bool hasBND() const { return var.hasBND(); }
     inline bool hasOTHER() const { return var.hasOTHER(); }
     inline bool hasOVERLAP() const { return var.hasOVERLAP(); }
+    inline int nsamples() const { return br.nsamples; }
+    inline std::string string() const { return var.asString(); }
+    inline std::string header() const { return br.header.asString(); }
 
     // WRITE
-    inline void output(std::string vcffile) {
+    inline void output(const std::string& vcffile) {
         bw.open(vcffile);
         bw.initalHeader(br.header);
     }
     inline void write() { bw.writeRecord(var); }
     inline void close() { bw.close(); }
-    
+
     inline void setCHR(std::string s) { var.setCHR(s.c_str()); }
     inline void setID(std::string s) { var.setID(s.c_str()); }
     inline void setPOS(int pos) { var.setPOS(pos); }
-    inline void setRefAlt(std::string s) { var.setRefAlt(s.c_str()); }
-
+    inline void setRefAlt(const std::string& s) { var.setRefAlt(s.c_str()); }
+    inline void setInfoInt(std::string tag, int v) { var.setINFO(tag, v); }
+    inline void setInfoFloat(std::string tag, double v) { var.setINFO(tag, v); }
+    inline void setInfoStr(std::string tag, const std::string& v) { var.setINFO(tag, v); }
+    inline void rmInfoTag(std::string s) { var.removeINFO(s); }
+    
    private:
     vcfpp::BcfReader br;
     vcfpp::BcfRecord var;
@@ -214,7 +233,6 @@ RCPP_MODULE(vcfreader) {
         .method("qual", &vcfreader::qual, "get QUAL")
         .method("filter", &vcfreader::filter, "get FILTER")
         .method("info", &vcfreader::info, "get INFO as a string")
-        .method("nsamples", &vcfreader::nsamples, "get the number of smaples")
         .method("genotypes", &vcfreader::genotypes, "get genotypes")
         .method("infoInt", &vcfreader::infoInt, "get tag value of int type in INFO")
         .method("infoIntVec", &vcfreader::infoIntVec,
@@ -238,5 +256,19 @@ RCPP_MODULE(vcfreader) {
         .method("hasMNP", &vcfreader::hasMNP)
         .method("hasBND", &vcfreader::hasBND)
         .method("hasOTHER", &vcfreader::hasOTHER)
-        .method("hasOVERLAP", &vcfreader::hasOVERLAP);
+        .method("hasOVERLAP", &vcfreader::hasOVERLAP)
+        .method("nsamples", &vcfreader::nsamples)
+        .method("header", &vcfreader::header)
+        .method("string", &vcfreader::string)
+        .method("output", &vcfreader::output)
+        .method("write", &vcfreader::write)
+        .method("close", &vcfreader::close)
+        .method("setCHR", &vcfreader::setCHR)
+        .method("setID", &vcfreader::setID)
+        .method("setPOS", &vcfreader::setPOS)
+        .method("setRefAlt", &vcfreader::setRefAlt)
+        .method("setInfoInt", &vcfreader::setInfoInt)
+        .method("setInfoFloat", &vcfreader::setInfoFloat)
+        .method("setInfoStr", &vcfreader::setInfoStr)
+        .method("rmInfoTag", &vcfreader::rmInfoTag);
 }

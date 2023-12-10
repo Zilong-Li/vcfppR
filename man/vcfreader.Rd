@@ -60,8 +60,6 @@ Type the name of the class to see its methods
 
 \item{\code{formatStr}}{Return the tag value of string type for each sample in FORAMT field of current variant \itemize{ \item Parameter: tag - The tag name to retrieve in FORAMT}}
 
-\item{\code{nsamples}}{Return the number of samples}
-
 \item{\code{isSNP}}{Test if current variant is exculsively a SNP or not}
 
 \item{\code{isIndel}}{Test if current variant is exculsively a INDEL or not}
@@ -87,5 +85,33 @@ Type the name of the class to see its methods
 \item{\code{hasOTHER}}{Test if current variant has a OTHER or not}
 
 \item{\code{hasOVERLAP}}{Test if current variant has a OVERLAP or not}
+
+\item{\code{nsamples}}{Return the number of samples}
+
+\item{\code{string}}{Return the raw string of current variant}
+
+\item{\code{header}}{Return the raw string of the vcf header}
+
+\item{\code{output}}{Init an output object for streaming out the variants to another vcf}
+
+\item{\code{write}}{Streaming out current variant the output vcf}
+
+\item{\code{close}}{Close the connection to the output vcf}
+
+\item{\code{setCHR}}{Modify the CHR of current variant}
+
+\item{\code{setID}}{Modify the ID of current variant}
+
+\item{\code{setPOS}}{Modify the POS of current variant}
+
+\item{\code{setRefAlt}}{Modify the REF and ALT of current variant given a string seperated by comma}
+
+\item{\code{setInfoInt}}{Modify the given tag of INT type in the INFO of current variant}
+
+\item{\code{setInfoFloat}}{Modify the given tag of FLOAT type in the INFO of current variant}
+
+\item{\code{setInfoStr}}{Modify the given tag of STRING type in the INFO of current variant}
+
+\item{\code{rmInfoTag}}{Remove the given tag from the INFO of current variant}
 }}
 

@@ -10,6 +10,14 @@ using namespace std;
 //' \item Parameter: vcffile - The path of a vcf file. don't start with "~"
 //' \item Parameter: version - The version of VCF specification
 //' }
+//' @field addContig Add a Contig in the header of the vcf
+//' @field addFILTER Add a FILTER in the header of the vcf
+//' @field addINFO Add a INFO in the header of the vcf
+//' @field addFORMAT Add a FORMAT in the header of the vcf
+//' @field addSample Add a SAMPLE in the header of the vcf
+//' @field addLine Add a line in the header of the vcf
+//' @field writeline Write a variant record given a line
+//' @field close Close and save the vcf file
 class vcfwriter {
    public:
     vcfwriter(std::string vcffile, std::string version) : bw(vcffile, version) {}
@@ -18,17 +26,21 @@ class vcfwriter {
     inline void close() { bw.close(); }
 
     // WRITE ONLY
-    inline void writeline(std::string line) { bw.writeLine(line); }
-    inline void addLine(std::string str) { bw.header.addLine(str); }
-    inline void addSample(std::string str) { bw.header.addSample(str); }
-    inline void addContig(std::string str) { bw.header.addContig(str); }
-    inline void addFILTER(std::string id, std::string desc) { bw.header.addFILTER(id, desc); }
-    inline void addINFO(std::string id, std::string number, std::string type, std::string desc) {
+    inline void addContig(const std::string& str) { bw.header.addContig(str); }
+    inline void addFILTER(const std::string& id, const std::string& desc) {
+        bw.header.addFILTER(id, desc);
+    }
+    inline void addINFO(const std::string& id, const std::string& number, const std::string& type,
+                        const std::string& desc) {
         bw.header.addINFO(id, number, type, desc);
     }
-    inline void addFORMAT(std::string id, std::string number, std::string type, std::string desc) {
+    inline void addFORMAT(const std::string& id, const std::string& number, const std::string& type,
+                          const std::string& desc) {
         bw.header.addFORMAT(id, number, type, desc);
     }
+    inline void addSample(const std::string & str) { bw.header.addSample(str); }
+    inline void addLine(const std::string & str) { bw.header.addLine(str); }
+    inline void writeline(const std::string & line) { bw.writeLine(line); }
 
    private:
     vcfpp::BcfWriter bw;
@@ -46,6 +58,5 @@ RCPP_MODULE(vcfwriter) {
         .method("addContig", &vcfwriter::addContig)
         .method("addFILTER", &vcfwriter::addFILTER)
         .method("addINFO", &vcfwriter::addINFO)
-        .method("addFORMAT", &vcfwriter::addFORMAT)
-        ;
+        .method("addFORMAT", &vcfwriter::addFORMAT);
 }
