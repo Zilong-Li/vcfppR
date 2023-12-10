@@ -1,3 +1,7 @@
+# vcfppR 0.3.5
+
+* add vcfreader and vcfwriter
+
 # vcfppR 0.3.4
 
 * support filters by variant ID
