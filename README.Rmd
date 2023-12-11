@@ -43,11 +43,11 @@ In addtion to two classes for R-bindings of vcfpp.h, there are some useful funct
 
 ## Read VCF as tabular data in R
  
-This example shows how to read only SNP variants with FILTER="PASS" and GT format in the VCF/BCF into R tables:
+This example shows how to read only SNP variants with genotypes in the VCF/BCF into R tables:
 ```r
 library(vcfppR)
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
-res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps", pass = TRUE)
+res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps")
 str(res)
 ```
 

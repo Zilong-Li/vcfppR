@@ -4,9 +4,9 @@
 \name{vcfppR-package}
 \alias{vcfppR}
 \alias{vcfppR-package}
-\title{vcfppR: Rapid Manipulation of The VCF/BCF Format in R}
+\title{vcfppR: Rapid Manipulation of the Variant Call Format (VCF) in R}
 \description{
-The https://github.com/Zilong-Li/vcfpp is an easy-to-use C++ API of htslib, offering the full functionalities as the htslib to manipulate the VCF/BCF file. Thus, this package is built upon the vcfpp.h to provide rapid genomic variant analyses on the VCF/BCF file in R.
+The \url{https://github.com/Zilong-Li/vcfpp} is an easy-to-use C++ API of htslib, offering the full functionalities as the htslib to manipulate the VCF/BCF file. Thus, this package is built upon the vcfpp.h to provide rapid variant processing with the variant call format in R.
 }
 \seealso{
 Useful links:

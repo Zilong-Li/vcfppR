@@ -101,6 +101,7 @@ vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", forma
   res <- NULL
   if(format == "GT") {
     res <- tableGT(vcffile, region, samples, "GT", ids, qual, pass, info, snps, indels, multiallelics, multisnps)
+    if(length(res$gt)==0) return(res)
     res[[10]] <- do.call("rbind", res[[10]])
     n <- ncol(res$gt)
     ploidy <- n / length(res$samples)
@@ -116,3 +117,4 @@ vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", forma
   }
   return(res)
 }
+

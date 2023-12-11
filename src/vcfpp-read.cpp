@@ -177,6 +177,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
             filter.push_back(var.FILTER());
             if (INFO) info.push_back(var.INFO());
         }
+        Rcout << "there is no " << format << " in the FORMAT\n";
         return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                             Named("pos") = pos, Named("id") = id, Named("ref") = ref,
                             Named("alt") = alt, Named("qual") = qual, Named("filter") = filter,
