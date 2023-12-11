@@ -1,20 +1,15 @@
 ## R CMD check results
 
 
-❯ checking top-level files ... WARNING
-  A complete check needs the 'checkbashisms' script.
-  See section ‘Configure and cleanup’ in the ‘Writing R Extensions’
-  manual.
+New submission
 
-❯ checking for GNU extensions in Makefiles ... NOTE
-  GNU make is a SystemRequirements.
+* Possibly misspelled words in DESCRIPTION:
+  BCF (7:162)
+  htslib (7:84, 7:133)
+  VCF (2:55, 7:158)
+  vcfpp (7:209)
 
-❯ checking pragmas in C/C++ headers and code ... NOTE
-  File which contains pragma(s) suppressing diagnostics:
-    ‘src/htslib-1.18/htscodecs/htscodecs/fqzcomp_qual.c’
+Size of tarball: 5132553 bytes
 
-❯ checking compilation flags used ... NOTE
-  Compilation used the following non-portable flag(s):
-    ‘-mavx2’ ‘-mavx512f’ ‘-mpopcnt’
-
-0 errors ✔ | 1 warning ✖ | 3 notes ✖
+* checking for GNU extensions in Makefiles ... NOTE
+GNU make is a SystemRequirements.
