@@ -41,7 +41,7 @@ CPPFLAGS += -D_FILE_OFFSET_BITS=64 -DCURL_STATICLIB
 # TODO: probably update cram code to make it compile cleanly with -Wc++-compat
 # For testing strict C99 support add -std=c99 -D_XOPEN_SOURCE=600
 #CFLAGS   = -g -Wall -O2 -pedantic -std=c99 -D_XOPEN_SOURCE=600
-CFLAGS += -fpic -fvisibility=hidden
+CFLAGS += -fpic -fvisibility=hidden -Wstrict-prototypes 
 EXTRA_CFLAGS_PIC =
 TARGET_CFLAGS =
 LDFLAGS  = -fvisibility=hidden
