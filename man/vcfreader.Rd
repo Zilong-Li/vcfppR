@@ -2,7 +2,10 @@
 % Please edit documentation in R/RcppExports.R
 \name{vcfreader}
 \alias{vcfreader}
-\title{API for reading the VCF/BCF.}
+\title{API for manipulating the VCF/BCF.}
+\value{
+A class with many methods for manipulating the VCF/BCF
+}
 \description{
 Type the name of the class to see its methods
 }
@@ -24,7 +27,7 @@ Type the name of the class to see its methods
 \item Parameter: samples - The samples to be constrained. Comma separated list of samples to include (or exclude with "^" prefix).
 }}
 
-\item{\code{variant}}{Try to get next variant record. Return false if there are no more variants or hit the end of file, otherwise return true.}
+\item{\code{variant}}{Try to get next variant record. @return FALSE if there are no more variants or hit the end of file, otherwise TRUE.}
 
 \item{\code{chr}}{Return the CHROM field of current variant}
 
@@ -129,3 +132,15 @@ Type the name of the class to see its methods
 \item{\code{addFORMAT}}{Add a FORMAT in the header of the vcf}
 }}
 
+\examples{
+vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
+br <- vcfreader$new(vcffile)
+res <- rep(0L, br$nsamples())
+while(br$variant()) {
+  if(br$isSNP()) {
+  gt <- br$genotypes(TRUE) == 1
+  gt[is.na(gt)] <- FALSE
+  res <- res + gt
+  }
+}
+}

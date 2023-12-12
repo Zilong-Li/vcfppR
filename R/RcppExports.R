@@ -2,8 +2,9 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @name vcfreader
-#' @title API for reading the VCF/BCF.
+#' @title API for manipulating the VCF/BCF.
 #' @description Type the name of the class to see its methods
+#' @return A class with many methods for manipulating the VCF/BCF
 #' @field new Constructor given a vcf file \itemize{
 #' \item Parameter: vcffile - The path of a vcf file
 #' }
@@ -16,7 +17,7 @@
 #' \item Parameter: region - The region to be constrained
 #' \item Parameter: samples - The samples to be constrained. Comma separated list of samples to include (or exclude with "^" prefix).
 #' }
-#' @field variant Try to get next variant record. Return false if there are no more variants or hit the end of file, otherwise return true.
+#' @field variant Try to get next variant record. @return FALSE if there are no more variants or hit the end of file, otherwise TRUE.
 #' @field chr Return the CHROM field of current variant
 #' @field pos Return the POS field of current variant
 #' @field id Return the CHROM field of current variant
@@ -68,11 +69,23 @@
 #' @field setVariant Modify current variant by adding a vcf line
 #' @field addINFO Add a INFO in the header of the vcf
 #' @field addFORMAT Add a FORMAT in the header of the vcf
+#' @examples
+#' vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
+#' br <- vcfreader$new(vcffile)
+#' res <- rep(0L, br$nsamples())
+#' while(br$variant()) {
+#'   if(br$isSNP()) {
+#'   gt <- br$genotypes(TRUE) == 1
+#'   gt[is.na(gt)] <- FALSE
+#'   res <- res + gt
+#'   }
+#' }
 NULL
 
 #' @name vcfwriter
 #' @title API for writing the VCF/BCF.
 #' @description Type the name of the class to see its methods
+#' @return A class with many methods for outputting the VCF/BCF
 #' @field new Constructor given a vcf file \itemize{
 #' \item Parameter: vcffile - The path of a vcf file. don't start with "~"
 #' \item Parameter: version - The version of VCF specification
@@ -85,6 +98,16 @@ NULL
 #' @field addLine Add a line in the header of the vcf
 #' @field writeline Write a variant record given a line
 #' @field close Close and save the vcf file
+#' @examples
+#' outvcf <- paste0(tempfile(), ".vcf.gz")
+#' bw <- vcfwriter$new(outvcf, "VCF4.3")
+#' bw$addContig("chr20")
+#' bw$addINFO("AF", "A", "Float", "Estimated allele frequency in the range (0,1)");
+#' bw$addFORMAT("GT", "1", "String", "Genotype");
+#' bw$addSample("NA12878")
+#' s1 <- "chr20\t2006060\trs146931526\tG\tC\t100\tPASS\tAF=0.000998403\tGT\t1|0"
+#' bw$writeline(s1)
+#' bw$close()
 NULL
 
 #' calculate the number of heterozygous SNPs for each sample

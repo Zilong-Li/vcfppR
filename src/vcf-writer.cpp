@@ -6,6 +6,7 @@ using namespace std;
 //' @name vcfwriter
 //' @title API for writing the VCF/BCF.
 //' @description Type the name of the class to see its methods
+//' @return A class with many methods for outputting the VCF/BCF
 //' @field new Constructor given a vcf file \itemize{
 //' \item Parameter: vcffile - The path of a vcf file. don't start with "~"
 //' \item Parameter: version - The version of VCF specification
@@ -18,6 +19,16 @@ using namespace std;
 //' @field addLine Add a line in the header of the vcf
 //' @field writeline Write a variant record given a line
 //' @field close Close and save the vcf file
+//' @examples
+//' outvcf <- paste0(tempfile(), ".vcf.gz")
+//' bw <- vcfwriter$new(outvcf, "VCF4.3")
+//' bw$addContig("chr20")
+//' bw$addINFO("AF", "A", "Float", "Estimated allele frequency in the range (0,1)");
+//' bw$addFORMAT("GT", "1", "String", "Genotype");
+//' bw$addSample("NA12878")
+//' s1 <- "chr20\t2006060\trs146931526\tG\tC\t100\tPASS\tAF=0.000998403\tGT\t1|0"
+//' bw$writeline(s1)
+//' bw$close()
 class vcfwriter {
    public:
     vcfwriter(std::string vcffile, std::string version) : bw(vcffile, version) {}

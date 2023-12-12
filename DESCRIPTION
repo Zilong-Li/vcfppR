@@ -1,10 +1,13 @@
 Package: vcfppR
-Title: Rapid Manipulation of the Variant Call Format (VCF) in R
+Title: Rapid Manipulation of the Variant Call Format (VCF)
 Version: 0.3.5
-Authors@R: 
-    person("Zilong", "Li", , "zilong.dk@gmail.com", role = c("aut", "cre", "cph"),
-           comment = c(ORCID = "0000-0001-5859-2078"))
-Description: The <https://github.com/Zilong-Li/vcfpp> is an easy-to-use C++ API of htslib, offering the full functionalities as the htslib to manipulate the VCF/BCF file. Thus, this package is built upon the vcfpp.h to provide rapid variant processing with the variant call format in R.
+Authors@R: c(
+    person("Zilong", "Li", , "zilong.dk@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-5859-2078")),
+    person("Bonfield, James K and Marshall, John and Danecek, Petr and Li, Heng",  role = "cph",
+           comment = "Authors of included htslib library")
+           )
+Description: The <https://github.com/Zilong-Li/vcfpp> is an easy-to-use 'C++' 'API' of 'htslib', offering the full functionalities as the 'htslib' to manipulate the variant call format (VCF) file. Thus, this package is built upon the 'vcfpp.h' for rapid variant processing of the compressed or uncompressed VCF/BCF file.
 Encoding: UTF-8
 Depends: R (>= 3.6.0)
 Roxygen: list(markdown = TRUE)

@@ -36,7 +36,7 @@
 #'                 If the FORMAT to extract is not "GT", then with collapse=TRUE it will try to turn a list of the extracted vector into a matrix.
 #'                 However, this raises issues when one variant is mutliallelic resulting in more vaules than others.
 #'
-#' @return \code{vcftable} a list containing the following components:
+#' @return Return a list containing the following components:
 #'\describe{
 #'\item{samples}{: character vector; \cr
 #'                 the samples ids in the VCF file after subsetting

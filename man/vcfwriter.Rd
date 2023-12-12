@@ -3,6 +3,9 @@
 \name{vcfwriter}
 \alias{vcfwriter}
 \title{API for writing the VCF/BCF.}
+\value{
+A class with many methods for outputting the VCF/BCF
+}
 \description{
 Type the name of the class to see its methods
 }
@@ -31,3 +34,14 @@ Type the name of the class to see its methods
 \item{\code{close}}{Close and save the vcf file}
 }}
 
+\examples{
+outvcf <- paste0(tempfile(), ".vcf.gz")
+bw <- vcfwriter$new(outvcf, "VCF4.3")
+bw$addContig("chr20")
+bw$addINFO("AF", "A", "Float", "Estimated allele frequency in the range (0,1)");
+bw$addFORMAT("GT", "1", "String", "Genotype");
+bw$addSample("NA12878")
+s1 <- "chr20\t2006060\trs146931526\tG\tC\t100\tPASS\tAF=0.000998403\tGT\t1|0"
+bw$writeline(s1)
+bw$close()
+}

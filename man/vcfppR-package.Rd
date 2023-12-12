@@ -4,9 +4,9 @@
 \name{vcfppR-package}
 \alias{vcfppR}
 \alias{vcfppR-package}
-\title{vcfppR: Rapid Manipulation of the Variant Call Format (VCF) in R}
+\title{vcfppR: Rapid Manipulation of the Variant Call Format (VCF)}
 \description{
-The \url{https://github.com/Zilong-Li/vcfpp} is an easy-to-use C++ API of htslib, offering the full functionalities as the htslib to manipulate the VCF/BCF file. Thus, this package is built upon the vcfpp.h to provide rapid variant processing with the variant call format in R.
+The \url{https://github.com/Zilong-Li/vcfpp} is an easy-to-use 'C++' 'API' of 'htslib', offering the full functionalities as the 'htslib' to manipulate the variant call format (VCF) file. Thus, this package is built upon the 'vcfpp.h' for rapid variant processing of the compressed or uncompressed VCF/BCF file.
 }
 \seealso{
 Useful links:
@@ -17,6 +17,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Zilong Li \email{zilong.dk@gmail.com} (\href{https://orcid.org/0000-0001-5859-2078}{ORCID}) [copyright holder]
+\strong{Maintainer}: Zilong Li \email{zilong.dk@gmail.com} (\href{https://orcid.org/0000-0001-5859-2078}{ORCID})
+
+Other contributors:
+\itemize{
+  \item Bonfield, James K and Marshall, John and Danecek, Petr and Li, Heng (Authors of included htslib library) [copyright holder]
+}
 
 }
