@@ -5,8 +5,8 @@ using namespace std;
 
 //' @name vcfreader
 //' @title API for manipulating the VCF/BCF.
-//' @description Type the name of the class to see its methods
-//' @return A class with many methods for manipulating the VCF/BCF
+//' @description Type the name of the class to see the details and methods
+//' @return A C++ class with the following fields/methods for manipulating the VCF/BCF
 //' @field new Constructor given a vcf file \itemize{
 //' \item Parameter: vcffile - The path of a vcf file
 //' }
@@ -19,7 +19,7 @@ using namespace std;
 //' \item Parameter: region - The region to be constrained
 //' \item Parameter: samples - The samples to be constrained. Comma separated list of samples to include (or exclude with "^" prefix).
 //' }
-//' @field variant Try to get next variant record. @return FALSE if there are no more variants or hit the end of file, otherwise TRUE.
+//' @field variant Try to get next variant record. return FALSE if there are no more variants or hit the end of file, otherwise TRUE.
 //' @field chr Return the CHROM field of current variant
 //' @field pos Return the POS field of current variant
 //' @field id Return the CHROM field of current variant
@@ -56,14 +56,24 @@ using namespace std;
 //' @field output Init an output object for streaming out the variants to another vcf
 //' @field write Streaming out current variant the output vcf
 //' @field close Close the connection to the output vcf
-//' @field setCHR Modify the CHR of current variant
-//' @field setID Modify the ID of current variant
-//' @field setPOS Modify the POS of current variant
-//' @field setRefAlt Modify the REF and ALT of current variant given a string seperated by comma
+//' @field setCHR Modify the CHR of current variant \itemize{ \item Parameter: s - A string for CHR}
+//' @field setID Modify the ID of current variant \itemize{ \item Parameter: s - A string for ID}
+//' @field setPOS Modify the POS of current variant \itemize{ \item Parameter: pos - An integer for POS}
+//' @field setRefAlt Modify the REF and ALT of current variant \itemize{ \item Parameter: s - A string reperated by comma}
 //' @field setInfoInt Modify the given tag of INT type in the INFO of current variant
+//' \itemize{
+//' \item Parameter: tag - A string for the tag name
+//' \item Parameter: v - An integer for the tag value}
 //' @field setInfoFloat Modify the given tag of FLOAT type in the INFO of current variant
+//' \itemize{
+//' \item Parameter: tag - A string for the tag name
+//' \item Parameter: v - A double for the tag value}
 //' @field setInfoStr Modify the given tag of STRING type in the INFO of current variant
+//' \itemize{
+//' \item Parameter: tag - A string for the tag name
+//' \item Parameter: s - A string for the tag value}
 //' @field setGenotypes Modify the genotypes of current variant
+//' \itemize{\item Parameter: v - An integer vector for genotypes. Use -9 for missing value.}
 //' @field setFormatInt Modify the given tag of INT type in the FORMAT of current variant
 //' @field setFormatFloat Modify the given tag of FLOAT type in the FORMAT of current variant
 //' @field setFormatStr Modify the given tag of STRING type in the FORMAT of current variant
@@ -224,7 +234,7 @@ class vcfreader {
     inline void setInfoInt(std::string tag, int v) { var.setINFO(tag, v); }
     inline void setInfoFloat(std::string tag, double v) { var.setINFO(tag, v); }
     inline void setInfoStr(std::string tag, const std::string& s) { var.setINFO(tag, s); }
-    inline void setGenotypes(std::string tag, const vector<int>& v) { var.setGenotypes(v); }
+    inline void setGenotypes(const vector<int>& v) { var.setGenotypes(v); }
     inline void setFormatInt(std::string tag, const vector<int>& v) { var.setFORMAT(tag, v); }
     inline void setFormatFloat(std::string tag, const vector<double>& v) {
         vector<float> f(v.begin(), v.end());

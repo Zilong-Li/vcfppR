@@ -4,10 +4,10 @@
 \alias{vcfwriter}
 \title{API for writing the VCF/BCF.}
 \value{
-A class with many methods for outputting the VCF/BCF
+A C++ class with the following fields/methods for writing the VCF/BCF
 }
 \description{
-Type the name of the class to see its methods
+Type the name of the class to see the details and methods
 }
 \section{Fields}{
 

@@ -5,8 +5,8 @@ using namespace std;
 
 //' @name vcfwriter
 //' @title API for writing the VCF/BCF.
-//' @description Type the name of the class to see its methods
-//' @return A class with many methods for outputting the VCF/BCF
+//' @description Type the name of the class to see the details and methods
+//' @return A C++ class with the following fields/methods for writing the VCF/BCF
 //' @field new Constructor given a vcf file \itemize{
 //' \item Parameter: vcffile - The path of a vcf file. don't start with "~"
 //' \item Parameter: version - The version of VCF specification

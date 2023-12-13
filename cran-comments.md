@@ -1,15 +1,6 @@
-## R CMD check results
+Fix the following issues.
 
-
-New submission
-
-* Possibly misspelled words in DESCRIPTION:
-  BCF (7:162)
-  htslib (7:84, 7:133)
-  VCF (2:55, 7:158)
-  vcfpp (7:209)
-
-Size of tarball: 5132553 bytes
-
-* checking for GNU extensions in Makefiles ... NOTE
-GNU make is a SystemRequirements.
+1. Removed the redundant "in R" in the title.
+2. Wrote 'C++', 'htslib' 'vcfpp.h' in single quotes
+3. Updated the .Rd files by adding \value for exported methods and classes
+4. Added the authors of htslib as 'cph' in ‘Authors@R’ 

@@ -85,7 +85,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
             int nvals = vec.size() / vcf.nsamples;  // how many values per sample
             for (int i = 0; i < vcf.nsamples; i++) {
                 for (int j = 0; j < nvals; j++)
-                    // hit the end, set it to NA == bcf_int32_missing
+                    // hit the end, if true, the sample has smaller ploidy
                     if (vec[i * nvals + j] == bcf_int32_vector_end ||
                         vec[i * nvals + j] == bcf_int32_missing)
                         vec[i * nvals + j] = NA_INTEGER;
