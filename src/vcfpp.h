@@ -491,7 +491,7 @@ type as noted in the other overloading function.
     {
         ndst = 0;
         ret = bcf_get_genotypes(header.hdr, line, &gts, &ndst);
-        if(ret <= 0) throw std::runtime_error("genotypes not present");
+        if(ret <= 0) throw std::runtime_error("genotypes not present. make sure you initilized the variant object first\n");
         v.resize(ret);
         isGenoMissing.assign(nsamples, 0);
         nploidy = ret / nsamples;
@@ -761,8 +761,8 @@ type as noted in the other overloading function.
             for(j = 0; j < nploidy; j++)
             {
                 k = i * nploidy + j;
-                if(v[k] == -9)
-                    gts[k] = 0;
+                if(v[k] == -9 || v[k] == bcf_int32_missing)
+                    gts[k] = bcf_gt_missing;
                 else if(gtPhase[i])
                     gts[k] = bcf_gt_phased(v[k]);
                 else

@@ -1,9 +1,8 @@
 library(testthat)
-library(vcfppR)
 
 vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
 
-test_that("vcfreader: reading variant works", {
+test_that("vcfreader: reading variant only", {
   br <- vcfreader$new(vcffile)
   br$variant()
   expect_identical(br$chr(), "chr21")
@@ -27,7 +26,7 @@ test_that("vcfreader: reading variant works", {
   expect_identical(length(pl), 9606L)
 })
 
-test_that("vcfreader: writing variant works", {
+test_that("vcfreader: read and output variant", {
   br <- vcfreader$new(vcffile)
   br$variant()
   br$setCHR("chr22")

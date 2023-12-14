@@ -12,12 +12,29 @@ using namespace std;
 //' \item Parameter: version - The version of VCF specification
 //' }
 //' @field addContig Add a Contig in the header of the vcf
+//' \itemize{ \item Parameter: str - A string for the CONTIG name }
 //' @field addFILTER Add a FILTER in the header of the vcf
+//' \itemize{
+//' \item Parameter: id - A string for the FILTER name
+//' \item Parameter: desc - A string for description of what it means}
 //' @field addINFO Add a INFO in the header of the vcf
+//' \itemize{
+//' \item Parameter: id - A string for the tag name
+//' \item Parameter: number - A string for the number
+//' \item Parameter: type - A string for the type
+//' \item Parameter: desc - A string for description of what it means}
 //' @field addFORMAT Add a FORMAT in the header of the vcf
+//' \itemize{
+//' \item Parameter: id - A string for the tag name
+//' \item Parameter: number - A string for the number
+//' \item Parameter: type - A string for the type
+//' \item Parameter: desc - A string for description of what it means}
 //' @field addSample Add a SAMPLE in the header of the vcf
+//' \itemize{ \item Parameter: str - A string for a SAMPLE name }
 //' @field addLine Add a line in the header of the vcf
+//' \itemize{ \item Parameter: str - A string for a line in the header of VCF }
 //' @field writeline Write a variant record given a line
+//' \itemize{ \item Parameter: line - A string for a line in the variant of VCF. Not ended with "newline" }
 //' @field close Close and save the vcf file
 //' @examples
 //' outvcf <- paste0(tempfile(), ".vcf.gz")
@@ -26,7 +43,8 @@ using namespace std;
 //' bw$addINFO("AF", "A", "Float", "Estimated allele frequency in the range (0,1)");
 //' bw$addFORMAT("GT", "1", "String", "Genotype");
 //' bw$addSample("NA12878")
-//' s1 <- "chr20\t2006060\trs146931526\tG\tC\t100\tPASS\tAF=0.000998403\tGT\t1|0"
+//' bw$addSample("NA12879")
+//' s1 <- "chr20\t2006060\trs146931526\tG\tC\t100\tPASS\tAF=0.000998403\tGT\t1|0\t1/1"
 //' bw$writeline(s1)
 //' bw$close()
 class vcfwriter {

@@ -72,15 +72,38 @@ using namespace std;
 //' \itemize{
 //' \item Parameter: tag - A string for the tag name
 //' \item Parameter: s - A string for the tag value}
+//' @field setPhasing Modify the phasing status of each sample
+//' \itemize{\item Parameter: v - An integer vector with size of the number of samples. only 1s and 0s are valid.}
 //' @field setGenotypes Modify the genotypes of current variant
-//' \itemize{\item Parameter: v - An integer vector for genotypes. Use -9 for missing value.}
+//' \itemize{\item Parameter: v - An integer vector for genotypes. Use NA or -9 for missing value.}
 //' @field setFormatInt Modify the given tag of INT type in the FORMAT of current variant
+//' \itemize{
+//' \item Parameter: tag - A string for the tag name
+//' \item Parameter: v - An integer for the tag value}
 //' @field setFormatFloat Modify the given tag of FLOAT type in the FORMAT of current variant
+//' \itemize{
+//' \item Parameter: tag - A string for the tag name
+//' \item Parameter: v - A double for the tag value}
 //' @field setFormatStr Modify the given tag of STRING type in the FORMAT of current variant
+//' \itemize{
+//' \item Parameter: tag - A string for the tag name
+//' \item Parameter: s - A string for the tag value}
 //' @field rmInfoTag Remove the given tag from the INFO of current variant
+//' \itemize{\item Parameter: s - A string for the tag name}
 //' @field setVariant Modify current variant by adding a vcf line
+//' \itemize{\item Parameter: s - A string for one line in the VCF}
 //' @field addINFO Add a INFO in the header of the vcf
+//' \itemize{
+//' \item Parameter: id - A string for the tag name
+//' \item Parameter: number - A string for the number
+//' \item Parameter: type - A string for the type
+//' \item Parameter: desc - A string for description of what it means}
 //' @field addFORMAT Add a FORMAT in the header of the vcf
+//' \itemize{
+//' \item Parameter: id - A string for the tag name
+//' \item Parameter: number - A string for the number
+//' \item Parameter: type - A string for the type
+//' \item Parameter: desc - A string for description of what it means}
 //' @examples
 //' vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
 //' br <- vcfreader$new(vcffile)
@@ -216,6 +239,10 @@ class vcfreader {
     inline bool hasOTHER() const { return var.hasOTHER(); }
     inline bool hasOVERLAP() const { return var.hasOVERLAP(); }
     inline int nsamples() const { return br.nsamples; }
+    inline int ploidy() {
+        auto v = genotypes(false);
+        return v.size() / nsamples();
+    }
     inline std::string string() const { return var.asString(); }
     inline std::string header() const { return br.header.asString(); }
 
@@ -234,13 +261,25 @@ class vcfreader {
     inline void setInfoInt(std::string tag, int v) { var.setINFO(tag, v); }
     inline void setInfoFloat(std::string tag, double v) { var.setINFO(tag, v); }
     inline void setInfoStr(std::string tag, const std::string& s) { var.setINFO(tag, s); }
-    inline void setGenotypes(const vector<int>& v) { var.setGenotypes(v); }
     inline void setFormatInt(std::string tag, const vector<int>& v) { var.setFORMAT(tag, v); }
     inline void setFormatFloat(std::string tag, const vector<double>& v) {
         vector<float> f(v.begin(), v.end());
         var.setFORMAT(tag, f);
     }
     inline void setFormatStr(std::string tag, const std::string& s) { var.setINFO(tag, s); }
+    inline void setGenotypes(const vector<int>& v) {
+        if ((int)v.size() != nsamples() * ploidy()) {
+            Rcpp::Rcout << "nsamples: " << nsamples() << ", ploidy: " << ploidy() << "\n";
+            throw std::runtime_error(
+                "the size of genotype vector is not equal to nsamples * ploidy");
+        }
+        var.setGenotypes(v);
+    }
+    inline void setPhasing(const vector<int>& v) {
+        vector<char> c(v.begin(), v.end());
+        var.setPhasing(c);
+    }
+
     inline void rmInfoTag(std::string s) { var.removeINFO(s); }
     inline void setVariant(const std::string& s) { var.addLineFromString(s); }
     inline void addINFO(const std::string& id, const std::string& number, const std::string& type,
@@ -316,6 +355,7 @@ RCPP_MODULE(vcfreader) {
         .method("setInfoFloat", &vcfreader::setInfoFloat)
         .method("setInfoStr", &vcfreader::setInfoStr)
         .method("setGenotypes", &vcfreader::setGenotypes)
+        .method("setPhasing", &vcfreader::setPhasing)
         .method("setFormatInt", &vcfreader::setFormatInt)
         .method("setFormatFloat", &vcfreader::setFormatFloat)
         .method("setFormatStr", &vcfreader::setFormatStr)

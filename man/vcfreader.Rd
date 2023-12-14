@@ -124,22 +124,46 @@ Type the name of the class to see the details and methods
 \item Parameter: tag - A string for the tag name
 \item Parameter: s - A string for the tag value}}
 
+\item{\code{setPhasing}}{Modify the phasing status of each sample
+\itemize{\item Parameter: v - An integer vector with size of the number of samples. only 1s and 0s are valid.}}
+
 \item{\code{setGenotypes}}{Modify the genotypes of current variant
-\itemize{\item Parameter: v - An integer vector for genotypes. Use -9 for missing value.}}
+\itemize{\item Parameter: v - An integer vector for genotypes. Use NA or -9 for missing value.}}
 
-\item{\code{setFormatInt}}{Modify the given tag of INT type in the FORMAT of current variant}
+\item{\code{setFormatInt}}{Modify the given tag of INT type in the FORMAT of current variant
+\itemize{
+\item Parameter: tag - A string for the tag name
+\item Parameter: v - An integer for the tag value}}
 
-\item{\code{setFormatFloat}}{Modify the given tag of FLOAT type in the FORMAT of current variant}
+\item{\code{setFormatFloat}}{Modify the given tag of FLOAT type in the FORMAT of current variant
+\itemize{
+\item Parameter: tag - A string for the tag name
+\item Parameter: v - A double for the tag value}}
 
-\item{\code{setFormatStr}}{Modify the given tag of STRING type in the FORMAT of current variant}
+\item{\code{setFormatStr}}{Modify the given tag of STRING type in the FORMAT of current variant
+\itemize{
+\item Parameter: tag - A string for the tag name
+\item Parameter: s - A string for the tag value}}
 
-\item{\code{rmInfoTag}}{Remove the given tag from the INFO of current variant}
+\item{\code{rmInfoTag}}{Remove the given tag from the INFO of current variant
+\itemize{\item Parameter: s - A string for the tag name}}
 
-\item{\code{setVariant}}{Modify current variant by adding a vcf line}
+\item{\code{setVariant}}{Modify current variant by adding a vcf line
+\itemize{\item Parameter: s - A string for one line in the VCF}}
 
-\item{\code{addINFO}}{Add a INFO in the header of the vcf}
+\item{\code{addINFO}}{Add a INFO in the header of the vcf
+\itemize{
+\item Parameter: id - A string for the tag name
+\item Parameter: number - A string for the number
+\item Parameter: type - A string for the type
+\item Parameter: desc - A string for description of what it means}}
 
-\item{\code{addFORMAT}}{Add a FORMAT in the header of the vcf}
+\item{\code{addFORMAT}}{Add a FORMAT in the header of the vcf
+\itemize{
+\item Parameter: id - A string for the tag name
+\item Parameter: number - A string for the number
+\item Parameter: type - A string for the type
+\item Parameter: desc - A string for description of what it means}}
 }}
 
 \examples{
