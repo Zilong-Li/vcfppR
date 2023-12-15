@@ -1,8 +1,11 @@
+library(testthat)
 
 test_that("vcfwriter: writing variant works", {
   outvcf <- paste0(tempfile(), ".vcf.gz")
   bw <- vcfwriter$new(outvcf, "VCF4.3")
+  bw$addLine('##ALT=<ID=NON_REF,Description="Represents any possible alternative allele at this location">')
   bw$addContig("chr20")
+  bw$addFILTER("PASS", "All filters passed")
   bw$addINFO("AF", "A", "Float", "Estimated allele frequency in the range (0,1)");
   bw$addFORMAT("GT", "1", "String", "Genotype");
   bw$addSample("NA12878")
@@ -11,11 +14,10 @@ test_that("vcfwriter: writing variant works", {
   bw$close()
   ## tests
   br <- vcfreader$new(outvcf)
+  print(br$header())
   br$variant()
   s2 <- gsub("\n", "", br$string())
   expect_identical(br$chr(), "chr20")
-  print(s1)
-  print(s2)
   expect_identical(s1, s2)
 })
 
