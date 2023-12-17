@@ -11,4 +11,5 @@
 ^README.html
 .*\.tar\.gz$
 ^.covrignore$
+^codecov.yaml$
 ^\.github$

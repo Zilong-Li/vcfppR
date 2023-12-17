@@ -26,6 +26,18 @@ test_that("extract GT for variant with ID=chr21:5030516:G:A", {
   expect_equal(res$alt, "A")
 })
 
+test_that("extract GT for all multisnps", {
+  res <- vcftable(vcffile, vartype = "multisnps")
+  expect_identical(res$ref, c("C", "C", "G"))
+  expect_identical(res$alt, c("G,T", "T,G", "T,*"))
+})
+
+test_that("extract GT for all multiallelics", {
+  res <- vcftable(vcffile, vartype = "multiallelics")
+  expect_identical(res$ref, c("C", "C", "CTTTTTT","G"))
+  expect_identical(res$alt, c("G,T", "T,G", "CTTTTT,CTTTTTTT,C", "T,*"))
+})
+
 test_that("extract AD (Integer, number=.) for variant with ID=chr21:5030247:G:A", {
   res <- vcftable(vcffile, id = c("chr21:5030347:G:A"), pass = TRUE, format = "AD")
   expect_equal(nrow(res$AD), 1)

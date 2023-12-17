@@ -61,8 +61,9 @@ heterozygosity <- function(vcffile, region = "", samples = "-", pass = FALSE, qu
 #' @field hasOTHER Test if current variant has a OTHER or not
 #' @field hasOVERLAP Test if current variant has a OVERLAP or not
 #' @field nsamples Return the number of samples
-#' @field string Return the raw string of current variant
 #' @field header Return the raw string of the vcf header
+#' @field string Return the raw string of current variant including newline
+#' @field line Return the raw string of current variant without newline
 #' @field output Init an output object for streaming out the variants to another vcf
 #' @field write Streaming out current variant the output vcf
 #' @field close Close the connection to the output vcf

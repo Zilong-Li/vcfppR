@@ -91,9 +91,11 @@ Type the name of the class to see the details and methods
 
 \item{\code{nsamples}}{Return the number of samples}
 
-\item{\code{string}}{Return the raw string of current variant}
-
 \item{\code{header}}{Return the raw string of the vcf header}
+
+\item{\code{string}}{Return the raw string of current variant including newline}
+
+\item{\code{line}}{Return the raw string of current variant without newline}
 
 \item{\code{output}}{Init an output object for streaming out the variants to another vcf}
 

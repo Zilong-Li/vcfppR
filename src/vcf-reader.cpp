@@ -51,8 +51,9 @@ using namespace std;
 //' @field hasOTHER Test if current variant has a OTHER or not
 //' @field hasOVERLAP Test if current variant has a OVERLAP or not
 //' @field nsamples Return the number of samples
-//' @field string Return the raw string of current variant
 //' @field header Return the raw string of the vcf header
+//' @field string Return the raw string of current variant including newline
+//' @field line Return the raw string of current variant without newline
 //' @field output Init an output object for streaming out the variants to another vcf
 //' @field write Streaming out current variant the output vcf
 //' @field close Close the connection to the output vcf
@@ -243,13 +244,19 @@ class vcfreader {
         auto v = genotypes(false);
         return v.size() / nsamples();
     }
-    inline std::string string() const { return var.asString(); }
     inline std::string header() const { return br.header.asString(); }
+    inline std::string string() const { return var.asString(); }
+    inline std::string line() {
+        std::string s = var.asString();
+        s.pop_back();
+        return s;
+    }
 
     // WRITE
     inline void output(const std::string& vcffile) {
         bw.open(vcffile);
         bw.initalHeader(br.header);
+        writable = true;
     }
     inline void write() { bw.writeRecord(var); }
     inline void close() { bw.close(); }
@@ -258,22 +265,30 @@ class vcfreader {
     inline void setID(std::string s) { var.setID(s.c_str()); }
     inline void setPOS(int pos) { var.setPOS(pos); }
     inline void setRefAlt(const std::string& s) { var.setRefAlt(s.c_str()); }
-    inline void setInfoInt(std::string tag, int v) { var.setINFO(tag, v); }
-    inline void setInfoFloat(std::string tag, double v) { var.setINFO(tag, v); }
-    inline void setInfoStr(std::string tag, const std::string& s) { var.setINFO(tag, s); }
-    inline void setFormatInt(std::string tag, const vector<int>& v) { var.setFORMAT(tag, v); }
-    inline void setFormatFloat(std::string tag, const vector<double>& v) {
-        vector<float> f(v.begin(), v.end());
-        var.setFORMAT(tag, f);
+    inline bool setInfoInt(std::string tag, int v) { return var.setINFO(tag, v); }
+    inline bool setInfoFloat(std::string tag, double v) { return var.setINFO(tag, v); }
+    inline bool setInfoStr(std::string tag, const std::string& s) { return var.setINFO(tag, s); }
+    inline bool setFormatInt(std::string tag, const vector<int>& v) {
+        return var.setFORMAT(tag, v);
     }
-    inline void setFormatStr(std::string tag, const std::string& s) { var.setINFO(tag, s); }
-    inline void setGenotypes(const vector<int>& v) {
+    inline bool setFormatFloat(std::string tag, const vector<double>& v) {
+        vector<float> f(v.begin(), v.end());
+        return var.setFORMAT(tag, f);
+    }
+    inline bool setFormatStr(std::string tag, const std::string& s) {
+        if (s.length() % nsamples() != 0) {
+            Rcpp::Rcout << "the length of s must be divisable by nsamples()";
+            return false;
+        }
+        return var.setFORMAT(tag, s);
+    }
+    inline bool setGenotypes(const vector<int>& v) {
         if ((int)v.size() != nsamples() * ploidy()) {
             Rcpp::Rcout << "nsamples: " << nsamples() << ", ploidy: " << ploidy() << "\n";
-            throw std::runtime_error(
-                "the size of genotype vector is not equal to nsamples * ploidy");
+            Rcpp::Rcout << "the size of genotype vector is not equal to nsamples * ploidy\n";
+            return false;
         }
-        var.setGenotypes(v);
+        return var.setGenotypes(v);
     }
     inline void setPhasing(const vector<int>& v) {
         vector<char> c(v.begin(), v.end());
@@ -281,17 +296,23 @@ class vcfreader {
     }
 
     inline void rmInfoTag(std::string s) { var.removeINFO(s); }
-    inline void setVariant(const std::string& s) { var.addLineFromString(s); }
     inline void addINFO(const std::string& id, const std::string& number, const std::string& type,
                         const std::string& desc) {
-        bw.header.addINFO(id, number, type, desc);
+        if (writable)
+            bw.header.addINFO(id, number, type, desc);
+        else
+            Rcpp::Rcout << "please call the `output(filename)` function first\n";
     }
     inline void addFORMAT(const std::string& id, const std::string& number, const std::string& type,
                           const std::string& desc) {
-        bw.header.addFORMAT(id, number, type, desc);
+        if (writable)
+            bw.header.addFORMAT(id, number, type, desc);
+        else
+            Rcpp::Rcout << "please call the `output(filename)` function first\n";
     }
 
    private:
+    bool writable = false;
     vcfpp::BcfReader br;
     vcfpp::BcfRecord var;
     vcfpp::BcfWriter bw;
@@ -344,6 +365,7 @@ RCPP_MODULE(vcfreader) {
         .method("nsamples", &vcfreader::nsamples)
         .method("header", &vcfreader::header)
         .method("string", &vcfreader::string)
+        .method("line", &vcfreader::line)
         .method("output", &vcfreader::output)
         .method("write", &vcfreader::write)
         .method("close", &vcfreader::close)

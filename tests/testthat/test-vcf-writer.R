@@ -19,6 +19,8 @@ test_that("vcfwriter: writing variant works", {
   s2 <- gsub("\n", "", br$string())
   expect_identical(br$chr(), "chr20")
   expect_identical(s1, s2)
+  s2 <- br$line()
+  expect_identical(s1, s2)
 })
 
 

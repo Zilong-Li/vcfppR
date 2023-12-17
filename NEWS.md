@@ -1,3 +1,10 @@
+# vcfppR 0.3.6
+
+* add `vcfreader::line`
+* remove `vcfreader::setVariant`
+* bug fix `setFormatStr`
+* more units tests
+
 # vcfppR 0.3.5
 
 * add vcfreader and vcfwriter
