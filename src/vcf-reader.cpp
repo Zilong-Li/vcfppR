@@ -381,7 +381,6 @@ RCPP_MODULE(vcfreader) {
         .method("setFormatInt", &vcfreader::setFormatInt)
         .method("setFormatFloat", &vcfreader::setFormatFloat)
         .method("setFormatStr", &vcfreader::setFormatStr)
-        .method("setVariant", &vcfreader::setVariant)
         .method("addINFO", &vcfreader::addINFO)
         .method("addFORMAT", &vcfreader::addFORMAT)
         .method("rmInfoTag", &vcfreader::rmInfoTag);
