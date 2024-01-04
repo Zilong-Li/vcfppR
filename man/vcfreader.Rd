@@ -91,6 +91,8 @@ Type the name of the class to see the details and methods
 
 \item{\code{nsamples}}{Return the number of samples}
 
+\item{\code{samples}}{Return a vector of samples id}
+
 \item{\code{header}}{Return the raw string of the vcf header}
 
 \item{\code{string}}{Return the raw string of current variant including newline}

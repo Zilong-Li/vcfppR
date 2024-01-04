@@ -1,3 +1,7 @@
+# vcfppR 0.3.7
+
+* add `vcfreader@samples()`
+
 # vcfppR 0.3.6
 
 * add `vcfreader::line`

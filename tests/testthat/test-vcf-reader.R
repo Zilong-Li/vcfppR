@@ -5,7 +5,7 @@ svfile <- system.file("extdata", "sv.vcf.gz", package="vcfppR")
 
 test_that("vcfreader: constructor with vcfffile only", {
   br <- vcfreader$new(vcffile)
-  br$variant()
+  expect_true(br$variant())
   expect_identical(br$chr(), "chr21")
   expect_identical(br$pos(), 5030082L)
   expect_identical(br$id(), "chr21:5030082:G:A")
@@ -15,7 +15,7 @@ test_that("vcfreader: constructor with vcfffile only", {
 
 test_that("vcfreader: constructor with vcfffile and region", {
   br <- vcfreader$new(vcffile, "chr21:5030082-")
-  br$variant()
+  expect_true(br$variant())
   expect_identical(br$chr(), "chr21")
   expect_identical(br$pos(), 5030082L)
   expect_identical(br$id(), "chr21:5030082:G:A")
@@ -25,7 +25,8 @@ test_that("vcfreader: constructor with vcfffile and region", {
 
 test_that("vcfreader: constructor with vcfffile, region and samples", {
   br <- vcfreader$new(vcffile, "chr21:5030082-", "HG00097,HG00099")
-  br$variant()
+  expect_identical(br$samples(), c("HG00097", "HG00099"))
+  expect_true(br$variant())
   expect_identical(br$genotypes(F), rep(0L, 4))
   expect_identical(br$chr(), "chr21")
   expect_identical(br$pos(), 5030082L)
@@ -36,20 +37,23 @@ test_that("vcfreader: constructor with vcfffile, region and samples", {
 
 test_that("vcfreader: get FORMAT item with Float type", {
   br <- vcfreader$new(vcffile, "chr21:5030347-", "HG00097,HG00099")
-  br$variant()
+  expect_identical(br$samples(), c("HG00097", "HG00099"))
+  expect_true(br$variant())
   expect_identical(br$pos(), 5030347L)
   expect_identical(all(is.na(br$formatFloat("AB"))), TRUE)
 })
 
 test_that("vcfreader: get FORMAT item with Integer type", {
   br <- vcfreader$new(vcffile, "chr21:5030347-", "HG00097,HG00099")
-  br$variant()
+  expect_identical(br$samples(), c("HG00097", "HG00099"))
+  expect_true(br$variant())
   expect_identical(br$pos(), 5030347L)
   expect_identical(br$formatInt("AD"), c(4L, 0L, 16L, 0L))
 })
 
 test_that("vcfreader: get FORMAT item with String type", {
   br <- vcfreader$new(svfile, "chr21:5114000-", "HG00096,HG00097")
+  expect_identical(br$samples(), c("HG00096", "HG00097"))
   expect_true(br$variant())
   expect_identical(br$pos(), 5114000L)
   expect_identical(br$formatStr("EV"), c("RD","RD"))

@@ -51,6 +51,7 @@ using namespace std;
 //' @field hasOTHER Test if current variant has a OTHER or not
 //' @field hasOVERLAP Test if current variant has a OVERLAP or not
 //' @field nsamples Return the number of samples
+//' @field samples Return a vector of samples id
 //' @field header Return the raw string of the vcf header
 //' @field string Return the raw string of current variant including newline
 //' @field line Return the raw string of current variant without newline
@@ -245,6 +246,7 @@ class vcfreader {
         return v.size() / nsamples();
     }
     inline std::string header() const { return br.header.asString(); }
+    inline std::vector<std::string> samples() const { return br.header.getSamples(); }
     inline std::string string() const { return var.asString(); }
     inline std::string line() {
         std::string s = var.asString();
@@ -363,6 +365,7 @@ RCPP_MODULE(vcfreader) {
         .method("hasOTHER", &vcfreader::hasOTHER)
         .method("hasOVERLAP", &vcfreader::hasOVERLAP)
         .method("nsamples", &vcfreader::nsamples)
+        .method("samples", &vcfreader::samples)
         .method("header", &vcfreader::header)
         .method("string", &vcfreader::string)
         .method("line", &vcfreader::line)
