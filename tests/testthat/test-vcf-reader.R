@@ -178,3 +178,24 @@ test_that("vcfreader: read and output variant", {
 })
 
 
+test_that("vcfreader: remove tag from FORMAT", {
+  br <- vcfreader$new(vcffile)
+  br$variant()
+  s <- unlist(strsplit(br$line(), "\t"))
+  expect_identical(s[9], "GT:AD:DP:GQ:PL")
+  br$rmFormatTag("AD")
+  s <- unlist(strsplit(br$line(), "\t"))
+  expect_identical(s[9], "GT:DP:GQ:PL")
+  expect_error(br$formatInt("AD"))
+  ## output current variant to another vcf
+  outvcf <- paste0(tempfile(), ".vcf.gz")
+  br$output(outvcf)
+  br$write()
+  br$close()
+  ## check the output file
+  br <- vcfreader$new(outvcf)
+  br$variant()
+  s <- unlist(strsplit(br$line(), "\t"))
+  expect_identical(s[9], "GT:DP:GQ:PL")
+  expect_error(br$formatInt("AD"))
+})

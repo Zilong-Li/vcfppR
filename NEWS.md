@@ -1,5 +1,6 @@
 # vcfppR 0.3.7
 
+* add `vcfreader@rmFormatTag()`
 * add `vcfreader@samples()`
 
 # vcfppR 0.3.6

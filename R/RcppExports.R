@@ -102,6 +102,8 @@ heterozygosity <- function(vcffile, region = "", samples = "-", pass = FALSE, qu
 #' \item Parameter: s - A string for the tag value}
 #' @field rmInfoTag Remove the given tag from the INFO of current variant
 #' \itemize{\item Parameter: s - A string for the tag name}
+#' @field rmFormatTag Remove the given tag from the FORMAT of current variant
+#' \itemize{\item Parameter: s - A string for the tag name}
 #' @field setVariant Modify current variant by adding a vcf line
 #' \itemize{\item Parameter: s - A string for one line in the VCF}
 #' @field addINFO Add a INFO in the header of the vcf

@@ -152,6 +152,9 @@ Type the name of the class to see the details and methods
 \item{\code{rmInfoTag}}{Remove the given tag from the INFO of current variant
 \itemize{\item Parameter: s - A string for the tag name}}
 
+\item{\code{rmFormatTag}}{Remove the given tag from the FORMAT of current variant
+\itemize{\item Parameter: s - A string for the tag name}}
+
 \item{\code{setVariant}}{Modify current variant by adding a vcf line
 \itemize{\item Parameter: s - A string for one line in the VCF}}
 
