@@ -18,7 +18,7 @@ UMapStringInt map_ids(const std::vector<std::string>& ids) {
 // [[Rcpp::export]]
 List tableGT(std::string vcffile, std::string region, std::string samples, std::string format,
              const std::vector<std::string>& ids, double qualval, bool pass, bool INFO, bool snps,
-             bool indels, bool multiallelics, bool multisnps) {
+             bool indels, bool multiallelics, bool multisnps, bool svs) {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
     vector<vector<int>> GT;
@@ -34,6 +34,7 @@ List tableGT(std::string vcffile, std::string region, std::string samples, std::
         if (multisnps && (!var.isMultiAllelicSNP())) continue;
         if (snps && (!var.isSNP())) continue;
         if (indels && (!var.isIndel())) continue;
+        if (svs && (!var.isSV())) continue;
         pos.push_back(var.POS());
         qual.push_back(var.QUAL());
         chr.push_back(var.CHROM());
@@ -54,7 +55,7 @@ List tableGT(std::string vcffile, std::string region, std::string samples, std::
 // [[Rcpp::export]]
 List tableFormat(std::string vcffile, std::string region, std::string samples, std::string format,
                  const std::vector<std::string>& ids, double qualval, bool pass, bool INFO,
-                 bool snps, bool indels, bool multiallelics, bool multisnps) {
+                 bool snps, bool indels, bool multiallelics, bool multisnps, bool svs) {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
     vector<int> pos;
@@ -73,6 +74,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
             if (multisnps && (!var.isMultiAllelicSNP())) continue;
             if (snps && (!var.isSNP())) continue;
             if (indels && (!var.isIndel())) continue;
+            if (svs && (!var.isSV())) continue;
             pos.push_back(var.POS());
             qual.push_back(var.QUAL());
             chr.push_back(var.CHROM());
@@ -108,6 +110,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
             if (multisnps && (!var.isMultiAllelicSNP())) continue;
             if (snps && (!var.isSNP())) continue;
             if (indels && (!var.isIndel())) continue;
+            if (svs && (!var.isSV())) continue;
             pos.push_back(var.POS());
             qual.push_back(var.QUAL());
             chr.push_back(var.CHROM());
@@ -144,6 +147,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
             if (multisnps && (!var.isMultiAllelicSNP())) continue;
             if (snps && (!var.isSNP())) continue;
             if (indels && (!var.isIndel())) continue;
+            if (svs && (!var.isSV())) continue;
             pos.push_back(var.POS());
             qual.push_back(var.QUAL());
             chr.push_back(var.CHROM());

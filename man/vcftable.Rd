@@ -26,7 +26,7 @@ vcftable(
 comma separated list of samples to include (or exclude with "^" prefix).
 e.g. "id01,id02", "^id01,id02".}
 
-\item{vartype}{restrict to specific type of variants. supports "snps","indels", "multisnps","multiallelics"}
+\item{vartype}{restrict to specific type of variants. supports "snps","indels", "sv", "multisnps","multiallelics"}
 
 \item{format}{the FORMAT tag to extract. default "GT" is extracted.}
 

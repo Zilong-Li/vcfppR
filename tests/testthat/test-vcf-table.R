@@ -63,6 +63,6 @@ test_that("extract AB (Float, number=1)", {
 
 test_that("extract EV (String, number=1) from sv file", {
   ## res <- vcftable(svfile, format = "EV") ## there is no EV for ID=HGSV_240945
-  res <- vcftable(svfile, format = "EV", id = c("HGSV_240934"))
+  res <- vcftable(svfile, vartype = "sv", format = "EV", id = c("HGSV_240934"))
   expect_equal(res$EV[1,], rep("RD", length(res$samples)))
 })

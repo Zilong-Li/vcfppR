@@ -139,12 +139,12 @@ summarySVs <- function(vcffile, region = "", samples = "-", filter_pass = FALSE,
     .Call(`_vcfppR_summarySVs`, vcffile, region, samples, filter_pass, qual)
 }
 
-tableGT <- function(vcffile, region, samples, format, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps) {
-    .Call(`_vcfppR_tableGT`, vcffile, region, samples, format, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
+tableGT <- function(vcffile, region, samples, format, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps, svs) {
+    .Call(`_vcfppR_tableGT`, vcffile, region, samples, format, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps, svs)
 }
 
-tableFormat <- function(vcffile, region, samples, format, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps) {
-    .Call(`_vcfppR_tableFormat`, vcffile, region, samples, format, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps)
+tableFormat <- function(vcffile, region, samples, format, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps, svs) {
+    .Call(`_vcfppR_tableFormat`, vcffile, region, samples, format, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps, svs)
 }
 
 #' @name vcfwriter

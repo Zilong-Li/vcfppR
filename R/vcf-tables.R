@@ -19,7 +19,7 @@
 #'                comma separated list of samples to include (or exclude with "^" prefix).
 #'                e.g. "id01,id02", "^id01,id02".
 #'
-#' @param vartype restrict to specific type of variants. supports "snps","indels", "multisnps","multiallelics"
+#' @param vartype restrict to specific type of variants. supports "snps","indels", "sv", "multisnps","multiallelics"
 #' @param format the FORMAT tag to extract. default "GT" is extracted.
 #'
 #' @param ids  character vector. restrict to sites with ID in the given vector. default NULL won't filter any sites.
@@ -90,17 +90,19 @@ vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", forma
                      qual = 0, pass = FALSE, info = TRUE, collapse = TRUE) {
   snps <- FALSE
   indels <- FALSE
+  svs <- FALSE
   multiallelics <- FALSE
   multisnps <- FALSE
   if(vartype == "snps") snps <- TRUE
   else if(vartype == "indels") indels <- TRUE
+  else if(vartype == "sv") svs <- TRUE
   else if(vartype == "multisnps") multisnps <- TRUE
   else if(vartype == "multiallelics") multiallelics <- TRUE
   else if(vartype != "all") stop("Invaild variant type!")
   if(is.null(ids)) ids <- c("")
   res <- NULL
   if(format == "GT") {
-    res <- tableGT(vcffile, region, samples, "GT", ids, qual, pass, info, snps, indels, multiallelics, multisnps)
+    res <- tableGT(vcffile, region, samples, "GT", ids, qual, pass, info, snps, indels, multiallelics, multisnps, svs)
     if(length(res$gt)==0) return(res)
     res[[10]] <- do.call("rbind", res[[10]])
     n <- ncol(res$gt)
@@ -112,7 +114,7 @@ vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", forma
       res$gt[res$gt < 0] <- NA
     }
   } else {
-    res <- tableFormat(vcffile, region, samples, format, ids, qual, pass, info, snps, indels, multiallelics, multisnps)
+    res <- tableFormat(vcffile, region, samples, format, ids, qual, pass, info, snps, indels, multiallelics, multisnps, svs)
     if(is.list(res[[10]]) && collapse) res[[10]] <- do.call("rbind", res[[10]])
   }
   return(res)

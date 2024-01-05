@@ -2,6 +2,7 @@
 
 * add `vcfreader@rmFormatTag()`
 * add `vcfreader@samples()`
+* `vcftable` supports vartype = 'sv'
 
 # vcfppR 0.3.6
 
