@@ -1554,8 +1554,7 @@ class BcfWriter
     /// initial a VCF header by refering to another vcf header
     void initalHeader(const BcfHeader & h)
     {
-        header.hdr = h.hdr; // point to another header
-        if(header.hdr == NULL) throw std::runtime_error("couldn't copy the header from another vcf.\n");
+        if(header.hdr == NULL) header.hdr = h.hdr; // point to another header
     }
 
     /// write a string to a vcf line

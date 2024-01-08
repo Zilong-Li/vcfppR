@@ -23,6 +23,12 @@ test_that("modify the genotypes", {
   (g2 <- br$genotypes(F))
   expect_false(isTRUE(all.equal(g0, g2)))
   expect_identical(g1, g2)
+  br$close()
+  ##  the original vcf can not be modified
+  br <- vcfreader$new(outvcf)
+  br$variant() ## get a variant record
+  (g3 <- br$genotypes(F))
+  expect_identical(g0, g3)
 })
 
 test_that("modify item in FORMAT", {

@@ -45,7 +45,7 @@ In addtion to two classes for R-bindings of vcfpp.h, there are some useful funct
 
 ## Read VCF as tabular data in R
  
-This example shows how to read only SNP variants with genotypes in the VCF/BCF into R tables:
+This example shows how to read only SNP variants with genotypes in the VCF/BCF into R list:
 ```r
 library(vcfppR)
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
@@ -53,7 +53,7 @@ res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps")
 str(res)
 ```
 
-This example shows how to read only SNP variants with PL format and drop the INFO column in the VCF/BCF into R tables:
+This example shows how to read only SNP variants with PL format into R list and drop the INFO column in the VCF/BCF:
 
 ```r
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_raw_GT_with_annot/20201028_CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.recalibrated_variants.vcf.gz"
@@ -61,7 +61,7 @@ res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps", format = "PL", inf
 str(res)
 ```
 
-This example shows how to read only indels variants with DP format in the VCF/BCF into R tables:
+This example shows how to read only indels variants with DP format in the VCF/BCF into R list:
 
 ```r
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_raw_GT_with_annot/20201028_CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.recalibrated_variants.vcf.gz"
@@ -75,7 +75,7 @@ This example shows how to summarize small variants discovered by GATK. The data 
 
 ```r
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_raw_GT_with_annot/20201028_CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.recalibrated_variants.vcf.gz"
-region <- "chr21:10000000-10500000"
+region <- "chr21:10000000-10010000"
 res <- vcfsummary(vcffile, region)
 str(res)
 # get labels and do plottiing
@@ -94,10 +94,9 @@ This example shows how to summarize complex structure variants discovered by GAT
 
 ```r
 svfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20210124.SV_Illumina_Integration/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz"
-sv <- vcfsummary(svfile, svtype = TRUE)
+sv <- vcfsummary(svfile, svtype = TRUE, region = "chr20")
 str(sv)
 allsvs <- sv$summary[-1]
 bar <- barplot(allsvs, ylim = c(0, 1.1*max(allsvs)),
-               main = "Variant Count (all SVs)")
-text(bar, allsvs+4500, paste("n: ", allsvs, sep=""))
+               main = "Variant Counts on chr20 (all SVs)")
 ```
