@@ -37,10 +37,10 @@ jobs:
 
       - name: Build
         run: R CMD build
-        
-      - uses: 'marvinpinto/action-automatic-releases@latest'
+
+      - name: Publish release
+        uses: r-lib/actions/github-release@v1
         with:
-          repo_token: '${{ secrets.GITHUB_TOKEN }}'
-          prerelease: false
           files: "*.tar.gz"
-        id: 'automatic_releases'
+          token: ${{ secrets.GITHUB_TOKEN }}
+        
