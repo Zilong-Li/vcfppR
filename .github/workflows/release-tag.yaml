@@ -39,7 +39,7 @@ jobs:
         run: R CMD build
 
       - name: Publish release
-        uses: r-lib/actions/github-release@v1
+        uses: softprops/action-gh-release@v1
         with:
           files: "*.tar.gz"
           token: ${{ secrets.GITHUB_TOKEN }}
