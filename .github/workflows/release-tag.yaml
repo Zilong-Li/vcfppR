@@ -36,7 +36,7 @@ jobs:
           Rscript -e 'remotes::install_deps(dependencies = TRUE)'
 
       - name: Build
-        run: R CMD build
+        run: R CMD build .
 
       - name: Publish release
         uses: softprops/action-gh-release@v1
