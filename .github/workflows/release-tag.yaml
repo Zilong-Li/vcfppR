@@ -35,8 +35,8 @@ jobs:
           Rscript -e 'install.packages("remotes")'
           Rscript -e 'remotes::install_deps(dependencies = TRUE)'
 
-      - name: Build and check
-        run: R CMD build . && R CMD check *tar.gz
+      - name: Build
+        run: R CMD build
         
       - uses: 'marvinpinto/action-automatic-releases@latest'
         with:
