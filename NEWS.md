@@ -1,3 +1,7 @@
+# vcfppR 0.3.8
+
+* fix issues on M1 Mac
+
 # vcfppR 0.3.7
 
 * add `vcfreader@rmFormatTag()`
