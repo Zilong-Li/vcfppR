@@ -13,8 +13,8 @@ CXX=$(shell "R CMD config CXX")
 AR=$(shell "R CMD config AR")
 RANLIB=$(shell "R CMD config RANLIB")
 LDFLAGS=$(shell "R CMD config LDFLAGS")
-CFLAGS=$(shell "R CMD config CFLAGS")
-CPPFLAGS=$(shell "R CMD config CPPFLAGS")
+# CFLAGS=$(shell "R CMD config CFLAGS")
+# CPPFLAGS=$(shell "R CMD config CPPFLAGS")
 
 HTSLIB:
 	(cd ${HTSLIB_DIR} && $(MAKE) -f Makefile.vcfppR libhts.a && cd ..)
