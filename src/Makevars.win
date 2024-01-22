@@ -1,6 +1,6 @@
 HTSLIB_DIR=htslib-1.18
 PKG_CPPFLAGS=-I. -I${HTSLIB_DIR} -D_FILE_OFFSET_BITS=64
-PKG_LIBS=${HTSLIB_DIR}/libhts.a -lz -lm -lbz2 -llzma -lcurl -lbcrypt -lidn2 -lunistring -liconv -lssl -lcrypto -lcrypt32 -lwsock32 -lwldap32 -lssh2 -lgcrypt -lgpg-error -lws2_32 -lzstd -lregex
+PKG_LIBS=${HTSLIB_DIR}/libhts.a -lm -lbz2 -llzma -lcurl -lbcrypt -lidn2 -lunistring -liconv -lssl -lcrypto -lcrypt32 -lwsock32 -lwldap32 -lssh2 -lgcrypt -lgpg-error -lws2_32 -lzstd -lregex -lz
 
 .PHONY: all clean HTSLIB
 
