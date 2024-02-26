@@ -14,6 +14,11 @@ test_that("extract GT for all SNPs", {
   expect_identical(sum(res$alt!=""), length(res$alt))
 })
 
+test_that("extract SNPs by ID and reset ID afterwards", {
+  res <- vcftable(vcffile, vartype = "snps", id = c("chr21:5030516:G:A"), setid = TRUE)
+  expect_identical(res$id, "chr21_5030516_G_A")
+})
+
 test_that("extract GT for a indel with FILTER not displaying PASS", {
   res <- vcftable(vcffile, id = c("chr21:5030240:AC:A"), vartype = "indels", pass = TRUE)
   expect_equal(length(res$gt), 0)

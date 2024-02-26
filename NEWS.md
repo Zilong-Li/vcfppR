@@ -1,3 +1,8 @@
+# vcfppR 0.4.0
+
+* add `setid` option for vcftable
+* patches for upcoming Rtools on windows
+
 # vcfppR 0.3.8
 
 * fix issues on M1 Mac

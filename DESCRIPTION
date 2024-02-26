@@ -1,6 +1,6 @@
 Package: vcfppR
 Title: Rapid Manipulation of the Variant Call Format (VCF)
-Version: 0.3.8
+Version: 0.4.0
 Authors@R: c(
     person("Zilong", "Li", , "zilong.dk@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5859-2078")),
@@ -11,7 +11,7 @@ Description: The 'vcfpp.h' (<https://github.com/Zilong-Li/vcfpp>) provides an ea
 Encoding: UTF-8
 Depends: R (>= 3.6.0)
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

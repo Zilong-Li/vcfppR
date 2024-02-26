@@ -36,6 +36,8 @@
 #'                 If the FORMAT to extract is not "GT", then with collapse=TRUE it will try to turn a list of the extracted vector into a matrix.
 #'                 However, this raises issues when one variant is mutliallelic resulting in more vaules than others.
 #'
+#' @param setid logical. reset ID column as CHR_POS_REF_ALT.
+#'
 #' @return Return a list containing the following components:
 #'\describe{
 #'\item{samples}{: character vector; \cr
@@ -87,7 +89,7 @@
 #' str(res)
 #' @export
 vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", format = "GT", ids = NULL,
-                     qual = 0, pass = FALSE, info = TRUE, collapse = TRUE) {
+                     qual = 0, pass = FALSE, info = TRUE, collapse = TRUE, setid = FALSE) {
   snps <- FALSE
   indels <- FALSE
   svs <- FALSE
@@ -117,6 +119,7 @@ vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", forma
     res <- tableFormat(vcffile, region, samples, format, ids, qual, pass, info, snps, indels, multiallelics, multisnps, svs)
     if(is.list(res[[10]]) && collapse) res[[10]] <- do.call("rbind", res[[10]])
   }
+  if(setid) res$id <- paste(res$chr, res$pos, res$ref, res$alt, sep = "_")
   return(res)
 }
 

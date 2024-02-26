@@ -14,7 +14,8 @@ vcftable(
   qual = 0,
   pass = FALSE,
   info = TRUE,
-  collapse = TRUE
+  collapse = TRUE,
+  setid = FALSE
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ where M is #markers and N is #samples. default TRUE will collapse the genotypes 
 Set this to FALSE if one wants to maintain the phasing order, e.g. "1|0" is parsed as c(1, 0) with collapse=FALSE.
 If the FORMAT to extract is not "GT", then with collapse=TRUE it will try to turn a list of the extracted vector into a matrix.
 However, this raises issues when one variant is mutliallelic resulting in more vaules than others.}
+
+\item{setid}{logical. reset ID column as CHR_POS_REF_ALT.}
 }
 \value{
 Return a list containing the following components:
