@@ -150,7 +150,7 @@ class vcfreader {
     inline int pos() const { return var.POS(); }
     inline double qual() { return var.QUAL(); }
     inline std::string filter() { return var.FILTER(); }
-    inline std::string info() { return var.INFO(); }
+    inline std::string info() { return var.allINFO(); }
 
     int infoInt(std::string tag) {
         int i;

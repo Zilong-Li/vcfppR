@@ -42,7 +42,7 @@ List tableGT(std::string vcffile, std::string region, std::string samples, std::
         ref.push_back(var.REF());
         alt.push_back(var.ALT());
         filter.push_back(var.FILTER());
-        if (INFO) info.push_back(var.INFO());
+        if (INFO) info.push_back(var.allINFO());
         var.getGenotypes(gt);
         GT.push_back(gt);
     }
@@ -82,7 +82,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
             ref.push_back(var.REF());
             alt.push_back(var.ALT());
             filter.push_back(var.FILTER());
-            if (INFO) info.push_back(var.INFO());
+            if (INFO) info.push_back(var.allINFO());
             var.getFORMAT(format, vec);
             int nvals = vec.size() / vcf.nsamples;  // how many values per sample
             for (int i = 0; i < vcf.nsamples; i++) {
@@ -118,7 +118,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
             ref.push_back(var.REF());
             alt.push_back(var.ALT());
             filter.push_back(var.FILTER());
-            if (INFO) info.push_back(var.INFO());
+            if (INFO) info.push_back(var.allINFO());
             var.getFORMAT(format, vecf);
             int nvals = vecf.size() / vcf.nsamples;  // how many values per sample
             vecd.resize(vecf.size());
@@ -155,7 +155,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
             ref.push_back(var.REF());
             alt.push_back(var.ALT());
             filter.push_back(var.FILTER());
-            if (INFO) info.push_back(var.INFO());
+            if (INFO) info.push_back(var.allINFO());
             var.getFORMAT(format, vec);
             mat.push_back(vec);
         }
@@ -179,7 +179,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
             ref.push_back(var.REF());
             alt.push_back(var.ALT());
             filter.push_back(var.FILTER());
-            if (INFO) info.push_back(var.INFO());
+            if (INFO) info.push_back(var.allINFO());
         }
         Rcout << "there is no " << format << " in the FORMAT\n";
         return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
