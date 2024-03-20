@@ -1,6 +1,6 @@
-HTSLIB_DIR=htslib-1.18
+HTSLIB_DIR=htslib-1.19.1
 PKG_CPPFLAGS=-I. -I${HTSLIB_DIR}
-PKG_LIBS=${HTSLIB_DIR}/libhts.a -fPIC -lz -lm -lbz2 -llzma -lcurl
+PKG_LIBS=${HTSLIB_DIR}/libhts.so -fPIC -lz -lm -lbz2 -llzma -lcurl
 
 .PHONY: all clean HTSLIB
 
@@ -17,7 +17,7 @@ LDFLAGS=$(shell "R CMD config LDFLAGS")
 # CPPFLAGS=$(shell "R CMD config CPPFLAGS")
 
 HTSLIB:
-	(cd ${HTSLIB_DIR} && $(MAKE) -f Makefile.vcfppR libhts.a && cd ..)
+	(cd ${HTSLIB_DIR} && $(MAKE) && cd ..)
 
 
 clean:
