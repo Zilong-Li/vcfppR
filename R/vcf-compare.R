@@ -68,10 +68,10 @@ vcfcomp <- function(test, truth, region = "", samples = "-", names = NULL,
   sites <- intersect(d1$id,  d2$id)
   ## chr pos ref alt af
   if(!is.null(af)){
-    af <- tryCatch( { readRDS(af) }, errorCondition = function(e) {
+    af <- tryCatch( { readRDS(af) }, error = function(e) {
       af <- read.table(af, header = TRUE)
       af$id <- paste0(af[,"chr"], "_", af[,"pos"], "_", af[,"ref"], "_", af[,"alt"])
-      subset(af, select = id)
+      subset(af, select = c(id, af))
     } )
     sites <-  intersect(af[,"id"], sites) ## use intersect sites only
   }
@@ -88,8 +88,11 @@ vcfcomp <- function(test, truth, region = "", samples = "-", names = NULL,
   rownames(gt) <- sites
   rownames(ds) <- sites
   res <- NULL
-  if(stats=="r2")
+  if(stats=="r2") {
+    af <- af[match(sites, af[,"id"]), "af"]
+    names(af) <- sites
     res <- r2_by_freq(bins, af, gt, ds, which_snps = sites, flip = FALSE)
+  }
   if(stats=="f1")
     res <- F1(gt, ds)
   return(res)
