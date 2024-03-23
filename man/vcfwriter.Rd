@@ -58,6 +58,5 @@ bw$addContig("chr20")
 bw$addFORMAT("GT", "1", "String", "Genotype");
 bw$addSample("NA12878")
 s1 <- "chr20\t2006060\t.\tG\tC\t100\tPASS\t.\tGT\t1|0"
-tryCatch((bw$writeline(s1)), error=function(e) e)
 bw$close()
 }
