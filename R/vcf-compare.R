@@ -41,7 +41,9 @@
 #' library('vcfppR')
 #' test <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
 #' truth <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
-#' suppressWarnings(res <- vcfcomp(test, truth, vartype = "snps", stats = "f1", format = c("GT", "GT")))
+#' suppressWarnings(
+#'   res <- vcfcomp(test, truth, stats = "f1", format = c("GT", "GT"))
+#' )
 #' str(res[!is.na(res)])
 #' @export
 vcfcomp <- function(test, truth, region = "", samples = "-", names = NULL,

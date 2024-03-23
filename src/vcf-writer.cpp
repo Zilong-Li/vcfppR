@@ -43,6 +43,7 @@ using namespace std;
 //' bw$addFORMAT("GT", "1", "String", "Genotype");
 //' bw$addSample("NA12878")
 //' s1 <- "chr20\t2006060\t.\tG\tC\t100\tPASS\t.\tGT\t1|0"
+//' bw$writeline(s1)
 //' bw$close()
 class vcfwriter {
    public:

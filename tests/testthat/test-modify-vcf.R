@@ -1,7 +1,7 @@
 library(testthat)
 
 test_that("modify the genotypes", {
-  skip_on_os(c("windows"), arch = NULL)
+  ## skip_on_os(c("windows"), arch = NULL)
   outvcf <- paste0(tempfile(), ".vcf.gz")
   bw <- vcfwriter$new(outvcf, "VCF4.3")
   bw$addContig("chr20")
@@ -33,7 +33,7 @@ test_that("modify the genotypes", {
 })
 
 test_that("modify item in FORMAT", {
-  skip_on_os(c("windows"), arch = NULL)
+  ## skip_on_os(c("windows"), arch = NULL)
   ## creat a VCF with GP in FORMAT
   outvcf <- paste0(tempfile(), ".vcf.gz")
   bw <- vcfwriter$new(outvcf, "VCF4.3")
