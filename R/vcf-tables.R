@@ -24,7 +24,7 @@
 #'
 #' @param ids  character vector. restrict to sites with ID in the given vector. default NULL won't filter any sites.
 #'
-#' @param qual logical. restrict to variants with QUAL > qual.
+#' @param qual numeric. restrict to variants with QUAL > qual.
 #'
 #' @param pass logical. restrict to variants with FILTER = "PASS".
 #'

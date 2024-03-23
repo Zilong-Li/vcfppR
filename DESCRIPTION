@@ -17,7 +17,7 @@ Suggests:
 Config/testthat/edition: 3
 SystemRequirements: libcurl: libcurl-devel (rpm) or libcurl4-openssl-dev (deb), GNU make.
 Imports: 
-    Rcpp, methods
+    Rcpp, methods, stats
 LinkingTo:
     Rcpp
 URL: https://github.com/Zilong-Li/vcfppR

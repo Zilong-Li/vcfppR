@@ -33,7 +33,7 @@ e.g. "id01,id02", "^id01,id02".}
 
 \item{ids}{character vector. restrict to sites with ID in the given vector. default NULL won't filter any sites.}
 
-\item{qual}{logical. restrict to variants with QUAL > qual.}
+\item{qual}{numeric. restrict to variants with QUAL > qual.}
 
 \item{pass}{logical. restrict to variants with FILTER = "PASS".}
 
