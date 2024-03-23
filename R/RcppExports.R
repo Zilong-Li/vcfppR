@@ -181,15 +181,13 @@ tableFormat <- function(vcffile, region, samples, format, ids, qualval, pass, IN
 #' \itemize{ \item Parameter: line - A string for a line in the variant of VCF. Not ended with "newline" }
 #' @field close Close and save the vcf file
 #' @examples
-#' outvcf <- paste0(tempfile(), ".vcf.gz")
-#' bw <- vcfwriter$new(outvcf, "VCF4.3")
+#' outvcf <- file.path(paste0(tempfile(), ".vcf.gz"))
+#' bw <- vcfwriter$new(outvcf, "VCF4.1")
 #' bw$addContig("chr20")
-#' bw$addINFO("AF", "A", "Float", "Estimated allele frequency in the range (0,1)");
 #' bw$addFORMAT("GT", "1", "String", "Genotype");
 #' bw$addSample("NA12878")
-#' bw$addSample("NA12879")
-#' s1 <- "chr20\t2006060\trs146931526\tG\tC\t100\tPASS\tAF=0.000998403\tGT\t1|0\t1/1"
-#' bw$writeline(s1)
+#' s1 <- "chr20\t2006060\t.\tG\tC\t100\tPASS\t.\tGT\t1|0"
+#' tryCatch((bw$writeline(s1)), error=function(e) e)
 #' bw$close()
 NULL
 

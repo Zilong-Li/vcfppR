@@ -167,7 +167,8 @@ test_that("vcfreader: read and output variant", {
   expect_identical(br$infoStr("VariantType" ), "indel")
   ## output current variant to another vcf
   s1 <- br$string()
-  outvcf <- paste0(tempfile(), ".vcf.gz")
+  outvcf <- file.path(tempdir(), "test.vcf.gz")
+  file.create(outvcf)
   br$output(outvcf)
   br$write()
   br$close()
@@ -188,7 +189,8 @@ test_that("vcfreader: remove tag from FORMAT", {
   expect_identical(s[9], "GT:DP:GQ:PL")
   expect_error(br$formatInt("AD"))
   ## output current variant to another vcf
-  outvcf <- paste0(tempfile(), ".vcf.gz")
+  outvcf <- file.path(tempdir(), "test.vcf.gz")
+  file.create(outvcf)
   br$output(outvcf)
   br$write()
   br$close()

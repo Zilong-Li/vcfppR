@@ -879,8 +879,8 @@ class BcfRecord
         std::vector<char> str(vcfline.begin(), vcfline.end());
         str.push_back('\0'); // don't forget string has no \0;
         kstring_t s = {vcfline.length(), vcfline.length(), &str[0]}; // kstring
-        ret = vcf_parse(&s, header.hdr, line.get());
-        if(ret > 0) throw std::runtime_error("error parsing: " + vcfline + "\n");
+        ret = vcf_parse1(&s, header.hdr, line.get());
+        if(ret < 0) throw std::runtime_error("error parsing: " + vcfline + "\n");
         if(line->errcode == BCF_ERR_CTG_UNDEF)
         {
             std::string contig(bcf_hdr_id2name(header.hdr, line->rid));
@@ -1434,10 +1434,10 @@ class BcfReader
                 int slen = tbx_itr_next(fp.get(), tidx, itr, &s);
                 if(slen > 0)
                 {
-                    ret = vcf_parse(&s, r.header.hdr, r.line.get()); // ret > 0, error
+                    ret = vcf_parse1(&s, r.header.hdr, r.line.get()); // ret < 0, error
                     bcf_unpack(r.line.get(), BCF_UN_ALL);
                 }
-                return (ret <= 0) && (slen > 0);
+                return (ret >= 0) && (slen > 0);
             }
         }
         else
@@ -1581,8 +1581,9 @@ class BcfWriter
         std::vector<char> str(vcfline.begin(), vcfline.end());
         str.push_back('\0'); // don't forget string has no \0;
         kstring_t s = {vcfline.length(), vcfline.length(), &str[0]}; // kstring
-        ret = vcf_parse(&s, header.hdr, b.get());
-        if(ret > 0) throw std::runtime_error("error parsing: " + vcfline + "\n");
+        ret = vcf_parse1(&s, header.hdr, b.get());
+        if(ret < 0) hts_log_debug("the ret is %i ", ret);
+        if(ret < 0) throw std::runtime_error("error parsing: " + vcfline + "\n");
         if(b->errcode == BCF_ERR_CTG_UNDEF)
         {
             throw std::runtime_error("contig id " + (std::string)bcf_hdr_id2name(header.hdr, b->rid)
