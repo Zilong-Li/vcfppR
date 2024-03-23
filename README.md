@@ -24,26 +24,10 @@ dependencies of `libcurl`.
 
 ``` r
 ## install.package("vcfppR") ## from CRAN
-devtools::install_github("Zilong-Li/vcfppR")
+remotes::install_github("Zilong-Li/vcfppR")
 ```
 
-## API
-
-There are two classes i.e. ***vcfreader*** and ***vcfwriter*** offering
-the full R-bindings of vcfpp.h. Check out the examples in the
-[tests](tests/testthat) folder or refer to the manual.
-
-``` r
-?vcfppR::vcfreader
-```
-
-In addtion to two classes for R-bindings of vcfpp.h, there are some
-useful functions in the package, e.g. ***vcftable***, ***vcfsummary***
-and ***vcfpopgen***. In the following examples, we use the URL link as
-filename, which can be directly fed to vcfppR, and the performance will
-depend on your connection to the servers.
-
-## Read VCF as tabular data in R
+## vcftable: read VCF as tabular data in R
 
 This example shows how to read only SNP variants with genotypes in the
 VCF/BCF into R list:
@@ -73,7 +57,27 @@ res <- vcftable(vcffile, "chr21:1-5100000", vartype = "indels", format = "DP")
 str(res)
 ```
 
-## Variants summarization
+## vcfcomp: compare two VCF files and report concordance statistics
+
+This example shows how to calculate genotype correlation (r2) between
+two VCF files
+
+``` r
+vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
+res <- vcfcomp(test = vcffile, truth = vcffile, region = "chr21:1-5100000", stats = "r2", format = c('GT','GT'))
+as.data.frame(res)
+```
+
+This example shows how to calculate genotype concordance (F1-score)
+between two VCF files
+
+``` r
+vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
+res <- vcfcomp(test = vcffile, truth = vcffile, region = "chr21:1-5100000", stats = "f1", format = c('GT','GT'))
+str(res)
+```
+
+## vcfsummary: variants characterization
 
 This example shows how to summarize small variants discovered by GATK.
 The data is from the 1000 Genome Project.
@@ -106,3 +110,19 @@ allsvs <- sv$summary[-1]
 bar <- barplot(allsvs, ylim = c(0, 1.1*max(allsvs)),
                main = "Variant Counts on chr20 (all SVs)")
 ```
+
+## API
+
+There are two classes i.e. ***vcfreader*** and ***vcfwriter*** offering
+the full R-bindings of vcfpp.h. Check out the examples in the
+[tests](tests/testthat) folder or refer to the manual.
+
+``` r
+?vcfppR::vcfreader
+```
+
+In addtion to two classes for R-bindings of vcfpp.h, there are some
+useful functions in the package, e.g. ***vcftable***, ***vcfsummary***
+and ***vcfpopgen***. In the following examples, we use the URL link as
+filename, which can be directly fed to vcfppR, and the performance will
+depend on your connection to the servers.

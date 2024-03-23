@@ -18,7 +18,7 @@ vcfcomp(
   vartype = "snps",
   ids = NULL,
   qual = 0,
-  pass = TRUE
+  pass = FALSE
 )
 }
 \arguments{
@@ -47,7 +47,7 @@ default c("DS", "GT") is used to extract DS of target and GT of truth respective
 
 \item{vartype}{restrict to specific type of variants. supports "snps","indels", "sv", "multisnps","multiallelics"}
 
-\item{ids}{character vector. restrict to sites with ID in the given vector. default NULL won't filter any sites.}
+\item{ids}{character vector. restrict to sites with ID in the given vector.}
 
 \item{qual}{logical. restrict to variants with QUAL > qual.}
 
@@ -67,9 +67,7 @@ e.g. report genotype concocrdance, correlation stratified by allele frequency.
 library('vcfppR')
 test <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
 truth <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
-suppressWarnings(
-  res <- vcfcomp(test, truth, stats = "f1", format = c("GT", "GT"))
-)
+res <- vcfcomp(test, truth, stats = "f1", format = c("GT", "GT"))
 str(res[!is.na(res)])
 }
 \author{

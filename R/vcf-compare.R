@@ -29,7 +29,7 @@
 #' @param out output prefix for saving objects into RDS file
 #'
 #' @param vartype restrict to specific type of variants. supports "snps","indels", "sv", "multisnps","multiallelics"
-#' @param ids  character vector. restrict to sites with ID in the given vector. default NULL won't filter any sites.
+#' @param ids  character vector. restrict to sites with ID in the given vector.
 #' @param qual logical. restrict to variants with QUAL > qual.
 #'
 #' @param pass logical. restrict to variants with FILTER = "PASS".
@@ -41,14 +41,12 @@
 #' library('vcfppR')
 #' test <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
 #' truth <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
-#' suppressWarnings(
-#'   res <- vcfcomp(test, truth, stats = "f1", format = c("GT", "GT"))
-#' )
+#' res <- vcfcomp(test, truth, stats = "f1", format = c("GT", "GT"))
 #' str(res[!is.na(res)])
 #' @export
 vcfcomp <- function(test, truth, region = "", samples = "-", names = NULL,
                     format = c("DS", "GT"), stats = "r2", bins = NULL, af = NULL, out = NULL,
-                    vartype = "snps", ids = NULL, qual = 0, pass = TRUE) {
+                    vartype = "snps", ids = NULL, qual = 0, pass = FALSE) {
   if(is.null(bins)){
     bins <- sort(unique(c(
       c(0, 0.01 / 1000, 0.02 / 1000, 0.05 / 1000),
@@ -63,14 +61,14 @@ vcfcomp <- function(test, truth, region = "", samples = "-", names = NULL,
                  vartype = vartype, ids = NULL, qual = qual, pass = pass)
   if(!is.null(names) & is.vector(names)) d1$samples <- names
   samples <- paste0(d1$samples, collapse = ",") 
-  d2 <- tryCatch( { readRDS(truth) }, error = function(e) {
+  d2 <- tryCatch( { suppressWarnings(readRDS(truth)) }, error = function(e) {
     vcftable(test, region = region, samples = samples, setid = TRUE, info = FALSE, format = format[2],
              vartype = vartype, ids = NULL, qual = qual, pass = pass)
   } )
   sites <- intersect(d1$id,  d2$id)
   ## chr pos ref alt af
   if(!is.null(af)){
-    af <- tryCatch( { readRDS(af) }, error = function(e) {
+    af <- tryCatch( { suppressWarnings(readRDS(af)) }, error = function(e) {
       af <- read.table(af, header = TRUE)
       af$id <- paste0(af[,"chr"], "_", af[,"pos"], "_", af[,"ref"], "_", af[,"alt"])
       subset(af, select = c(id, af))
@@ -91,7 +89,11 @@ vcfcomp <- function(test, truth, region = "", samples = "-", names = NULL,
   rownames(ds) <- sites
   res <- NULL
   if(stats=="r2") {
-    af <- af[match(sites, af[,"id"]), "af"]
+    if(is.null(af)){
+      af <- rowMeans(gt, na.rm = TRUE) / 2
+    } else {
+      af <- af[match(sites, af[,"id"]), "af"]
+    }
     names(af) <- sites
     res <- r2_by_freq(bins, af, gt, ds, which_snps = sites, flip = FALSE)
   }
