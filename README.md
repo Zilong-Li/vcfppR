@@ -1,15 +1,4 @@
 
-  - [vcfppR: rapid manipulation of the VCF/BCF
-    file](#vcfppr-rapid-manipulation-of-the-vcfbcf-file)
-      - [Installation](#installation)
-      - [vcftable: read VCF as tabular
-        data](#vcftable-read-vcf-as-tabular-data)
-      - [vcfcomp: compare two VCF files and report concordance
-        statistics](#vcfcomp-compare-two-vcf-files-and-report-concordance-statistics)
-      - [vcfsummary: variants
-        characterization](#vcfsummary-variants-characterization)
-      - [API](#api)
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # vcfppR: rapid manipulation of the VCF/BCF file
