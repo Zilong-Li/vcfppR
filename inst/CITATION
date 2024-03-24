@@ -1,0 +1,14 @@
+bibentry(
+  bibtype  = "Article",
+  title = "vcfpp: a C++ API for rapid processing of the variant call format",
+  author = person("Zilong", "Li"),
+  journal = "Bioinformatics",
+  volume = "40",
+  number = "2",
+  pages = "btae049",
+  year = "2024",
+  month = "01",
+  issn = "1367-4811",
+  abstract = "Given the widespread use of the variant call format (VCF/BCF) coupled with continuous surge in big data, there remains a perpetual demand for fast and flexible methods to manipulate these comprehensive formats across various programming languages.This work presents vcfpp, a C++ API of HTSlib in a single file, providing an intuitive interface to manipulate VCF/BCF files rapidly and safely, in addition to being portable. Moreover, this work introduces the vcfppR package to demonstrate the development of a high-performance R package with vcfpp, allowing for rapid and straightforward variants analyses.vcfpp is available from https://github.com/Zilong-Li/vcfpp under MIT license. vcfppR is available from https://cran.r-project.org/web/packages/vcfppR.",
+  doi = "10.1093/bioinformatics/btae049"
+)
