@@ -65,10 +65,11 @@ e.g. report genotype concocrdance, correlation stratified by allele frequency.
 }
 \examples{
 library('vcfppR')
-test <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
-truth <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
-res <- vcfcomp(test, truth, stats = "f1", format = c("GT", "GT"))
-str(res[!is.na(res)])
+test <- system.file("extdata", "imputed.gt.vcf.gz", package="vcfppR")
+truth <- system.file("extdata", "imputed.gt.vcf.gz", package="vcfppR")
+samples <- "HG00133,HG00143,HG00262"
+res <- vcfcomp(test, truth, stats="f1", format=c('GT','GT'), samples=samples)
+str(res)
 }
 \author{
 Zilong Li \email{zilong.dk@gmail.com}

@@ -1,4 +1,15 @@
 
+  - [vcfppR: rapid manipulation of the VCF/BCF
+    file](#vcfppr-rapid-manipulation-of-the-vcfbcf-file)
+      - [Installation](#installation)
+      - [vcftable: read VCF as tabular
+        data](#vcftable-read-vcf-as-tabular-data)
+      - [vcfcomp: compare two VCF files and report concordance
+        statistics](#vcfcomp-compare-two-vcf-files-and-report-concordance-statistics)
+      - [vcfsummary: variants
+        characterization](#vcfsummary-variants-characterization)
+      - [API](#api)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # vcfppR: rapid manipulation of the VCF/BCF file
@@ -13,24 +24,23 @@ status](https://www.r-pkg.org/badges/version/vcfppR)](https://CRAN.R-project.org
 [![codecov](https://codecov.io/github/Zilong-Li/vcfppR/graph/badge.svg?token=QE1UFVRH98)](https://app.codecov.io/github/Zilong-Li/vcfppR)
 <!-- badges: end -->
 
-The vcfppR package implements various useful functions for manipulating
-the VCF/BCF file in R using the C++ API of
+The vcfppR package implements various useful functions for rapidly
+manipulating VCF/BCF files in R using the C++ API of
 [vcfpp.h](https://github.com/Zilong-Li/vcfpp).
 
 ## Installation
 
-You can install the development version of vcfppR with the system
-dependencies of `libcurl`.
-
 ``` r
 ## install.package("vcfppR") ## from CRAN
-remotes::install_github("Zilong-Li/vcfppR")
+remotes::install_github("Zilong-Li/vcfppR") ## from latest github
 ```
 
-## vcftable: read VCF as tabular data in R
+## vcftable: read VCF as tabular data
 
-This example shows how to read only SNP variants with genotypes in the
-VCF/BCF into R list:
+`vcftable` gives you fine control over what you want to extract from
+VCF/BCF files.
+
+Read only SNP variants:
 
 ``` r
 library(vcfppR)
@@ -39,8 +49,8 @@ res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps")
 str(res)
 ```
 
-This example shows how to read only SNP variants with PL format into R
-list and drop the INFO column in the VCF/BCF:
+Read only SNP variants with PL format and drop the INFO column in the
+VCF/BCF:
 
 ``` r
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_raw_GT_with_annot/20201028_CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.recalibrated_variants.vcf.gz"
@@ -48,8 +58,7 @@ res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps", format = "PL", inf
 str(res)
 ```
 
-This example shows how to read only indels variants with DP format in
-the VCF/BCF into R list:
+Read only indels variants with DP format in the VCF/BCF:
 
 ``` r
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_raw_GT_with_annot/20201028_CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.recalibrated_variants.vcf.gz"
@@ -59,8 +68,10 @@ str(res)
 
 ## vcfcomp: compare two VCF files and report concordance statistics
 
-This example shows how to calculate genotype correlation (r2) between
-two VCF files
+Want to investigate the concordance between two VCF files? `vcfcomp` is
+the utility function you need\!
+
+**Genotype correlation**
 
 ``` r
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
@@ -68,8 +79,7 @@ res <- vcfcomp(test = vcffile, truth = vcffile, region = "chr21:1-5100000", stat
 as.data.frame(res)
 ```
 
-This example shows how to calculate genotype concordance (F1-score)
-between two VCF files
+**Genotype F1 score**
 
 ``` r
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
@@ -79,8 +89,10 @@ str(res)
 
 ## vcfsummary: variants characterization
 
-This example shows how to summarize small variants discovered by GATK.
-The data is from the 1000 Genome Project.
+Want to summarize variants discovered by genotype caller e.g. GATK?
+`vcfsummary` is the utility function you need\!
+
+**Small variants**
 
 ``` r
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_raw_GT_with_annot/20201028_CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.recalibrated_variants.vcf.gz"
@@ -99,8 +111,7 @@ out <- sapply(unique(ped$Superpopulation), function(pop) {
 boxplot(out, main = paste0("Average number of SNP & INDEL variants\nin region ", region))
 ```
 
-This example shows how to summarize complex structure variants
-discovered by GATK-SV.
+**Complex structure variants**
 
 ``` r
 svfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20210124.SV_Illumina_Integration/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz"
@@ -120,9 +131,3 @@ the full R-bindings of vcfpp.h. Check out the examples in the
 ``` r
 ?vcfppR::vcfreader
 ```
-
-In addtion to two classes for R-bindings of vcfpp.h, there are some
-useful functions in the package, e.g. ***vcftable***, ***vcfsummary***
-and ***vcfpopgen***. In the following examples, we use the URL link as
-filename, which can be directly fed to vcfppR, and the performance will
-depend on your connection to the servers.

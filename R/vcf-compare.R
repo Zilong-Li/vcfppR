@@ -39,10 +39,11 @@
 #'
 #' @examples
 #' library('vcfppR')
-#' test <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
-#' truth <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
-#' res <- vcfcomp(test, truth, stats = "f1", format = c("GT", "GT"))
-#' str(res[!is.na(res)])
+#' test <- system.file("extdata", "imputed.gt.vcf.gz", package="vcfppR")
+#' truth <- system.file("extdata", "imputed.gt.vcf.gz", package="vcfppR")
+#' samples <- "HG00133,HG00143,HG00262"
+#' res <- vcfcomp(test, truth, stats="f1", format=c('GT','GT'), samples=samples)
+#' str(res)
 #' @export
 vcfcomp <- function(test, truth, region = "", samples = "-", names = NULL,
                     format = c("DS", "GT"), stats = "r2", bins = NULL, af = NULL, out = NULL,
@@ -96,9 +97,11 @@ vcfcomp <- function(test, truth, region = "", samples = "-", names = NULL,
     }
     names(af) <- sites
     res <- r2_by_freq(bins, af, gt, ds, which_snps = sites, flip = FALSE)
+    return(list(samples = d1$samples, r2=res))
   }
-  if(stats=="f1")
+  if(stats=="f1"){
     res <- F1(gt, ds)
-  return(res)
+    return(list(samples = d1$samples, f1=res))
+  }
 }
 
