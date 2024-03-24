@@ -26,6 +26,7 @@ DEALINGS IN THE SOFTWARE.  */
 #define HTS_BUILDING_LIBRARY // Enables HTSLIB_EXPORT, see htslib/hts_defs.h
 #include <config.h>
 #include "htslib/hts_defs.h"
+#include "htslib/hts_os.h"
 
 // Windows (maybe more) lack a drand48 implementation.
 #ifndef HAVE_DRAND48
