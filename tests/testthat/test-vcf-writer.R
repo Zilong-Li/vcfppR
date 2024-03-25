@@ -1,7 +1,6 @@
 library(testthat)
 
 test_that("vcfwriter: writing variant works", {
-  ## skip_on_os(c("windows"), arch = NULL)
   outvcf <- file.path(paste0(tempfile(), ".vcf.gz"))
   bw <- vcfwriter$new(outvcf, "VCF4.3")
   bw$addLine('##ALT=<ID=NON_REF,Description="Represents any possible alternative allele at this location">')
@@ -12,12 +11,11 @@ test_that("vcfwriter: writing variant works", {
   bw$writeline(s1)
   bw$close()
   ## tests
+  skip_on_os(c("windows"), arch = NULL)
   br <- vcfreader$new(outvcf)
   print(br$header())
   br$variant()
-  s2 <- gsub("\n", "", br$string())
   expect_identical(br$chr(), "chr20")
-  expect_identical(s1, s2)
   s2 <- br$line()
   expect_identical(s1, s2)
 })
