@@ -39,7 +39,12 @@
 #' res <- vcfsummary(svfile, region = "chr21:1-10000000", svtype = TRUE)
 #' str(res)
 #' @export
-vcfsummary <- function(vcffile, region = "", samples = "-", pass = FALSE, qual = 0, svtype = FALSE) {
+vcfsummary <- function(vcffile,
+                       region = "",
+                       samples = "-",
+                       pass = FALSE,
+                       qual = 0,
+                       svtype = FALSE) {
   if(svtype) {
     return(summarySVs(vcffile, region, samples, pass, qual))
   } else {

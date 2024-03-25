@@ -88,8 +88,17 @@
 #' res <- vcftable(vcffile, "chr21:1-5050000", vartype = "snps")
 #' str(res)
 #' @export
-vcftable <- function(vcffile, region = "", samples = "-", vartype = "all", format = "GT", ids = NULL,
-                     qual = 0, pass = FALSE, info = TRUE, collapse = TRUE, setid = FALSE) {
+vcftable <- function(vcffile,
+                     region = "",
+                     samples = "-",
+                     vartype = "all",
+                     format = "GT",
+                     ids = NULL,
+                     qual = 0,
+                     pass = FALSE,
+                     info = TRUE,
+                     collapse = TRUE,
+                     setid = FALSE) {
   snps <- FALSE
   indels <- FALSE
   svs <- FALSE

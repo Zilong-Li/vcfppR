@@ -7,34 +7,24 @@
 #' 
 #' @param test path to the first VCF/BCF file referred as test.
 #'
-#' @param truth path to the second VCF/BCF file referred as truth.
+#' @param truth path to the second VCF/BCF file referred as truth, or saved RDS file.
 #'
-#' @param region region to subset in bcftools-like style: "chr1", "chr1:1-10000000"
+#' @param formats character vector. the FORMAT tags to extract for the test and truth respectively.
+#'               default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.
 #'
-#' @param samples samples to subset in bcftools-like style.
-#'                comma separated list of samples to include (or exclude with "^" prefix).
-#'                e.g. "id01,id02", "^id01,id02".
+#' @param stats the statistics to be calculated, e.g. "r2", "f1".
 #'
-#' @param names rename samples in test VCF.
+#' @param names character vector. reset samples' names in test VCF.
 #' 
-#' @param format character vector. the FORMAT tag to extract for comparison.
-#'               default c("DS", "GT") is used to extract DS of target and GT of truth respectively.
+#' @param bins numeric vector. break statistics into allele frequency bins.
 #'
-#' @param stats choose the statistics to be returned. eg. "r2", "f1"
-#'
-#' @param bins numeric vector. allele frequency bins to stratify with.
-#'
-#' @param af file path to allele frequency.
+#' @param af file path to allele frequency text file or saved RDS file.
 #'
 #' @param out output prefix for saving objects into RDS file
 #'
-#' @param vartype restrict to specific type of variants. supports "snps","indels", "sv", "multisnps","multiallelics"
-#' @param ids  character vector. restrict to sites with ID in the given vector.
-#' @param qual logical. restrict to variants with QUAL > qual.
+#' @param ... options passed to \code{vcftable}
 #'
-#' @param pass logical. restrict to variants with FILTER = "PASS".
-#'
-#' @return return various statistics
+#' @return a list of various statistics
 #' @author Zilong Li \email{zilong.dk@gmail.com}
 #'
 #' @examples
@@ -45,9 +35,14 @@
 #' res <- vcfcomp(test, truth, stats="f1", format=c('GT','GT'), samples=samples)
 #' str(res)
 #' @export
-vcfcomp <- function(test, truth, region = "", samples = "-", names = NULL,
-                    format = c("DS", "GT"), stats = "r2", bins = NULL, af = NULL, out = NULL,
-                    vartype = "snps", ids = NULL, qual = 0, pass = FALSE) {
+vcfcomp <- function(test, truth,
+                    formats = c("DS", "GT"),
+                    stats = "r2",
+                    names = NULL,
+                    bins = NULL,
+                    af = NULL,
+                    out = NULL,
+                    ...) {
   if(is.null(bins)){
     bins <- sort(unique(c(
       c(0, 0.01 / 1000, 0.02 / 1000, 0.05 / 1000),
@@ -57,14 +52,15 @@ vcfcomp <- function(test, truth, region = "", samples = "-", names = NULL,
       seq(0.1, 0.5, length.out = 5)
     )))
   }
-  if(stats=="f1" & format[1] != "GT") stop("F1 score is using GT format. please use format=c('GT','GT')")
-  d1 <- vcftable(test, region = region, samples = samples, setid = TRUE, info = FALSE, format = format[1],
-                 vartype = vartype, ids = NULL, qual = qual, pass = pass)
+  if(stats=="f1" & formats[1] != "GT") {
+    message("F1 score uses GT format")
+    formats[1] <- "GT"
+  }
+  d1 <- vcftable(test, format = formats[1], setid = TRUE, ...)
   if(!is.null(names) & is.vector(names)) d1$samples <- names
   samples <- paste0(d1$samples, collapse = ",") 
   d2 <- tryCatch( { suppressWarnings(readRDS(truth)) }, error = function(e) {
-    vcftable(test, region = region, samples = samples, setid = TRUE, info = FALSE, format = format[2],
-             vartype = vartype, ids = NULL, qual = qual, pass = pass)
+    vcftable(test, format = formats[2], setid = TRUE, ...)
   } )
   sites <- intersect(d1$id,  d2$id)
   ## chr pos ref alt af

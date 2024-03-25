@@ -7,54 +7,37 @@
 vcfcomp(
   test,
   truth,
-  region = "",
-  samples = "-",
-  names = NULL,
-  format = c("DS", "GT"),
+  formats = c("DS", "GT"),
   stats = "r2",
+  names = NULL,
   bins = NULL,
   af = NULL,
   out = NULL,
-  vartype = "snps",
-  ids = NULL,
-  qual = 0,
-  pass = FALSE
+  ...
 )
 }
 \arguments{
 \item{test}{path to the first VCF/BCF file referred as test.}
 
-\item{truth}{path to the second VCF/BCF file referred as truth.}
+\item{truth}{path to the second VCF/BCF file referred as truth, or saved RDS file.}
 
-\item{region}{region to subset in bcftools-like style: "chr1", "chr1:1-10000000"}
+\item{formats}{character vector. the FORMAT tags to extract for the test and truth respectively.
+default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.}
 
-\item{samples}{samples to subset in bcftools-like style.
-comma separated list of samples to include (or exclude with "^" prefix).
-e.g. "id01,id02", "^id01,id02".}
+\item{stats}{the statistics to be calculated, e.g. "r2", "f1".}
 
-\item{names}{rename samples in test VCF.}
+\item{names}{character vector. reset samples' names in test VCF.}
 
-\item{format}{character vector. the FORMAT tag to extract for comparison.
-default c("DS", "GT") is used to extract DS of target and GT of truth respectively.}
+\item{bins}{numeric vector. break statistics into allele frequency bins.}
 
-\item{stats}{choose the statistics to be returned. eg. "r2", "f1"}
-
-\item{bins}{numeric vector. allele frequency bins to stratify with.}
-
-\item{af}{file path to allele frequency.}
+\item{af}{file path to allele frequency text file or saved RDS file.}
 
 \item{out}{output prefix for saving objects into RDS file}
 
-\item{vartype}{restrict to specific type of variants. supports "snps","indels", "sv", "multisnps","multiallelics"}
-
-\item{ids}{character vector. restrict to sites with ID in the given vector.}
-
-\item{qual}{logical. restrict to variants with QUAL > qual.}
-
-\item{pass}{logical. restrict to variants with FILTER = "PASS".}
+\item{...}{options passed to \code{vcftable}}
 }
 \value{
-return various statistics
+a list of various statistics
 }
 \description{
 Compare two VCF/BCF files reporting various statistics

@@ -33,7 +33,11 @@
 #' res <- vcfpopgen(vcffile)
 #' str(res)
 #' @export
-vcfpopgen <- function(vcffile, region = "", samples = "-", pass = FALSE, qual = 0,
+vcfpopgen <- function(vcffile,
+                      region = "",
+                      samples = "-",
+                      pass = FALSE,
+                      qual = 0,
                       fun = "heterozygosity") {
     return(heterozygosity(vcffile, region, samples, pass, qual))
 }
