@@ -13,7 +13,7 @@ test_that("vcfwriter: writing variant works", {
   ## tests
   skip_on_os(c("windows"), arch = NULL)
   br <- vcfreader$new(outvcf)
-  print(br$header())
+  ## print(br$header())
   br$variant()
   expect_identical(br$chr(), "chr20")
   s2 <- br$line()

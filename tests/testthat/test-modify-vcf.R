@@ -15,20 +15,20 @@ test_that("modify the genotypes", {
   ## tests
   br <- vcfreader$new(outvcf)
   br$variant() ## get a variant record
-  (g0 <- br$genotypes(F))
+  g0 <- br$genotypes(F)
   ## if you wanna change the phasing of genotypes,
   ## call setPhasing before setGenotypes
   br$setPhasing(c(1L, 1L)) 
   g1 <- c(1L, 1L, NA, 0L)
   br$setGenotypes(g1)
-  (g2 <- br$genotypes(F))
+  g2 <- br$genotypes(F)
   expect_false(isTRUE(all.equal(g0, g2)))
   expect_identical(g1, g2)
   br$close()
   ##  the original vcf can not be modified
   br <- vcfreader$new(outvcf)
   br$variant() ## get a variant record
-  (g3 <- br$genotypes(F))
+  g3 <- br$genotypes(F)
   expect_identical(g0, g3)
 })
 
@@ -63,7 +63,7 @@ test_that("modify item in FORMAT", {
   br$addFORMAT("DS", "1", "Float", "Diploid dosage")
   br$addFORMAT("AC", "1", "Integer", "Allele counts")
   br$addFORMAT("STR", "1", "String", "Test String type")
-  print(br$header())
+  ## print(br$header())
   ## set DS in FORMAT now
   br$setFormatFloat("DS", ds)
   ## test if DS presents 
@@ -72,5 +72,5 @@ test_that("modify item in FORMAT", {
   br$setFormatInt("AC", c(3L, 4L))
   expect_false(br$setFormatStr("STR","HHH,JJJ")) ## length(s) %% nsamples != 0
   expect_true(br$setFormatStr("STR","HHHJJJ")) ## length(s) %% nsamples == 0
-  print(br$string())
+  ## print(br$string())
 })
