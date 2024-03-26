@@ -24,12 +24,22 @@ manipulating VCF/BCF files in R using the C++ API of
 remotes::install_github("Zilong-Li/vcfppR") ## from latest github
 ```
 
-## vcftable: read VCF as tabular data
+## Cite the work
+
+If you find it useful, please cite the
+[paper](https://doi.org/10.1093/bioinformatics/btae049)
+
+``` r
+library(vcfppR)
+citation("vcfppR")
+```
+
+## `vcftable`: read VCF as tabular data
 
 `vcftable` gives you fine control over what you want to extract from
 VCF/BCF files.
 
-Read only SNP variants:
+**Read only SNP variants**
 
 ``` r
 library(vcfppR)
@@ -38,8 +48,8 @@ res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps")
 str(res)
 ```
 
-Read only SNP variants with PL format and drop the INFO column in the
-VCF/BCF:
+**Read only SNP variants with PL format and drop the INFO column in the
+VCF/BCF**
 
 ``` r
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_raw_GT_with_annot/20201028_CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.recalibrated_variants.vcf.gz"
@@ -47,7 +57,7 @@ res <- vcftable(vcffile, "chr21:1-5100000", vartype = "snps", format = "PL", inf
 str(res)
 ```
 
-Read only indels variants with DP format in the VCF/BCF:
+**Read only INDEL variants with DP format in the VCF/BCF**
 
 ``` r
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_raw_GT_with_annot/20201028_CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.recalibrated_variants.vcf.gz"
@@ -55,31 +65,39 @@ res <- vcftable(vcffile, "chr21:1-5100000", vartype = "indels", format = "DP")
 str(res)
 ```
 
-## vcfcomp: compare two VCF files and report concordance statistics
+## `vcfcomp`: compare two VCF files and report concordance
 
 Want to investigate the concordance between two VCF files? `vcfcomp` is
-the utility function you need\!
+the utility function you need!
 
 **Genotype correlation**
 
 ``` r
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
-res <- vcfcomp(test = vcffile, truth = vcffile, region = "chr21:1-5100000", stats = "r2", format = c('GT','GT'))
-as.data.frame(res)
+res <- vcfcomp(test = vcffile, truth = vcffile, region = "chr21:1-5100000", stats = "r2", formats = c('GT','GT'))
+str(res)
 ```
 
 **Genotype F1 score**
 
 ``` r
 vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
-res <- vcfcomp(test = vcffile, truth = vcffile, region = "chr21:1-5100000", stats = "f1", format = c('GT','GT'))
+res <- vcfcomp(test = vcffile, truth = vcffile, region = "chr21:1-5100000", stats = "f1")
 str(res)
 ```
 
-## vcfsummary: variants characterization
+**Genotype Non-Reference Concordance**
+
+``` r
+vcffile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"
+res <- vcfcomp(test = vcffile, truth = vcffile, region = "chr21:1-5100000", stats = "nrc")
+str(res)
+```
+
+## `vcfsummary`: variants characterization
 
 Want to summarize variants discovered by genotype caller e.g. GATK?
-`vcfsummary` is the utility function you need\!
+`vcfsummary` is the utility function you need!
 
 **Small variants**
 
