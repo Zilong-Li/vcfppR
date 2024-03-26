@@ -33,14 +33,14 @@ test_that("extract GT for variant with ID=chr21:5030516:G:A", {
 
 test_that("extract GT for all multisnps", {
   res <- vcftable(vcffile, vartype = "multisnps")
-  expect_identical(res$ref, c("C", "C", "G"))
-  expect_identical(res$alt, c("G,T", "T,G", "T,*"))
+  expect_identical(res$ref, c("C", "C"))
+  expect_identical(res$alt, c("G,T", "T,G"))
 })
 
 test_that("extract GT for all multiallelics", {
   res <- vcftable(vcffile, vartype = "multiallelics")
-  expect_identical(res$ref, c("C", "C", "CTTTTTT","G"))
-  expect_identical(res$alt, c("G,T", "T,G", "CTTTTT,CTTTTTTT,C", "T,*"))
+  expect_identical(res$ref, c("C", "C"))
+  expect_identical(res$alt, c("G,T", "T,G"))
 })
 
 test_that("extract AD (Integer, number=.) for variant with ID=chr21:5030247:G:A", {

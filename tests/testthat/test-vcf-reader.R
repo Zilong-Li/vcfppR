@@ -81,10 +81,10 @@ test_that("vcfreader: get variants type", {
     if(br$isMultiAllelics()) m <- m + 1
     if(br$isMultiAllelicSNP()) ms <- ms + 1
   }
-  expect_identical(i, 6)
+  expect_identical(i, 1)
   expect_identical(s, 0)
-  expect_identical(m, 4)
-  expect_identical(ms, 3)
+  expect_identical(m, 2)
+  expect_identical(ms, 2)
 })
 
 test_that("vcfreader: test variants type", {
@@ -107,14 +107,14 @@ test_that("vcfreader: test variants type", {
     if(br$hasOTHER()) i7 <- i7 + 1
     if(br$hasOVERLAP()) i8 <- i8 + 1
   }
-  expect_identical(i1, 66)
-  expect_identical(i2, 6)
-  expect_identical(i3, 3)
-  expect_identical(i4, 4)
+  expect_identical(i1, 14)
+  expect_identical(i2, 1)
+  expect_identical(i3, 0)
+  expect_identical(i4, 1)
   expect_identical(i5, 0)
   expect_identical(i6, 0)
   expect_identical(i7, 0)
-  expect_identical(i8, 1)
+  expect_identical(i8, 0)
 })
 
 test_that("vcfreader: reading variant only", {

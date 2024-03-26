@@ -1,1 +1,1 @@
-address X-CRAN-Comment: Archived on 2024-03-15 as issues were not corrected in time.
+address clang-UBSAN issue by including the latest htslib-1.19.1 (https://github.com/samtools/htslib/releases/tag/1.19)
