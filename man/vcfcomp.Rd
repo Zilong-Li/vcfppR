@@ -7,10 +7,11 @@
 vcfcomp(
   test,
   truth,
+  stats = "all",
   formats = c("DS", "GT"),
-  stats = "r2",
-  bysample = FALSE,
-  byvariant = FALSE,
+  by.sample = FALSE,
+  by.variant = FALSE,
+  flip = FALSE,
   names = NULL,
   bins = NULL,
   af = NULL,
@@ -23,21 +24,23 @@ vcfcomp(
 
 \item{truth}{path to the second VCF/BCF file referred as truth, or saved RDS file.}
 
-\item{formats}{character vector. the FORMAT tags to extract for the test and truth respectively.
-default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.}
-
 \item{stats}{the statistics to be calculated. supports the following.
 "r2": pearson correlation coefficient ** 2.
 "f1": F1-score, good balance between sensitivity and precision.
 "nrc": Non-Reference Concordance rate}
 
-\item{bysample}{logical. calculate concordance for each samples, then average by bins.}
+\item{formats}{character vector. the FORMAT tags to extract for the test and truth respectively.
+default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.}
 
-\item{byvariant}{logical. calculate concordance for each variant, then average by bins.
+\item{by.sample}{logical. calculate concordance for each samples, then average by bins.}
+
+\item{by.variant}{logical. calculate concordance for each variant, then average by bins.
 if both bysample and by variant are TRUE, then do average on all samples first.
 if both bysample and by variant are FALSE, then do average on all samples and variants.}
 
-\item{names}{character vector. reset samples' names in test VCF.}
+\item{flip}{logical. flip the ref and alt variants}
+
+\item{names}{character vector. reset samples' names in truth VCF.}
 
 \item{bins}{numeric vector. break statistics into allele frequency bins.}
 

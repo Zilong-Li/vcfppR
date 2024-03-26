@@ -17,18 +17,20 @@
 #'              "f1": F1-score, good balance between sensitivity and precision.
 #'              "nrc": Non-Reference Concordance rate
 #' 
-#' @param bysample logical. calculate concordance for each samples, then average by bins.
+#' @param by.sample logical. calculate concordance for each samples, then average by bins.
 #' 
-#' @param byvariant logical. calculate concordance for each variant, then average by bins.
+#' @param by.variant logical. calculate concordance for each variant, then average by bins.
 #'                  if both bysample and by variant are TRUE, then do average on all samples first.
 #'                  if both bysample and by variant are FALSE, then do average on all samples and variants.
 #' 
-#' @param names character vector. reset samples' names in test VCF.
+#' @param flip logical. flip the ref and alt variants
+#' 
+#' @param names character vector. reset samples' names in truth VCF.
 #' 
 #' @param bins numeric vector. break statistics into allele frequency bins.
 #'
 #' @param af file path to allele frequency text file or saved RDS file.
-#'
+#' 
 #' @param out output prefix for saving objects into RDS file
 #'
 #' @param ... options passed to \code{vcftable}
@@ -45,10 +47,11 @@
 #' str(res)
 #' @export
 vcfcomp <- function(test, truth,
+                    stats = "all",
                     formats = c("DS", "GT"),
-                    stats = "r2",
-                    bysample = FALSE,
-                    byvariant = FALSE,
+                    by.sample = FALSE,
+                    by.variant = FALSE,
+                    flip = FALSE,
                     names = NULL,
                     bins = NULL,
                     af = NULL,
@@ -63,16 +66,15 @@ vcfcomp <- function(test, truth,
       seq(0.1, 0.5, length.out = 5)
     )))
   }
-  if((stats=="f1" | stats == "nrc") & formats[1] != "GT") {
+  if((stats=="f1" | stats == "nrc") & (formats[1] != "GT") & (stats != "all")) {
     message("F1 score or NRC rate use GT format")
     formats[1] <- "GT"
   }
   d1 <- vcftable(test, format = formats[1], setid = TRUE, ...)
-  if(!is.null(names) & is.vector(names)) d1$samples <- names
-  samples <- paste0(d1$samples, collapse = ",") 
   d2 <- tryCatch( { suppressWarnings(readRDS(truth)) }, error = function(e) {
-    vcftable(test, format = formats[2], setid = TRUE, ...)
+    vcftable(truth, format = formats[2], setid = TRUE, ...)
   } )
+  if(!is.null(names) & is.vector(names)) d2$samples <- names
   sites <- intersect(d1$id,  d2$id)
   ## chr pos ref alt af
   if(!is.null(af)){
@@ -101,21 +103,31 @@ vcfcomp <- function(test, truth,
     af <- af[match(sites, af[,"id"]), "af"]
   }
   names(af) <- sites
-  res <- NULL
-  if(stats=="r2") {
-    res <- concordance_by_freq(gt, ds, bins, af, R2, which_snps = sites,
-                               flip = FALSE, per_ind = bysample, per_snp = byvariant)
-    return(list(samples = d1$samples, r2=res))
-  }
-  if(stats=="f1"){
-    res <- concordance_by_freq(gt, ds, bins, af, F1, which_snps = sites,
-                               flip = FALSE, per_ind = bysample, per_snp = byvariant)
-    return(list(samples = d1$samples, f1=res))
-  }
-  if(stats=="nrc"){
-    res <- concordance_by_freq(gt, ds, bins, af, NRC, which_snps = sites,
-                               flip = FALSE, per_ind = bysample, per_snp = byvariant)
-    return(list(samples = d1$samples, nrc=res))
+  if(stats == "all") {
+    ## F2
+    res.r2 <- concordance_by_freq(gt, ds, bins, af, R2, which_snps = sites,
+                                  flip = flip, per_ind = FALSE, per_snp = by.variant)
+    if(stats == "r2")
+      return(list(samples = d1$samples, r2=res.r2))
+    ## F1 and NRC
+    d1 <- vcftable(test, format = "GT", setid = TRUE, ...)
+    ds <- d1[[10]]
+    ds <- ds[match(sites, d1$id), ]
+    rownames(ds) <- sites
+    res.f1 <- concordance_by_freq(gt, ds, bins, af, F1, which_snps = sites,
+                                  flip = flip, per_ind = by.sample, per_snp = by.variant)
+    res.nrc <- concordance_by_freq(gt, ds, bins, af, NRC, which_snps = sites,
+                                   flip = flip, per_ind = by.sample, per_snp = by.variant)
+    return(list(samples = d1$samples, r2=res.r2, f1=res.f1, nrc=res.nrc))
+  } else {
+    res <- switch(stats,
+                  r2 = concordance_by_freq(gt, ds, bins, af, R2, which_snps = sites,
+                                           flip = flip, per_ind = by.sample, per_snp = by.variant),
+                  f1 = concordance_by_freq(gt, ds, bins, af, F1, which_snps = sites,
+                                           flip = flip, per_ind = by.sample, per_snp = by.variant),
+                  nrc = concordance_by_freq(gt, ds, bins, af, NRC, which_snps = sites,
+                                            flip = flip, per_ind = by.sample, per_snp = by.variant))
+    return(list(samples = d1$samples, stats = res))
   }
 }
 

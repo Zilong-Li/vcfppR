@@ -73,7 +73,8 @@ R2 <- function(a, b) {
 ## f1 = 2 * TP / (2 * TP + FP + FN)
 F1 <- function(a, b) {
   o <- table(as.vector(a), as.vector(b))
-  if(sum(colnames(o) == c("0", "1", "2")) != 3) {
+  if((sum(colnames(o) == c("0", "1", "2")) != 3) ||
+       (sum(rownames(o) == c("0", "1", "2")) != 3)) {
     warning("F1 should be used only for a sample with genotypes of all types, hom ref(0), het(1) and hom alt(2)")
     return(NA)
   }
@@ -93,7 +94,8 @@ F1 <- function(a, b) {
 ## 2      e2     e2  m2
 NRC <- function(a, b) {
   o <- table(as.vector(a), as.vector(b))
-  if(sum(colnames(o) == c("0", "1", "2")) != 3) {
+  if((sum(colnames(o) == c("0", "1", "2")) != 3) ||
+       (sum(rownames(o) == c("0", "1", "2")) != 3)) {
     warning("NRC should be used only for a sample with genotypes of all types, hom ref(0), het(1) and hom alt(2)")
     return(NA)
   }
