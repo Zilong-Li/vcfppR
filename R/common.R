@@ -24,7 +24,7 @@ concordance_by_freq <- function(truthG, testDS, breaks, af, FUN,
       list(
         n = length(w),
         nA = sum(truthG[w, ], na.rm = TRUE),
-        simple = unlist(sapply(1:ncol(truthG), function(ind) {
+        concordance = unlist(sapply(1:ncol(truthG), function(ind) {
           FUN(truthG[w, ind], testDS[w, ind])
         }))
       )
@@ -35,7 +35,7 @@ concordance_by_freq <- function(truthG, testDS, breaks, af, FUN,
       c(
         n = length(w),
         nA = sum(truthG[w, ], na.rm = TRUE),
-        simple = mean(sapply(w, function(ww) {
+        concordance = mean(sapply(w, function(ww) {
           FUN(truthG[ww, ], testDS[ww, ])
         }), na.rm = TRUE)
       )
@@ -45,14 +45,14 @@ concordance_by_freq <- function(truthG, testDS, breaks, af, FUN,
       c(
         n = length(w),
         nA = sum(truthG[w, ], na.rm = TRUE),
-        simple = FUN(truthG[w,], testDS[w,])
+        concordance = FUN(truthG[w,], testDS[w,])
       )
     })
   }
   # fill with NA for AF bins without SNPs
   cors_per_af <- t(sapply(cors_per_af, function(a) {
     if (is.null(a[1])) {
-      return(c(n = NA, nA = NA, simple = NA))
+      return(c(n = NA, nA = NA, concordance = NA))
     }
     a
   }))
@@ -77,16 +77,15 @@ F1 <- function(a, b) {
   if(nrow(o)!=ncol(o)){
     if(nrow(o) == ncol(o)+1){
       o <- o[-nrow(o),]
-      colnames(o) <- rownames(o)
     } else if (nrow(o)+1==ncol(o)){
-      o <- o[,ncol(o)]
-      rownames(o) <- colnames(o) 
+      o <- o[,-ncol(o)]
     } else{
-      warning("ONLY hom ref(0) found in either truth or test data")
+      warning("ONLY homozygous (0) found in either truth or test data")
       return(NA)
     }
   }
-  if(all(dim(o)==c(4,4))) o <- o[1:3,1:3]
+  if(all(dim(o)==c(4,4)))
+    o <- o[1:3,1:3]
   if(all(dim(o)!=c(3,3))) {
     warning("F1 should be used only for a sample with genotypes of all types, hom ref(0), het(1) and hom alt(2)")
     return(NA)
@@ -115,18 +114,16 @@ NRC <- function(a, b) {
   if(nrow(o)!=ncol(o)){
     if(nrow(o) == ncol(o)+1){
       o <- o[-nrow(o),]
-      colnames(o) <- rownames(o)
     } else if (nrow(o)+1==ncol(o)){
-      o <- o[,ncol(o)]
-      rownames(o) <- colnames(o) 
+      o <- o[,-ncol(o)]
     } else{
-      warning("ONLY hom ref(0) found in either truth or test data")
+      warning("ONLY homozygous (0) found in either truth or test data")
       return(NA)
     }
   }
-  if(all(dim(o)==c(4,4))) o <- o[1:3,1:3]
+  if(all(dim(o)==c(4,4)))
+    o <- o[1:3,1:3]
   if(all(dim(o)!=c(3,3))) {
-    print(o)
     warning("NRC should be used only for a sample with genotypes of all types, hom ref(0), het(1) and hom alt(2)")
     return(NA)
   }
@@ -135,3 +132,4 @@ NRC <- function(a, b) {
   res <- mismatches / (mismatches+matches)
   return(1-res)
 }
+
