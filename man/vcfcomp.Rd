@@ -40,7 +40,7 @@ if both bysample and by variant are FALSE, then do average on all samples and va
 
 \item{flip}{logical. flip the ref and alt variants}
 
-\item{names}{character vector. reset samples' names in truth VCF.}
+\item{names}{character vector. reset samples' names in the test VCF.}
 
 \item{bins}{numeric vector. break statistics into allele frequency bins.}
 

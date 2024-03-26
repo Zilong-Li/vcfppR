@@ -25,7 +25,7 @@
 #' 
 #' @param flip logical. flip the ref and alt variants
 #' 
-#' @param names character vector. reset samples' names in truth VCF.
+#' @param names character vector. reset samples' names in the test VCF.
 #' 
 #' @param bins numeric vector. break statistics into allele frequency bins.
 #'
@@ -71,10 +71,10 @@ vcfcomp <- function(test, truth,
     formats[1] <- "GT"
   }
   d1 <- vcftable(test, format = formats[1], setid = TRUE, ...)
+  if(!is.null(names) & is.vector(names)) d1$samples <- names
   d2 <- tryCatch( { suppressWarnings(readRDS(truth)) }, error = function(e) {
     vcftable(truth, format = formats[2], setid = TRUE, ...)
   } )
-  if(!is.null(names) & is.vector(names)) d2$samples <- names
   sites <- intersect(d1$id,  d2$id)
   ## chr pos ref alt af
   if(!is.null(af)){
