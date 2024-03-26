@@ -12,8 +12,17 @@
 #' @param formats character vector. the FORMAT tags to extract for the test and truth respectively.
 #'               default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.
 #'
-#' @param stats the statistics to be calculated, e.g. "r2", "f1".
-#'
+#' @param stats the statistics to be calculated. supports the following.
+#'              "r2": pearson correlation coefficient ** 2.
+#'              "f1": F1-score, good balance between sensitivity and precision.
+#'              "nrc": Non-Reference Concordance rate
+#' 
+#' @param bysample logical. calculate concordance for each samples, then average by bins.
+#' 
+#' @param byvariant logical. calculate concordance for each variant, then average by bins.
+#'                  if both bysample and by variant are TRUE, then do average on all samples first.
+#'                  if both bysample and by variant are FALSE, then do average on all samples and variants.
+#' 
 #' @param names character vector. reset samples' names in test VCF.
 #' 
 #' @param bins numeric vector. break statistics into allele frequency bins.
@@ -38,6 +47,8 @@
 vcfcomp <- function(test, truth,
                     formats = c("DS", "GT"),
                     stats = "r2",
+                    bysample = FALSE,
+                    byvariant = FALSE,
                     names = NULL,
                     bins = NULL,
                     af = NULL,
@@ -52,8 +63,8 @@ vcfcomp <- function(test, truth,
       seq(0.1, 0.5, length.out = 5)
     )))
   }
-  if(stats=="f1" & formats[1] != "GT") {
-    message("F1 score uses GT format")
+  if((stats=="f1" | stats == "nrc") & formats[1] != "GT") {
+    message("F1 score or NRC rate use GT format")
     formats[1] <- "GT"
   }
   d1 <- vcftable(test, format = formats[1], setid = TRUE, ...)
@@ -84,20 +95,27 @@ vcfcomp <- function(test, truth,
   gt <- gt[match(sites, d2$id), ord]
   rownames(gt) <- sites
   rownames(ds) <- sites
+  if(is.null(af)){
+    af <- rowMeans(gt, na.rm = TRUE) / 2
+  } else {
+    af <- af[match(sites, af[,"id"]), "af"]
+  }
+  names(af) <- sites
   res <- NULL
   if(stats=="r2") {
-    if(is.null(af)){
-      af <- rowMeans(gt, na.rm = TRUE) / 2
-    } else {
-      af <- af[match(sites, af[,"id"]), "af"]
-    }
-    names(af) <- sites
-    res <- r2_by_freq(bins, af, gt, ds, which_snps = sites, flip = FALSE)
+    res <- concordance_by_freq(gt, ds, bins, af, R2, which_snps = sites,
+                               flip = FALSE, per_ind = bysample, per_snp = byvariant)
     return(list(samples = d1$samples, r2=res))
   }
   if(stats=="f1"){
-    res <- F1(gt, ds)
+    res <- concordance_by_freq(gt, ds, bins, af, F1, which_snps = sites,
+                               flip = FALSE, per_ind = bysample, per_snp = byvariant)
     return(list(samples = d1$samples, f1=res))
+  }
+  if(stats=="nrc"){
+    res <- concordance_by_freq(gt, ds, bins, af, NRC, which_snps = sites,
+                               flip = FALSE, per_ind = bysample, per_snp = byvariant)
+    return(list(samples = d1$samples, nrc=res))
   }
 }
 
