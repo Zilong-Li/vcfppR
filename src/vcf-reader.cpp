@@ -121,22 +121,23 @@ using namespace std;
 //' }
 class vcfreader {
    public:
-    vcfreader(const std::string& vcffile) {
+    vcfreader(const std::string& vcffile) : fin(vcffile) {
         br.open(vcffile);
-        var.init(br.header);
+        var.initHeader(br.header);
     }
 
-    vcfreader(const std::string& vcffile, const std::string& region) {
+    vcfreader(const std::string& vcffile, const std::string& region) : fin(vcffile) {
         br.open(vcffile);
         if (!region.empty()) br.setRegion(region);
-        var.init(br.header);
+        var.initHeader(br.header);
     }
 
-    vcfreader(const std::string& vcffile, const std::string& region, const std::string& samples) {
+    vcfreader(const std::string& vcffile, const std::string& region, const std::string& samples)
+        : fin(vcffile) {
         br.open(vcffile);
         if (!samples.empty()) br.setSamples(samples);
         if (!region.empty()) br.setRegion(region);
-        var.init(br.header);
+        var.initHeader(br.header);
     }
 
     ~vcfreader() {}
@@ -259,11 +260,16 @@ class vcfreader {
     // WRITE
     inline void output(const std::string& vcffile) {
         bw.open(vcffile);
-        bw.initalHeader(br.header);
+        bw.copyHeader(fin);
+        var.resetHeader(bw.header);
         writable = true;
     }
-    inline void write() { bw.writeRecord(var); }
-    inline void close() { bw.close(); }
+    inline void write() {
+        if (writable) bw.writeRecord(var);
+    }
+    inline void close() {
+        if (writable) bw.close();
+    }
 
     inline void setCHR(std::string s) { var.setCHR(s.c_str()); }
     inline void setID(std::string s) { var.setID(s.c_str()); }
@@ -318,6 +324,7 @@ class vcfreader {
 
    private:
     bool writable = false;
+    const std::string fin;
     vcfpp::BcfReader br;
     vcfpp::BcfRecord var;
     vcfpp::BcfWriter bw;

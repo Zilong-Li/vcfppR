@@ -1,4 +1,2 @@
-1. address clang-UBSAN issue by including the latest htslib-1.19.1 (https://github.com/samtools/htslib/releases/tag/1.19)
-2. reduce size of package
-3. add copyrights and authors of htslib
-4. new function `vcfcomp`
+1. address issues on https://cran.r-project.org/web/checks/check_results_vcfppR.html
+2. verbose message of vcfcomp

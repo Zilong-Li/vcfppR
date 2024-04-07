@@ -24,7 +24,6 @@ test_that("modify the genotypes", {
   g2 <- br$genotypes(F)
   expect_false(isTRUE(all.equal(g0, g2)))
   expect_identical(g1, g2)
-  br$close()
   ##  the original vcf can not be modified
   br <- vcfreader$new(outvcf)
   br$variant() ## get a variant record
@@ -54,7 +53,6 @@ test_that("modify item in FORMAT", {
   ds <- gp[2,] + gp[3,] * 2
   ## will prompt uses a message if `output` is not called 
   br$addFORMAT("DS", "1", "Float", "Diploid dosage")
-  br$addINFO("INFO", "1", "Float", "INFO score of imputation")
   ## now open another file for output 
   newvcf <- paste0(tempfile(), ".vcf.gz")
   br$output(newvcf)
