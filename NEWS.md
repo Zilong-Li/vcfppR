@@ -1,3 +1,8 @@
+# vcfppR 0.4.5
+
+* add `vcfcomp` function
+* fix memory leaks and pass ASAN check
+
 # vcfppR 0.4.0
 
 * add `setid` option for vcftable

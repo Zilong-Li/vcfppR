@@ -1,4 +1,5 @@
 # sample regex patterns
 ignore:
+  - "src/vcfpp.h"      # this is coverged seperately in its own repo
   - "src/htslib-1.19.1"  # ignore folders and all its contents
   - "src/htslib-1.18"  # ignore folders and all its contents

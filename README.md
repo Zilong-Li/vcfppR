@@ -13,9 +13,17 @@ status](https://www.r-pkg.org/badges/version/vcfppR)](https://CRAN.R-project.org
 [![codecov](https://codecov.io/github/Zilong-Li/vcfppR/graph/badge.svg?token=QE1UFVRH98)](https://app.codecov.io/github/Zilong-Li/vcfppR)
 <!-- badges: end -->
 
-The vcfppR package implements various useful functions for rapidly
-manipulating VCF/BCF files in R using the C++ API of
+The vcfppR package implements various powerful functions for fast
+genomics analyses with VCF/BCF files using the C++ API of
 [vcfpp.h](https://github.com/Zilong-Li/vcfpp).
+
+- Load/save content of VCF/BCF into R objects with highly customizable
+  options
+- Visualize and chracterize variants
+- Compare two VCF/BCF files and report various statistics
+- Streaming read/write VCF/BCF files with fine control of everything
+- [Paper](https://doi.org/10.1093/bioinformatics/btae049) shows vcfppR
+  is 20x faster than `vcfR`. Also, much faster than `cyvcf2`
 
 ## Installation
 
