@@ -16,6 +16,7 @@
 #'              "r2": pearson correlation coefficient ** 2.
 #'              "f1": F1-score, good balance between sensitivity and precision.
 #'              "nrc": Non-Reference Concordance rate
+#'              "pse": Phasing Switch Error rate
 #' 
 #' @param by.sample logical. calculate concordance for each samples, then average by bins.
 #' 
@@ -32,6 +33,10 @@
 #' @param af file path to allele frequency text file or saved RDS file.
 #' 
 #' @param out output prefix for saving objects into RDS file
+#'
+#' @param choose_random_start choose random start for stats="pse"
+#'
+#' @param return_pse_sites boolean. return phasing switch error sites
 #'
 #' @param ... options passed to \code{vcftable}
 #'
@@ -56,6 +61,8 @@ vcfcomp <- function(test, truth,
                     bins = NULL,
                     af = NULL,
                     out = NULL,
+                    choose_random_start = FALSE,
+                    return_pse_sites = FALSE,
                     ...) {
   if(is.null(bins)){
     bins <- sort(unique(c(
@@ -66,13 +73,14 @@ vcfcomp <- function(test, truth,
       seq(0.1, 0.5, length.out = 5)
     )))
   }
-  if((stats=="f1" | stats == "nrc") & (formats[1] != "GT") & (stats != "all")) {
-    message("F1 score or NRC rate use GT format")
+  if((stats=="f1" | stats == "nrc" | stats == "pse") & (formats[1] != "GT") & (stats != "all")) {
+    message("stats F1 or NRC or PSE only uses GT format")
     formats[1] <- "GT"
   }
-  d1 <- vcftable(test, format = formats[1], setid = TRUE, ...)
+  collapse <- ifelse(stats=="pse", FALSE, TRUE)
+  d1 <- vcftable(test, format = formats[1], setid = TRUE, collapse = collapse, ...)
   d2 <- tryCatch( { suppressWarnings(readRDS(truth)) }, error = function(e) {
-    vcftable(truth, format = formats[2], setid = TRUE, ...)
+    vcftable(truth, format = formats[2], setid = TRUE, collapse = collapse, ...)
   } )
   if(length(d1$samples)!=length(d2$samples))
     stop("the number of samples in two VCF files is inconsistent. check out option `samples`")
@@ -93,6 +101,7 @@ vcfcomp <- function(test, truth,
     saveRDS(truth, file.path(paste0(out, ".truth.rds")))
   }
   ord <- match(d1$samples, d2$samples)
+  if(!collapse) ord <- c(sapply(ord, function(i) c(2*i-1, 2*i)))
   if(is.na(sum(ord)))
     stop("the samples name in two VCF files is inconsistent. please set `names`")
   ds <- d1[[10]]
@@ -125,6 +134,7 @@ vcfcomp <- function(test, truth,
     return(list(samples = d1$samples, r2=res.r2, f1=res.f1, nrc=res.nrc))
   } else {
     res <- switch(stats,
+                  pse = PSE(gt, ds, sites, choose_random_start, return_pse_sites),
                   r2 = concordance_by_freq(gt, ds, bins, af, R2, which_snps = sites,
                                            flip = flip, per_ind = by.sample, per_snp = by.variant),
                   f1 = concordance_by_freq(gt, ds, bins, af, F1, which_snps = sites,

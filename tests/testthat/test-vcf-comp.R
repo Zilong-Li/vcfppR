@@ -28,3 +28,13 @@ test_that("can work for NRC rate by sample", {
   expect_identical(unlist(res[[2]][[3]]), rep(1,2))
 })
 
+test_that("can work for PSE", {
+  skip_on_os(c("windows"), arch = NULL)
+  samples <- "HG00151,HG00380"
+  expect_warning(res <- vcfcomp(imputedvcf, imputedvcf, stats = "pse", samples = samples))
+  expect_true(is.nan(res[[2]][[1]]$pse))
+  expect_true(is.na(res[[2]][[2]]))
+  expect_identical(paste0(res$samples, collapse = ","), samples)
+})
+
+

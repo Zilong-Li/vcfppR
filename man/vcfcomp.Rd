@@ -16,6 +16,8 @@ vcfcomp(
   bins = NULL,
   af = NULL,
   out = NULL,
+  choose_random_start = FALSE,
+  return_pse_sites = FALSE,
   ...
 )
 }
@@ -27,7 +29,8 @@ vcfcomp(
 \item{stats}{the statistics to be calculated. supports the following.
 "r2": pearson correlation coefficient ** 2.
 "f1": F1-score, good balance between sensitivity and precision.
-"nrc": Non-Reference Concordance rate}
+"nrc": Non-Reference Concordance rate
+"pse": Phasing Switch Error rate}
 
 \item{formats}{character vector. the FORMAT tags to extract for the test and truth respectively.
 default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.}
@@ -47,6 +50,10 @@ if both bysample and by variant are FALSE, then do average on all samples and va
 \item{af}{file path to allele frequency text file or saved RDS file.}
 
 \item{out}{output prefix for saving objects into RDS file}
+
+\item{choose_random_start}{choose random start for stats="pse"}
+
+\item{return_pse_sites}{boolean. return phasing switch error sites}
 
 \item{...}{options passed to \code{vcftable}}
 }
