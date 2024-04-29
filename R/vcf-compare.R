@@ -134,7 +134,7 @@ vcfcomp <- function(test, truth,
     return(list(samples = d1$samples, r2=res.r2, f1=res.f1, nrc=res.nrc))
   } else {
     res <- switch(stats,
-                  pse = PSE(gt, ds, sites, choose_random_start, return_pse_sites),
+                  pse = PSE(ds, gt, sites, choose_random_start, return_pse_sites),
                   r2 = concordance_by_freq(gt, ds, bins, af, R2, which_snps = sites,
                                            flip = flip, per_ind = by.sample, per_snp = by.variant),
                   f1 = concordance_by_freq(gt, ds, bins, af, F1, which_snps = sites,

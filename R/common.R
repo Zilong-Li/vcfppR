@@ -140,14 +140,14 @@ calculate_pse_2ways <- function(test,
                                 seed = NULL) {
   ## for testing
   if (!is.null(seed)) set.seed(seed)
-  truth <- truth[which_snps, ]
-  test <- test[which_snps, ]
+  truth <- truth[which_snps, , drop = FALSE]
+  test <- test[which_snps, , drop = FALSE]
   which_sites <-
     rowSums(truth == 0 | truth == 1, na.rm = TRUE) == 2 &
     rowSums(truth, na.rm = TRUE) == 1 &
     rowSums(is.na(truth)) == 0
-  truth <- matrix(truth[which_sites, ], ncol=2,byrow=T)
-  test <- matrix(test[which_sites, ], ncol=2, byrow=T)
+  truth <- truth[which_sites, , drop = FALSE]
+  test <- test[which_sites, , drop = FALSE]
   snps <- which_snps[which_sites]
   if (nrow(test) == 0) {
     warning("No heterozygous sites!")

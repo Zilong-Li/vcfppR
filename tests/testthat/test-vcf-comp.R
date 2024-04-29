@@ -31,9 +31,11 @@ test_that("can work for NRC rate by sample", {
 test_that("can work for PSE", {
   skip_on_os(c("windows"), arch = NULL)
   samples <- "HG00151,HG00380"
-  expect_warning(res <- vcfcomp(imputedvcf, imputedvcf, stats = "pse", samples = samples))
+  (res <- vcfcomp(imputedvcf, imputedvcf, stats = "pse", samples = samples))
   expect_true(is.nan(res[[2]][[1]]$pse))
-  expect_true(is.na(res[[2]][[2]]))
+  expect_true((res[[2]][[2]]$pse==0))
+  expect_true((res[[2]][[2]]$disc==0))
+  expect_true(is.null(res[[2]][[2]]$pos))
   expect_identical(paste0(res$samples, collapse = ","), samples)
 })
 
