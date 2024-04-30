@@ -5,7 +5,7 @@
 #' \code{vcfcomp} implements various statisitcs to compare two VCF/BCF files,
 #' e.g. report genotype concocrdance, correlation stratified by allele frequency.
 #' 
-#' @param test path to the first VCF/BCF file referred as test.
+#' @param test path to the first VCF/BCF file referred as test, or saved RDS file.
 #'
 #' @param truth path to the second VCF/BCF file referred as truth, or saved RDS file.
 #'
@@ -78,7 +78,9 @@ vcfcomp <- function(test, truth,
     formats[1] <- "GT"
   }
   collapse <- ifelse(stats=="pse", FALSE, TRUE)
-  d1 <- vcftable(test, format = formats[1], setid = TRUE, collapse = collapse, ...)
+  d1 <- tryCatch( { suppressWarnings(readRDS(test)) }, error = function(e) {
+    vcftable(test, format = formats[1], setid = TRUE, collapse = collapse, ...)
+  } )
   d2 <- tryCatch( { suppressWarnings(readRDS(truth)) }, error = function(e) {
     vcftable(truth, format = formats[2], setid = TRUE, collapse = collapse, ...)
   } )
@@ -98,6 +100,7 @@ vcfcomp <- function(test, truth,
   ## save some useful objects
   if(!is.null(out)){
     saveRDS(af, file.path(paste0(out, ".af.rds")))
+    saveRDS(test, file.path(paste0(out, ".test.rds")))
     saveRDS(truth, file.path(paste0(out, ".truth.rds")))
   }
   ord <- match(d1$samples, d2$samples)
