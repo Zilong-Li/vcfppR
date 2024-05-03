@@ -93,9 +93,11 @@ vcfcomp <- function(test, truth,
     af <- tryCatch( { suppressWarnings(readRDS(af)) }, error = function(e) {
       af <- read.table(af, header = TRUE)
       af$id <- paste0(af[,"chr"], "_", af[,"pos"], "_", af[,"ref"], "_", af[,"alt"])
-      subset(af, select = c(id, af))
+      aaf <- af[,"af"]
+      names(aaf) <- af[,"id"]
+      aaf
     } )
-    sites <-  intersect(af[,"id"], sites) ## use intersect sites only
+    sites <-  intersect(names(af), sites) ## use intersect sites only
   }
   ## save some useful objects
   if(!is.null(out)){
@@ -116,7 +118,7 @@ vcfcomp <- function(test, truth,
   if(is.null(af)){
     af <- rowMeans(gt, na.rm = TRUE) / 2
   } else {
-    af <- af[match(sites, af[,"id"]), "af"]
+    af <- af[match(sites, names(af))]
   }
   names(af) <- sites
   if(stats == "all") {

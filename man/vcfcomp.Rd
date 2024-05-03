@@ -22,7 +22,7 @@ vcfcomp(
 )
 }
 \arguments{
-\item{test}{path to the first VCF/BCF file referred as test.}
+\item{test}{path to the first VCF/BCF file referred as test, or saved RDS file.}
 
 \item{truth}{path to the second VCF/BCF file referred as truth, or saved RDS file.}
 

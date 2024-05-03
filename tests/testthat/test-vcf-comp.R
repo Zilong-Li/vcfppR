@@ -12,6 +12,18 @@ test_that("can work for correlation r2 between DS and GT", {
   expect_identical(unlist(res$nrc[[3]]), rep(1,2))
 })
 
+test_that("can work for r2 with af", {
+  skip_on_os(c("windows"), arch = NULL)
+  samples <- "HG00673,NA10840"
+  d1 <- vcftable(imputedvcf,setid = T, info=F)
+  af <- runif(15)
+  names(af) <- d1$id
+  affile <- tempfile()
+  saveRDS(af, affile)
+  res <- vcfcomp(imputedvcf, rawvcf, stats = "r2", bins = c(0,1), af = affile, samples = samples)
+  expect_identical(res[[2]][,3], 1)
+})
+
 test_that("can work for F1 score", {
   skip_on_os(c("windows"), arch = NULL)
   samples <- "HG00673,NA10840"
