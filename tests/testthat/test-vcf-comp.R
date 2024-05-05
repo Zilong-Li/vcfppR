@@ -6,7 +6,7 @@ imputedvcf <- system.file("extdata", "imputed.gt.vcf.gz", package="vcfppR")
 test_that("can work for correlation r2 between DS and GT", {
   skip_on_os(c("windows"), arch = NULL)
   samples <- "HG00673,NA10840"
-  res <- vcfcomp(imputedvcf, imputedvcf, bins = c(0,1), by.sample = TRUE, samples = samples)
+  res <- vcfcomp(imputedvcf, imputedvcf, bins = c(0,1), by.sample = TRUE, samples = samples, stats = "all")
   expect_equal(as.numeric(res$r2[1,]), c(15, 6, 1), tolerance=1e-6)
   expect_identical(unlist(res$f1[[3]]), rep(1,2))
   expect_identical(unlist(res$nrc[[3]]), rep(1,2))
