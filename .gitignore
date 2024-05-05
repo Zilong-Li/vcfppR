@@ -17,4 +17,4 @@ src/symbols.rds
 *.Rcheck
 CRAN-SUBMISSION
 README.html
-docs
+## docs
