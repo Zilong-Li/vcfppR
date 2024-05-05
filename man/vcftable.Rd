@@ -15,7 +15,8 @@ vcftable(
   pass = FALSE,
   info = TRUE,
   collapse = TRUE,
-  setid = FALSE
+  setid = FALSE,
+  mac = 0
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ If the FORMAT to extract is not "GT", then with collapse=TRUE it will try to tur
 However, this raises issues when one variant is mutliallelic resulting in more vaules than others.}
 
 \item{setid}{logical. reset ID column as CHR_POS_REF_ALT.}
+
+\item{mac}{integer. restrict to variants with minor allele count higher than the value.}
 }
 \value{
 Return a list containing the following components:

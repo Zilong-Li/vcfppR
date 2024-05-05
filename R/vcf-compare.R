@@ -52,8 +52,8 @@
 #' str(res)
 #' @export
 vcfcomp <- function(test, truth,
-                    stats = "all",
                     formats = c("DS", "GT"),
+                    stats = "r2",
                     by.sample = FALSE,
                     by.variant = FALSE,
                     flip = FALSE,
@@ -84,11 +84,9 @@ vcfcomp <- function(test, truth,
   d2 <- tryCatch( { suppressWarnings(readRDS(truth)) }, error = function(e) {
     vcftable(truth, format = formats[2], setid = TRUE, collapse = collapse, ...)
   } )
-  if(length(d1$samples)!=length(d2$samples))
-    stop("the number of samples in two VCF files is inconsistent. check out option `samples`")
   if(!is.null(names) & is.vector(names)) d1$samples <- names
-  sites <- intersect(d1$id,  d2$id)
   ## chr pos ref alt af
+  sites <- intersect(d1$id,  d2$id)
   if(!is.null(af)){
     af <- tryCatch( { suppressWarnings(readRDS(af)) }, error = function(e) {
       af <- read.table(af, header = TRUE)
@@ -106,9 +104,9 @@ vcfcomp <- function(test, truth,
     saveRDS(truth, file.path(paste0(out, ".truth.rds")))
   }
   ord <- match(d1$samples, d2$samples)
-  if(!collapse) ord <- c(sapply(ord, function(i) c(2*i-1, 2*i)))
   if(is.na(sum(ord)))
     stop("the samples name in two VCF files is inconsistent. please set `names`")
+  if(!collapse) ord <- c(sapply(ord, function(i) c(2*i-1, 2*i)))
   ds <- d1[[10]]
   ds <- ds[match(sites, d1$id), ]
   gt <- d2[[10]]

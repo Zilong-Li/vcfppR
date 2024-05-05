@@ -56,8 +56,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // tableGT
-List tableGT(std::string vcffile, std::string region, std::string samples, std::string format, const std::vector<std::string>& ids, double qualval, bool pass, bool INFO, bool snps, bool indels, bool multiallelics, bool multisnps, bool svs);
-RcppExport SEXP _vcfppR_tableGT(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP formatSEXP, SEXP idsSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP INFOSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP, SEXP svsSEXP) {
+List tableGT(std::string vcffile, std::string region, std::string samples, std::string format, const std::vector<std::string>& ids, double qualval, bool pass, bool INFO, bool snps, bool indels, bool multiallelics, bool multisnps, bool svs, int mac);
+RcppExport SEXP _vcfppR_tableGT(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP formatSEXP, SEXP idsSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP INFOSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP, SEXP svsSEXP, SEXP macSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -74,7 +74,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
     Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
     Rcpp::traits::input_parameter< bool >::type svs(svsSEXP);
-    rcpp_result_gen = Rcpp::wrap(tableGT(vcffile, region, samples, format, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps, svs));
+    Rcpp::traits::input_parameter< int >::type mac(macSEXP);
+    rcpp_result_gen = Rcpp::wrap(tableGT(vcffile, region, samples, format, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps, svs, mac));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -109,7 +110,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfppR_heterozygosity", (DL_FUNC) &_vcfppR_heterozygosity, 5},
     {"_vcfppR_summaryVariants", (DL_FUNC) &_vcfppR_summaryVariants, 5},
     {"_vcfppR_summarySVs", (DL_FUNC) &_vcfppR_summarySVs, 5},
-    {"_vcfppR_tableGT", (DL_FUNC) &_vcfppR_tableGT, 13},
+    {"_vcfppR_tableGT", (DL_FUNC) &_vcfppR_tableGT, 14},
     {"_vcfppR_tableFormat", (DL_FUNC) &_vcfppR_tableFormat, 13},
     {"_rcpp_module_boot_vcfreader", (DL_FUNC) &_rcpp_module_boot_vcfreader, 0},
     {"_rcpp_module_boot_vcfwriter", (DL_FUNC) &_rcpp_module_boot_vcfwriter, 0},

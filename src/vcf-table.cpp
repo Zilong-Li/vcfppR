@@ -18,7 +18,7 @@ UMapStringInt map_ids(const std::vector<std::string>& ids) {
 // [[Rcpp::export]]
 List tableGT(std::string vcffile, std::string region, std::string samples, std::string format,
              const std::vector<std::string>& ids, double qualval, bool pass, bool INFO, bool snps,
-             bool indels, bool multiallelics, bool multisnps, bool svs) {
+             bool indels, bool multiallelics, bool multisnps, bool svs, int mac) {
     vcfpp::BcfReader vcf(vcffile, region, samples);
     vcfpp::BcfRecord var(vcf.header);
     vector<vector<int>> GT;
@@ -27,7 +27,7 @@ List tableGT(std::string vcffile, std::string region, std::string samples, std::
     vector<std::string> chr, ref, alt, id, filter, info;
     UMapStringInt ids_m = map_ids(ids);
     while (vcf.getNextVariant(var)) {
-        if (ids_m.size() && ids_m.count(var.ID())==0) continue;
+        if (ids_m.size() && ids_m.count(var.ID()) == 0) continue;
         if (pass && (var.FILTER() != "PASS")) continue;
         if ((qualval > 0) && (var.QUAL() < qualval)) continue;
         if (multiallelics && (!var.isMultiAllelics())) continue;
@@ -35,6 +35,14 @@ List tableGT(std::string vcffile, std::string region, std::string samples, std::
         if (snps && (!var.isSNP())) continue;
         if (indels && (!var.isIndel())) continue;
         if (svs && (!var.isSV())) continue;
+        var.getGenotypes(gt);
+        if (mac > 0) {
+            int ac = 0;
+            for (auto g : gt)
+                ac += g;
+            if (ac < mac) continue;
+        }
+        GT.push_back(gt);
         pos.push_back(var.POS());
         qual.push_back(var.QUAL());
         chr.push_back(var.CHROM());
@@ -43,8 +51,6 @@ List tableGT(std::string vcffile, std::string region, std::string samples, std::
         alt.push_back(var.ALT());
         filter.push_back(var.FILTER());
         if (INFO) info.push_back(var.allINFO());
-        var.getGenotypes(gt);
-        GT.push_back(gt);
     }
     return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                         Named("pos") = pos, Named("id") = id, Named("ref") = ref,
@@ -67,7 +73,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
         vector<vector<int>> mat;
         vector<int> vec;
         while (vcf.getNextVariant(var)) {
-            if (ids_m.size() && ids_m.count(var.ID())==0) continue;
+            if (ids_m.size() && ids_m.count(var.ID()) == 0) continue;
             if (pass && (var.FILTER() != "PASS")) continue;
             if ((qualval > 0) && (var.QUAL() < qualval)) continue;
             if (multiallelics && (!var.isMultiAllelics())) continue;
@@ -103,7 +109,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
         vector<float> vecf;
         vector<double> vecd;
         while (vcf.getNextVariant(var)) {
-            if (ids_m.size() && ids_m.count(var.ID())==0) continue;
+            if (ids_m.size() && ids_m.count(var.ID()) == 0) continue;
             if (pass && (var.FILTER() != "PASS")) continue;
             if ((qualval > 0) && (var.QUAL() < qualval)) continue;
             if (multiallelics && (!var.isMultiAllelics())) continue;
@@ -140,7 +146,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
         vector<vector<std::string>> mat;
         vector<std::string> vec;
         while (vcf.getNextVariant(var)) {
-            if (ids_m.size() && ids_m.count(var.ID())==0) continue;
+            if (ids_m.size() && ids_m.count(var.ID()) == 0) continue;
             if (pass && (var.FILTER() != "PASS")) continue;
             if ((qualval > 0) && (var.QUAL() < qualval)) continue;
             if (multiallelics && (!var.isMultiAllelics())) continue;
@@ -165,7 +171,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
                             Named("info") = info, Named(format) = mat);
     } else {
         while (vcf.getNextVariant(var)) {
-            if (ids_m.size() && ids_m.count(var.ID())==0) continue;
+            if (ids_m.size() && ids_m.count(var.ID()) == 0) continue;
             if (pass && (var.FILTER() != "PASS")) continue;
             if ((qualval > 0) && (var.QUAL() < qualval)) continue;
             if (multiallelics && (!var.isMultiAllelics())) continue;

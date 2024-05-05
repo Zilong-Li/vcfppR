@@ -38,6 +38,8 @@
 #'
 #' @param setid logical. reset ID column as CHR_POS_REF_ALT.
 #'
+#' @param mac integer. restrict to variants with minor allele count higher than the value.
+#'
 #' @return Return a list containing the following components:
 #'\describe{
 #'\item{samples}{: character vector; \cr
@@ -98,7 +100,8 @@ vcftable <- function(vcffile,
                      pass = FALSE,
                      info = TRUE,
                      collapse = TRUE,
-                     setid = FALSE) {
+                     setid = FALSE,
+                     mac = 0) {
   snps <- FALSE
   indels <- FALSE
   svs <- FALSE
@@ -113,7 +116,7 @@ vcftable <- function(vcffile,
   if(is.null(ids)) ids <- c("")
   res <- NULL
   if(format == "GT") {
-    res <- tableGT(vcffile, region, samples, "GT", ids, qual, pass, info, snps, indels, multiallelics, multisnps, svs)
+    res <- tableGT(vcffile, region, samples, "GT", ids, qual, pass, info, snps, indels, multiallelics, multisnps, svs, mac)
     if(length(res$gt)==0) return(res)
     res[[10]] <- do.call("rbind", res[[10]])
     n <- ncol(res$gt)
