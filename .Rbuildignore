@@ -13,3 +13,6 @@
 ^.covrignore$
 ^codecov.yaml$
 ^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
