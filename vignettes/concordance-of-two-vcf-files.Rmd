@@ -1,0 +1,76 @@
+---
+title: "Assess the concordance between VCFs"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Assess the concordance between VCFs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(vcfppR)
+```
+
+## Background
+
+In a benchmarking, it's often that we need to calculate the concordance rate between the test set and truth set. In the truth VCF file, there are always true genotypes **GT** otherwise we can't validate the test VCF. A test VCF may be from the variant caller or the genotype imputation program,  and the format can be variable, e.g **GP**, **DS** and **GT**. Hence, this article guides you how to use the `vcfppR::vcfcomp` function to rapidly examine various statistics for different scenarios and formats, such as the Pearson correlation of genotyping (stats="r2"), the Non-Reference Concordance (stats="nrc"), the F1-score (stats="f1") or the Phasing Switch Error (stats="pse").
+
+## Case 1: Genotype imputation accuracy
+
+We normally get genotype posterior `GP` and genotype dosage `DS` from the diploid imputation software, eg QUILT and GLIMPSE. To examine the imputation accuracy, we calculate the Pearson correlation between the imputed genotype dosage and the true genotypes. With `vcfcomp`, we need to specify the desired `stats="r2"` and `formats=c("DS","GT")`, which will extract the respective FORMAT items for the `testvcf` and `truthvcf`.
+
+```{r eval = FALSE}
+vcfcomp(testvcf, truthvcf, formats = c("DS", "GT"), stats = "r2")
+```
+
+Besides, the QUILT2-nipt method outputs `MDS` and `FDS` for both maternal and fetal genotype dosages in constract to the `DS` in diploid mode. To assess the imputation accuracy of both the maternal and fetal, we only need to specify the corresponding `formats`.
+
+```{r eval = FALSE}
+vcfcomp(testvcf, truthvcf, formats = c("MDS", "GT"), stats = "r2")
+vcfcomp(testvcf, truthvcf, formats = c("FDS", "GT"), stats = "r2")
+```
+
+
+**Note:** In the absence of `DS` format in the testvcf, one can either fill the `DS` tag using the [vcf_addDS](https://github.com/Zilong-Li/vcfpp/blob/main/tools) command line tool or manipulate the testvcf in R using `vcftable`. 
+
+## Case 2: Genotype concordance
+
+In this case, we are interested in the called genotype concordance and the sensitivity / specificity in genotype calling. In contrast to `stats="r2"`, we choose `stats="f1"` or `stats="nrc"` and specify the `formats=c("GT", "GT")`. Normally, we want the results for each sample, which can be achieved by using `by.sample=TRUE`.
+
+```{r eval = FALSE}
+vcfcomp(testvcf, truthvcf, formats = c("GT","GT"), stats="nrc", by.sample=TRUE)
+vcfcomp(testvcf, truthvcf, formats = c("GT","GT"), stats="f1", by.sample=TRUE)
+```
+
+## Case 3: Phasing switch error
+
+In this case, we look for functionality to assess the phasing switch error. First of all, we need the two VCF files to contain the **phased GT**, which is represented through the '|'.  We can choose to return the sites that have pse. 
+
+```{r eval = FALSE}
+vcfcomp(testvcf, truthvcf, stats="pse", return_pse_sites=TRUE)
+```
+
+**Note:** Currently, the `pse` statatics is a simple form that doesn't take the completeness and quality into account.
+
+## Case 4: Multiple testing repetitively
+
+In the comprehensive benchmarking, we often run many tests against the same true sets. In this scenario, we can save the truth as an RDS object and reuse it. Actually, both `test` and `truth` can take an RDS file as input. The RDS file stores an object that returned by `vcftable`.
+
+```{r eval = FALSE}
+saveRDS(vcftable(truthvcf), "truth.rds")
+vcfcomp(test=testvcf1, truth="truth.rds")
+vcfcomp(test=testvcf2, truth="truth.rds")
+vcfcomp(test=testvcf3, truth="truth.rds")
+```
+
+## Q&A: How to fix the error "inconsistent samples name"
+
+If one is certain about the samples name in the testvcf can be replaced with other names that can match the samples in the truthvcf. One can use the `names` option to specify a vector of new names that can be found in the truthvcf.
+

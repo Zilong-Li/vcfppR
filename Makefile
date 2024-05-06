@@ -9,6 +9,7 @@ rd:
 
 readme:
 	Rscript -e 'pkgdown::build_site()'
+	Rscript -e 'pkgdown::build_articles()'
 	Rscript -e 'rmarkdown::render("README.Rmd")'
 
 readme2:

@@ -14,6 +14,8 @@ Depends: R (>= 3.6.0)
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 SystemRequirements: libcurl: libcurl-devel (rpm) or libcurl4-openssl-dev (deb), GNU make.
@@ -24,3 +26,4 @@ LinkingTo:
 URL: https://github.com/Zilong-Li/vcfppR
 BugReports: https://github.com/Zilong-Li/vcfppR/issues
 License: MIT + file LICENSE
+VignetteBuilder: knitr
