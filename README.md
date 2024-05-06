@@ -5,25 +5,26 @@
 
 <!-- badges: start -->
 
+<a href="https://github.com/Zilong-Li/random/blob/main/vcfppR.png"><img src="https://raw.githubusercontent.com/Zilong-Li/random/main/vcfppR.png" width="120" align="right" /></a>
 ![R-CMD-check](https://github.com/Zilong-Li/vcfppR/actions/workflows/check-release.yaml/badge.svg)
-<a href="https://github.com/Zilong-Li/random/blob/main/vcfppR.png"><img src="https://raw.githubusercontent.com/Zilong-Li/random/main/vcfppR.png" height="200" align="right" /></a>
 [![CRAN
 status](https://www.r-pkg.org/badges/version/vcfppR)](https://CRAN.R-project.org/package=vcfppR)
 ![<https://github.com/Zilong-Li/vcfppR/releases/latest>](https://img.shields.io/github/v/release/Zilong-Li/vcfppR.svg)
 [![codecov](https://codecov.io/github/Zilong-Li/vcfppR/graph/badge.svg?token=QE1UFVRH98)](https://app.codecov.io/github/Zilong-Li/vcfppR)
+[![Downloads](https://cranlogs.r-pkg.org/badges/vcfppR?color=blue)](https://CRAN.R-project.org/package=vcfppR)
 <!-- badges: end -->
 
 The vcfppR package implements various powerful functions for fast
 genomics analyses with VCF/BCF files using the C++ API of
 [vcfpp.h](https://github.com/Zilong-Li/vcfpp).
 
-- Load/save content of VCF/BCF into R objects with highly customizable
-  options
-- Visualize and chracterize variants
-- Compare two VCF/BCF files and report various statistics
-- Streaming read/write VCF/BCF files with fine control of everything
-- [Paper](https://doi.org/10.1093/bioinformatics/btae049) shows vcfppR
-  is 20x faster than `vcfR`. Also, much faster than `cyvcf2`
+  - Load/save content of VCF/BCF into R objects with highly customizable
+    options
+  - Visualize and chracterize variants
+  - Compare two VCF/BCF files and report various statistics
+  - Streaming read/write VCF/BCF files with fine control of everything
+  - [Paper](https://doi.org/10.1093/bioinformatics/btae049) shows vcfppR
+    is 20x faster than `vcfR`. Also, much faster than `cyvcf2`
 
 ## Installation
 
@@ -76,7 +77,7 @@ str(res)
 ## `vcfcomp`: compare two VCF files and report concordance
 
 Want to investigate the concordance between two VCF files? `vcfcomp` is
-the utility function you need!
+the utility function you need\!
 
 **Genotype correlation**
 
@@ -105,7 +106,7 @@ str(res)
 ## `vcfsummary`: variants characterization
 
 Want to summarize variants discovered by genotype caller e.g. GATK?
-`vcfsummary` is the utility function you need!
+`vcfsummary` is the utility function you need\!
 
 **Small variants**
 

@@ -16,11 +16,12 @@ knitr::opts_chunk$set(
 # vcfppR: rapid manipulation of the VCF/BCF file
 
 <!-- badges: start -->
+<a href="https://github.com/Zilong-Li/random/blob/main/vcfppR.png"><img src="https://raw.githubusercontent.com/Zilong-Li/random/main/vcfppR.png" width="120" align="right" /></a> 
 ![R-CMD-check](https://github.com/Zilong-Li/vcfppR/actions/workflows/check-release.yaml/badge.svg)
-<a href="https://github.com/Zilong-Li/random/blob/main/vcfppR.png"><img src="https://raw.githubusercontent.com/Zilong-Li/random/main/vcfppR.png" height="200" align="right" /></a> 
 [![CRAN status](https://www.r-pkg.org/badges/version/vcfppR)](https://CRAN.R-project.org/package=vcfppR)
 ![https://github.com/Zilong-Li/vcfppR/releases/latest](https://img.shields.io/github/v/release/Zilong-Li/vcfppR.svg)
 [![codecov](https://codecov.io/github/Zilong-Li/vcfppR/graph/badge.svg?token=QE1UFVRH98)](https://app.codecov.io/github/Zilong-Li/vcfppR)
+[![Downloads](https://cranlogs.r-pkg.org/badges/vcfppR?color=blue)](https://CRAN.R-project.org/package=vcfppR)
 <!-- badges: end -->
 
 The vcfppR package implements various powerful functions for fast genomics analyses with VCF/BCF files using the C++ API of [vcfpp.h](https://github.com/Zilong-Li/vcfpp).

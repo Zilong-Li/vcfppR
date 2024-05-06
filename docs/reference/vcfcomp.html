@@ -54,8 +54,8 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vcfcomp</span><span class="op">(</span></span>
 <span>  <span class="va">test</span>,</span>
 <span>  <span class="va">truth</span>,</span>
-<span>  stats <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DS"</span>, <span class="st">"GT"</span><span class="op">)</span>,</span>
+<span>  stats <span class="op">=</span> <span class="st">"r2"</span>,</span>
 <span>  by.sample <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  by.variant <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  flip <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -79,17 +79,17 @@
 <dd><p>path to the second VCF/BCF file referred as truth, or saved RDS file.</p></dd>
 
 
+<dt>formats</dt>
+<dd><p>character vector. the FORMAT tags to extract for the test and truth respectively.
+default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.</p></dd>
+
+
 <dt>stats</dt>
 <dd><p>the statistics to be calculated. supports the following.
 "r2": pearson correlation coefficient ** 2.
 "f1": F1-score, good balance between sensitivity and precision.
 "nrc": Non-Reference Concordance rate
 "pse": Phasing Switch Error rate</p></dd>
-
-
-<dt>formats</dt>
-<dd><p>character vector. the FORMAT tags to extract for the test and truth respectively.
-default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.</p></dd>
 
 
 <dt>by.sample</dt>

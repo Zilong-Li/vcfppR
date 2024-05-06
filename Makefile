@@ -8,6 +8,7 @@ rd:
 	Rscript -e 'roxygen2::roxygenise(".")'
 
 readme:
+	Rscript -e 'pkgdown::build_site()'
 	Rscript -e 'rmarkdown::render("README.Rmd")'
 
 readme2:

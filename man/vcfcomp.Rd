@@ -7,8 +7,8 @@
 vcfcomp(
   test,
   truth,
-  stats = "all",
   formats = c("DS", "GT"),
+  stats = "r2",
   by.sample = FALSE,
   by.variant = FALSE,
   flip = FALSE,
@@ -26,14 +26,14 @@ vcfcomp(
 
 \item{truth}{path to the second VCF/BCF file referred as truth, or saved RDS file.}
 
+\item{formats}{character vector. the FORMAT tags to extract for the test and truth respectively.
+default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.}
+
 \item{stats}{the statistics to be calculated. supports the following.
 "r2": pearson correlation coefficient ** 2.
 "f1": F1-score, good balance between sensitivity and precision.
 "nrc": Non-Reference Concordance rate
 "pse": Phasing Switch Error rate}
-
-\item{formats}{character vector. the FORMAT tags to extract for the test and truth respectively.
-default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.}
 
 \item{by.sample}{logical. calculate concordance for each samples, then average by bins.}
 
