@@ -93,50 +93,108 @@
 <p>If you find it useful, please cite the <a href="https://doi.org/10.1093/bioinformatics/btae049" class="external-link">paper</a></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Zilong-Li/vcfppR" class="external-link">vcfppR</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"vcfppR"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"vcfppR"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; To cite package 'vcfppR' in publications use:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Li Z (2024). "vcfpp: a C++ API for rapid processing of the variant</span></span>
+<span><span class="co">#&gt;   call format." _Bioinformatics_, *40*(2), btae049. ISSN 1367-4811,</span></span>
+<span><span class="co">#&gt;   doi:10.1093/bioinformatics/btae049</span></span>
+<span><span class="co">#&gt;   &lt;https://doi.org/10.1093/bioinformatics/btae049&gt;.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   @Article{,</span></span>
+<span><span class="co">#&gt;     title = {vcfpp: a C++ API for rapid processing of the variant call format},</span></span>
+<span><span class="co">#&gt;     author = {Zilong Li},</span></span>
+<span><span class="co">#&gt;     journal = {Bioinformatics},</span></span>
+<span><span class="co">#&gt;     volume = {40},</span></span>
+<span><span class="co">#&gt;     number = {2},</span></span>
+<span><span class="co">#&gt;     pages = {btae049},</span></span>
+<span><span class="co">#&gt;     year = {2024},</span></span>
+<span><span class="co">#&gt;     month = {01},</span></span>
+<span><span class="co">#&gt;     issn = {1367-4811},</span></span>
+<span><span class="co">#&gt;     abstract = {Given the widespread use of the variant call format (VCF/BCF) coupled with continuous surge in big data, there remains a perpetual demand for fast and flexible methods to manipulate these comprehensive formats across various programming languages.This work presents vcfpp, a C++ API of HTSlib in a single file, providing an intuitive interface to manipulate VCF/BCF files rapidly and safely, in addition to being portable. Moreover, this work introduces the vcfppR package to demonstrate the development of a high-performance R package with vcfpp, allowing for rapid and straightforward variants analyses.vcfpp is available from https://github.com/Zilong-Li/vcfpp under MIT license. vcfppR is available from https://cran.r-project.org/web/packages/vcfppR.},</span></span>
+<span><span class="co">#&gt;     doi = {10.1093/bioinformatics/btae049},</span></span>
+<span><span class="co">#&gt;   }</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="url-as-filename">URL as filename<a class="anchor" aria-label="anchor" href="#url-as-filename"></a>
+</h2>
+<p>All functions in vcfppR support URL as filename of VCF/BCF files.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">phasedvcf</span> <span class="op">&lt;-</span> <span class="st">"https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"</span></span>
+<span><span class="va">rawvcf</span> <span class="op">&lt;-</span> <span class="st">"https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_raw_GT_with_annot/20201028_CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.recalibrated_variants.vcf.gz"</span></span>
+<span><span class="va">svfile</span> <span class="op">&lt;-</span> <span class="st">"https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20210124.SV_Illumina_Integration/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz"</span></span>
+<span><span class="va">popfile</span> <span class="op">&lt;-</span> <span class="st">"https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/20130606_g1k_3202_samples_ped_population.txt"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="vcftable-read-vcf-as-tabular-data">
 <code>vcftable</code>: read VCF as tabular data<a class="anchor" aria-label="anchor" href="#vcftable-read-vcf-as-tabular-data"></a>
 </h2>
 <p><code>vcftable</code> gives you fine control over what you want to extract from VCF/BCF files.</p>
-<p><strong>Read only SNP variants</strong></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Zilong-Li/vcfppR" class="external-link">vcfppR</a></span><span class="op">)</span></span>
-<span><span class="va">vcffile</span> <span class="op">&lt;-</span> <span class="st">"https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"</span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcftable.html">vcftable</a></span><span class="op">(</span><span class="va">vcffile</span>, <span class="st">"chr21:1-5100000"</span>, vartype <span class="op">=</span> <span class="st">"snps"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
-<p><strong>Read only SNP variants with PL format and drop the INFO column in the VCF/BCF</strong></p>
+<p><strong>Read SNP variants</strong></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vcffile</span> <span class="op">&lt;-</span> <span class="st">"https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_raw_GT_with_annot/20201028_CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.recalibrated_variants.vcf.gz"</span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcftable.html">vcftable</a></span><span class="op">(</span><span class="va">vcffile</span>, <span class="st">"chr21:1-5100000"</span>, vartype <span class="op">=</span> <span class="st">"snps"</span>, format <span class="op">=</span> <span class="st">"PL"</span>, info <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
-<p><strong>Read only INDEL variants with DP format in the VCF/BCF</strong></p>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcftable.html">vcftable</a></span><span class="op">(</span><span class="va">phasedvcf</span>, <span class="st">"chr21:1-5100000"</span>, vartype <span class="op">=</span> <span class="st">"snps"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 10</span></span>
+<span><span class="co">#&gt;  $ samples: chr [1:3202] "HG00096" "HG00097" "HG00099" "HG00100" ...</span></span>
+<span><span class="co">#&gt;  $ chr    : chr [1:194] "chr21" "chr21" "chr21" "chr21" ...</span></span>
+<span><span class="co">#&gt;  $ pos    : int [1:194] 5030578 5030588 5030596 5030673 5030957 5030960 5031004 5031031 5031194 5031224 ...</span></span>
+<span><span class="co">#&gt;  $ id     : chr [1:194] "21:5030578:C:T" "21:5030588:T:C" "21:5030596:A:G" "21:5030673:G:A" ...</span></span>
+<span><span class="co">#&gt;  $ ref    : chr [1:194] "C" "T" "A" "G" ...</span></span>
+<span><span class="co">#&gt;  $ alt    : chr [1:194] "T" "C" "G" "A" ...</span></span>
+<span><span class="co">#&gt;  $ qual   : num [1:194] 2.14e+09 2.14e+09 2.14e+09 2.14e+09 2.14e+09 ...</span></span>
+<span><span class="co">#&gt;  $ filter : chr [1:194] "." "." "." "." ...</span></span>
+<span><span class="co">#&gt;  $ info   : chr [1:194] "AC=74;AF=0.0115553;CM=0;AN=6404;AN_EAS=1170;AN_AMR=980;AN_EUR=1266;AN_AFR=1786;AN_SAS=1202;AN_EUR_unrel=1006;AN"| __truncated__ "AC=53;AF=0.00827608;CM=1.78789e-05;AN=6404;AN_EAS=1170;AN_AMR=980;AN_EUR=1266;AN_AFR=1786;AN_SAS=1202;AN_EUR_un"| __truncated__ "AC=2;AF=0.000312305;CM=3.21821e-05;AN=6404;AN_EAS=1170;AN_AMR=980;AN_EUR=1266;AN_AFR=1786;AN_SAS=1202;AN_EUR_un"| __truncated__ "AC=2;AF=0.000312305;CM=0.00016985;AN=6404;AN_EAS=1170;AN_AMR=980;AN_EUR=1266;AN_AFR=1786;AN_SAS=1202;AN_EUR_unr"| __truncated__ ...</span></span>
+<span><span class="co">#&gt;  $ gt     : int [1:194, 1:3202] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;  - attr(*, "class")= chr "vcftable"</span></span></code></pre></div>
+<p><strong>Read SNP variants with PL format and drop the INFO column in the VCF/BCF</strong></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vcffile</span> <span class="op">&lt;-</span> <span class="st">"https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_raw_GT_with_annot/20201028_CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.recalibrated_variants.vcf.gz"</span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcftable.html">vcftable</a></span><span class="op">(</span><span class="va">vcffile</span>, <span class="st">"chr21:1-5100000"</span>, vartype <span class="op">=</span> <span class="st">"indels"</span>, format <span class="op">=</span> <span class="st">"DP"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcftable.html">vcftable</a></span><span class="op">(</span><span class="va">rawvcf</span>, <span class="st">"chr21:1-5100000"</span>, vartype <span class="op">=</span> <span class="st">"snps"</span>, format <span class="op">=</span> <span class="st">"PL"</span>, info <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 10</span></span>
+<span><span class="co">#&gt;  $ samples: chr [1:3202] "HG00096" "HG00097" "HG00099" "HG00100" ...</span></span>
+<span><span class="co">#&gt;  $ chr    : chr [1:1383] "chr21" "chr21" "chr21" "chr21" ...</span></span>
+<span><span class="co">#&gt;  $ pos    : int [1:1383] 5030082 5030088 5030105 5030253 5030278 5030347 5030356 5030357 5030391 5030446 ...</span></span>
+<span><span class="co">#&gt;  $ id     : chr [1:1383] "." "." "." "." ...</span></span>
+<span><span class="co">#&gt;  $ ref    : chr [1:1383] "G" "C" "C" "G" ...</span></span>
+<span><span class="co">#&gt;  $ alt    : chr [1:1383] "A" "T" "A" "T" ...</span></span>
+<span><span class="co">#&gt;  $ qual   : num [1:1383] 70.1 2773.1 3897.8 102.6 868.9 ...</span></span>
+<span><span class="co">#&gt;  $ filter : chr [1:1383] "VQSRTrancheSNP99.80to100.00" "VQSRTrancheSNP99.80to100.00" "VQSRTrancheSNP99.80to100.00" "VQSRTrancheSNP99.80to100.00" ...</span></span>
+<span><span class="co">#&gt;  $ info   : chr(0) </span></span>
+<span><span class="co">#&gt;  $ PL     : int [1:1383, 1:9606] NA 64 64 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;  - attr(*, "class")= chr "vcftable"</span></span></code></pre></div>
+<p><strong>Read INDEL variants with DP format in the VCF/BCF</strong></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcftable.html">vcftable</a></span><span class="op">(</span><span class="va">rawvcf</span>, <span class="st">"chr21:1-5100000"</span>, vartype <span class="op">=</span> <span class="st">"indels"</span>, format <span class="op">=</span> <span class="st">"DP"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 10</span></span>
+<span><span class="co">#&gt;  $ samples: chr [1:3202] "HG00096" "HG00097" "HG00099" "HG00100" ...</span></span>
+<span><span class="co">#&gt;  $ chr    : chr [1:195] "chr21" "chr21" "chr21" "chr21" ...</span></span>
+<span><span class="co">#&gt;  $ pos    : int [1:195] 5030240 5030912 5030937 5031018 5031125 5031147 5031747 5031881 5031919 5031984 ...</span></span>
+<span><span class="co">#&gt;  $ id     : chr [1:195] "." "." "." "." ...</span></span>
+<span><span class="co">#&gt;  $ ref    : chr [1:195] "AC" "CA" "T" "C" ...</span></span>
+<span><span class="co">#&gt;  $ alt    : chr [1:195] "A" "C" "TGGTGCACGCCTGCAGTCCCGGC" "CCTATGATCACACCGT" ...</span></span>
+<span><span class="co">#&gt;  $ qual   : num [1:195] 6872 321 233 270 58361 ...</span></span>
+<span><span class="co">#&gt;  $ filter : chr [1:195] "VQSRTrancheINDEL99.00to100.00" "PASS" "PASS" "PASS" ...</span></span>
+<span><span class="co">#&gt;  $ info   : chr [1:195] "AC=82;AF=0.0136439;AN=6010;BaseQRankSum=-0.55;ClippingRankSum=0;DP=18067;FS=0;InbreedingCoeff=0.0664;MLEAC=76;M"| __truncated__ "AC=19;AF=0.0030586;AN=6212;BaseQRankSum=0.358;ClippingRankSum=-0.594;DP=30725;FS=44.58;InbreedingCoeff=-1.1608;"| __truncated__ "AC=1;AF=0.00015753;AN=6348;BaseQRankSum=-1.793;ClippingRankSum=-0.48;DP=32486;FS=27.337;InbreedingCoeff=-0.0212"| __truncated__ "AC=2;AF=0.000314268;AN=6364;BaseQRankSum=1.59;ClippingRankSum=0.358;DP=44916;FS=0;InbreedingCoeff=-0.0092;MLEAC"| __truncated__ ...</span></span>
+<span><span class="co">#&gt;  $ DP     : int [1:195, 1:3202] 3 15 13 16 19 20 5 34 29 24 ...</span></span>
+<span><span class="co">#&gt;  - attr(*, "class")= chr "vcftable"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="vcfcomp-compare-two-vcf-files-and-report-concordance">
 <code>vcfcomp</code>: compare two VCF files and report concordance<a class="anchor" aria-label="anchor" href="#vcfcomp-compare-two-vcf-files-and-report-concordance"></a>
 </h2>
-<p>Want to investigate the concordance between two VCF files? <code>vcfcomp</code> is the utility function you need!</p>
-<p><strong>Genotype correlation</strong></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vcffile</span> <span class="op">&lt;-</span> <span class="st">"https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"</span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span>test <span class="op">=</span> <span class="va">vcffile</span>, truth <span class="op">=</span> <span class="va">vcffile</span>, region <span class="op">=</span> <span class="st">"chr21:1-5100000"</span>, stats <span class="op">=</span> <span class="st">"r2"</span>, formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'GT'</span>,<span class="st">'GT'</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
-<p><strong>Genotype F1 score</strong></p>
+<p>Want to investigate the concordance between two VCF files? <code>vcfcomp</code> is the utility function you need! For example, in benchmarkings, we intend to calculate the genotype correlation between the test and the truth.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vcffile</span> <span class="op">&lt;-</span> <span class="st">"https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"</span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span>test <span class="op">=</span> <span class="va">vcffile</span>, truth <span class="op">=</span> <span class="va">vcffile</span>, region <span class="op">=</span> <span class="st">"chr21:1-5100000"</span>, stats <span class="op">=</span> <span class="st">"f1"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
-<p><strong>Genotype Non-Reference Concordance</strong></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vcffile</span> <span class="op">&lt;-</span> <span class="st">"https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20220422_3202_phased_SNV_INDEL_SV/1kGP_high_coverage_Illumina.chr21.filtered.SNV_INDEL_SV_phased_panel.vcf.gz"</span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span>test <span class="op">=</span> <span class="va">vcffile</span>, truth <span class="op">=</span> <span class="va">vcffile</span>, region <span class="op">=</span> <span class="st">"chr21:1-5100000"</span>, stats <span class="op">=</span> <span class="st">"nrc"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span>test <span class="op">=</span> <span class="va">rawvcf</span>, truth <span class="op">=</span> <span class="va">phasedvcf</span>,</span>
+<span>               region <span class="op">=</span> <span class="st">"chr21:1-5100000"</span>, stats <span class="op">=</span> <span class="st">"r2"</span>,</span>
+<span>               formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GT"</span>,<span class="st">"GT"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">5</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>, cex.lab <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/vcfplot.html">vcfplot</a></span><span class="op">(</span><span class="va">res</span>, what <span class="op">=</span> <span class="st">"r2"</span>, col <span class="op">=</span> <span class="fl">2</span>, cex <span class="op">=</span> <span class="fl">3</span>, lwd <span class="op">=</span> <span class="fl">4</span>, type <span class="op">=</span> <span class="st">"b"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Object is vcfcomp which hassamplesr2</span></span></code></pre></div>
+<p><img src="reference/figures/README-r2-1.png" width="100%"></p>
+<p>Check out the <a href="https://zilong-li.github.io/vcfppR/articles/" class="external-link">vignettes</a> for more!</p>
 </div>
 <div class="section level2">
 <h2 id="vcfsummary-variants-characterization">
@@ -144,35 +202,23 @@
 </h2>
 <p>Want to summarize variants discovered by genotype caller e.g. GATK? <code>vcfsummary</code> is the utility function you need!</p>
 <p><strong>Small variants</strong></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vcffile</span> <span class="op">&lt;-</span> <span class="st">"https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_raw_GT_with_annot/20201028_CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.recalibrated_variants.vcf.gz"</span></span>
-<span><span class="va">region</span> <span class="op">&lt;-</span> <span class="st">"chr21:10000000-10010000"</span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcfsummary.html">vcfsummary</a></span><span class="op">(</span><span class="va">vcffile</span>, <span class="va">region</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span><span class="co"># get labels and do plottiing</span></span>
-<span><span class="va">ped</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="st">"https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/20130606_g1k_3202_samples_ped_population.txt"</span>, h<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
-<span><span class="va">ped</span> <span class="op">&lt;-</span> <span class="va">ped</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">ped</span><span class="op">$</span><span class="va">Superpopulation</span><span class="op">)</span>,<span class="op">]</span></span>
-<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">ped</span><span class="op">$</span><span class="va">Superpopulation</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">pop</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">ped</span>, <span class="va">Superpopulation</span> <span class="op">==</span> <span class="va">pop</span><span class="op">)</span><span class="op">[</span>,<span class="st">"SampleID"</span><span class="op">]</span></span>
-<span>  <span class="va">ord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">res</span><span class="op">$</span><span class="va">samples</span><span class="op">)</span></span>
-<span>  <span class="va">res</span><span class="op">$</span><span class="va">SNP</span><span class="op">[</span><span class="va">ord</span><span class="op">]</span> <span class="op">+</span> <span class="va">res</span><span class="op">$</span><span class="va">INDEL</span><span class="op">[</span><span class="va">ord</span><span class="op">]</span></span>
-<span><span class="op">}</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">out</span>, main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Average number of SNP &amp; INDEL variants\nin region "</span>, <span class="va">region</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcfsummary.html">vcfsummary</a></span><span class="op">(</span><span class="va">rawvcf</span>,<span class="st">"chr21:10000000-10010000"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/vcfplot.html">vcfplot</a></span><span class="op">(</span><span class="va">res</span>, pop <span class="op">=</span> <span class="va">popfile</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, main <span class="op">=</span> <span class="st">"Mean number of SNP &amp; INDEL variants"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Object is vcfsummary</span></span></code></pre></div>
+<p><img src="reference/figures/README-summary_sm-1.png" width="100%"></p>
 <p><strong>Complex structure variants</strong></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">svfile</span> <span class="op">&lt;-</span> <span class="st">"https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20210124.SV_Illumina_Integration/1KGP_3202.gatksv_svtools_novelins.freeze_V3.wAF.vcf.gz"</span></span>
-<span><span class="va">sv</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcfsummary.html">vcfsummary</a></span><span class="op">(</span><span class="va">svfile</span>, svtype <span class="op">=</span> <span class="cn">TRUE</span>, region <span class="op">=</span> <span class="st">"chr20"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">sv</span><span class="op">)</span></span>
-<span><span class="va">allsvs</span> <span class="op">&lt;-</span> <span class="va">sv</span><span class="op">$</span><span class="va">summary</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
-<span><span class="va">bar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/barplot.html" class="external-link">barplot</a></span><span class="op">(</span><span class="va">allsvs</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1.1</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">allsvs</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>               main <span class="op">=</span> <span class="st">"Variant Counts on chr20 (all SVs)"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcfsummary.html">vcfsummary</a></span><span class="op">(</span><span class="va">svfile</span>, svtype <span class="op">=</span> <span class="cn">TRUE</span>, region <span class="op">=</span> <span class="st">"chr20"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/vcfplot.html">vcfplot</a></span><span class="op">(</span><span class="va">res</span>, main <span class="op">=</span> <span class="st">"Structure Variant Counts"</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Object is vcfsummary</span></span></code></pre></div>
+<p><img src="reference/figures/README-summary_sv-1.png" width="100%"></p>
 </div>
 <div class="section level2">
-<h2 id="api">API<a class="anchor" aria-label="anchor" href="#api"></a>
+<h2 id="r-api-of-vcfpph">R API of vcfpp.h<a class="anchor" aria-label="anchor" href="#r-api-of-vcfpph"></a>
 </h2>
 <p>There are two classes i.e. <strong><em>vcfreader</em></strong> and <strong><em>vcfwriter</em></strong> offering the full R-bindings of vcfpp.h. Check out the examples in the <a href="tests/testthat">tests</a> folder or refer to the manual.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">?</span><span class="fu">vcfppR</span><span class="fu">::</span><span class="va"><a href="reference/vcfreader.html">vcfreader</a></span></span></code></pre></div>
 </div>
 </div>

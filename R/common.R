@@ -280,23 +280,6 @@ PSE <- function(test, truth,
 }
 
 
-plot_pse <- function(pse, extra = 1000, col = 2, main = "", xaxis = TRUE) {
-  xmin <- 0
-  COL <- palette()[col]
-  pos <- lapply(pse, function(p) split_coordinates(p$pos))
-  xmax <- max(unlist(pos)) + extra
-  plot(0, 0, col = "white", axes=FALSE, xlim = c(xmin, xmax), ylim = c(0, length(pse)+1),
-       xlab = "", ylab = "", cex.lab = 1.5, cex.main = 2.0, main = main)
-  if(xaxis) axis(1, at = c(0,1E7,2E7,3E7,4E7,5E7,6E7, xmax), cex.axis = 2.0,
-                 labels = c("0e+00", "1e+07", "2e+07", "3e+07","4e+07","5e+07","6e+07", ""))
-  for(n in seq_along(pos)) {
-    a <- c(0, pos[[n]], xmax) ## pad 0 and xmax
-    for(l in 2:length(a)) {
-      rect(a[l-1], n, a[l], n+1, col = ifelse(l %% 2 == 0, COL, add_alpha(COL, 0.5)), border = NULL, lwd=0.5)
-    }
-  }
-}
-
 get_bin <- function(d){
   bins <- as.numeric(sapply(rownames(d), function(i){
     res <- unlist(strsplit(i, ","))

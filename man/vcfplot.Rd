@@ -2,13 +2,28 @@
 % Please edit documentation in R/vcf-plot.R
 \name{vcfplot}
 \alias{vcfplot}
-\title{Do plotting based on various objects in vcfppR}
+\title{Make sensible and beautiful plots based on various objects in vcfppR}
 \usage{
-vcfplot(obj, which.sample = 1, ...)
+vcfplot(
+  obj,
+  what = "r2",
+  which.sample = 1,
+  pop = NULL,
+  variant = c("SNP", "INDEL"),
+  ...
+)
 }
 \arguments{
 \item{obj}{object returned by vcfcomp}
+
+\item{what}{what statisitcs to be plotted}
+
+\item{which.sample}{which sample among all to be plotted}
+
+\item{pop}{file contains population information}
+
+\item{variant}{which type of variant are desired}
 }
 \description{
-Do plotting based on various objects in vcfppR
+Make sensible and beautiful plots based on various objects in vcfppR
 }

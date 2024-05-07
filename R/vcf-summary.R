@@ -46,8 +46,10 @@ vcfsummary <- function(vcffile,
                        qual = 0,
                        svtype = FALSE) {
   if(svtype) {
-    return(summarySVs(vcffile, region, samples, pass, qual))
+    ret <- summarySVs(vcffile, region, samples, pass, qual)
   } else {
-    return(summaryVariants(vcffile, region, samples, pass, qual))
+    ret <- summaryVariants(vcffile, region, samples, pass, qual)
   }
+  class(ret) <- "vcfsummary"
+  return(ret)
 }
