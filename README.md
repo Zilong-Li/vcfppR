@@ -76,6 +76,51 @@ svfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_250
 popfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/20130606_g1k_3202_samples_ped_population.txt"
 ```
 
+## `vcfcomp`: compare two VCF files and report concordance
+
+Want to investigate the concordance between two VCF files? `vcfcomp` is
+the utility function you need\! For example, in benchmarkings, we intend
+to calculate the genotype correlation between the test and the truth.
+
+``` r
+res <- vcfcomp(test = rawvcf, truth = phasedvcf,
+               region = "chr21:1-5100000", stats = "r2",
+               formats = c("GT","GT"))
+par(mar=c(5,5,2,2), cex.lab = 2)
+vcfplot(res, what = "r2", col = 2, cex = 3, lwd = 4, type = "b")
+#> input is an object with vcfcomp class
+```
+
+<img src="man/figures/README-r2-1.png" width="100%" />
+
+Check out the [vignettes](https://zilong-li.github.io/vcfppR/articles/)
+for more\!
+
+## `vcfsummary`: variants characterization
+
+Want to summarize variants discovered by genotype caller e.g. GATK?
+`vcfsummary` is the utility function you need\!
+
+**Small variants**
+
+``` r
+res <- vcfsummary(rawvcf,"chr21:10000000-10010000")
+vcfplot(res, pop = popfile, col = 1:5, main = "Number of SNP & INDEL variants per population")
+#> input is an object with vcfsummary class
+```
+
+<img src="man/figures/README-summary_sm-1.png" width="100%" />
+
+**Complex structure variants**
+
+``` r
+res <- vcfsummary(svfile, svtype = TRUE, region = "chr20")
+vcfplot(res, main = "Structure Variant Counts", col = 1:7)
+#> input is an object with vcfsummary class
+```
+
+<img src="man/figures/README-summary_sv-1.png" width="100%" />
+
 ## `vcftable`: read VCF as tabular data
 
 `vcftable` gives you fine control over what you want to extract from
@@ -138,51 +183,6 @@ str(res)
 #>  $ DP     : int [1:195, 1:3202] 3 15 13 16 19 20 5 34 29 24 ...
 #>  - attr(*, "class")= chr "vcftable"
 ```
-
-## `vcfcomp`: compare two VCF files and report concordance
-
-Want to investigate the concordance between two VCF files? `vcfcomp` is
-the utility function you need\! For example, in benchmarkings, we intend
-to calculate the genotype correlation between the test and the truth.
-
-``` r
-res <- vcfcomp(test = rawvcf, truth = phasedvcf,
-               region = "chr21:1-5100000", stats = "r2",
-               formats = c("GT","GT"))
-par(mar=c(5,5,2,2), cex.lab = 2)
-vcfplot(res, what = "r2", col = 2, cex = 3, lwd = 4, type = "b")
-#> input is an object with vcfcomp class
-```
-
-<img src="man/figures/README-r2-1.png" width="100%" />
-
-Check out the [vignettes](https://zilong-li.github.io/vcfppR/articles/)
-for more\!
-
-## `vcfsummary`: variants characterization
-
-Want to summarize variants discovered by genotype caller e.g. GATK?
-`vcfsummary` is the utility function you need\!
-
-**Small variants**
-
-``` r
-res <- vcfsummary(rawvcf,"chr21:10000000-10010000")
-vcfplot(res, pop = popfile, col = 1:5, main = "Mean number of SNP & INDEL variants")
-#> input is an object with vcfsummary class
-```
-
-<img src="man/figures/README-summary_sm-1.png" width="100%" />
-
-**Complex structure variants**
-
-``` r
-res <- vcfsummary(svfile, svtype = TRUE, region = "chr20")
-vcfplot(res, main = "Structure Variant Counts", col = 1:7)
-#> input is an object with vcfsummary class
-```
-
-<img src="man/figures/README-summary_sv-1.png" width="100%" />
 
 ## R API of vcfpp.h
 

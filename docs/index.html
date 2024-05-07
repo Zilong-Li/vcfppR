@@ -128,12 +128,45 @@
 <span><span class="va">popfile</span> <span class="op">&lt;-</span> <span class="st">"https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/20130606_g1k_3202_samples_ped_population.txt"</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="vcfcomp-compare-two-vcf-files-and-report-concordance">
+<code>vcfcomp</code>: compare two VCF files and report concordance<a class="anchor" aria-label="anchor" href="#vcfcomp-compare-two-vcf-files-and-report-concordance"></a>
+</h2>
+<p>Want to investigate the concordance between two VCF files? <code>vcfcomp</code> is the utility function you need! For example, in benchmarkings, we intend to calculate the genotype correlation between the test and the truth.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span>test <span class="op">=</span> <span class="va">rawvcf</span>, truth <span class="op">=</span> <span class="va">phasedvcf</span>,</span>
+<span>               region <span class="op">=</span> <span class="st">"chr21:1-5100000"</span>, stats <span class="op">=</span> <span class="st">"r2"</span>,</span>
+<span>               formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GT"</span>,<span class="st">"GT"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">5</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>, cex.lab <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/vcfplot.html">vcfplot</a></span><span class="op">(</span><span class="va">res</span>, what <span class="op">=</span> <span class="st">"r2"</span>, col <span class="op">=</span> <span class="fl">2</span>, cex <span class="op">=</span> <span class="fl">3</span>, lwd <span class="op">=</span> <span class="fl">4</span>, type <span class="op">=</span> <span class="st">"b"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; input is an object with vcfcomp class</span></span></code></pre></div>
+<p><img src="reference/figures/README-r2-1.png" width="100%"></p>
+<p>Check out the <a href="https://zilong-li.github.io/vcfppR/articles/" class="external-link">vignettes</a> for more!</p>
+</div>
+<div class="section level2">
+<h2 id="vcfsummary-variants-characterization">
+<code>vcfsummary</code>: variants characterization<a class="anchor" aria-label="anchor" href="#vcfsummary-variants-characterization"></a>
+</h2>
+<p>Want to summarize variants discovered by genotype caller e.g. GATK? <code>vcfsummary</code> is the utility function you need!</p>
+<p><strong>Small variants</strong></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcfsummary.html">vcfsummary</a></span><span class="op">(</span><span class="va">rawvcf</span>,<span class="st">"chr21:10000000-10010000"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/vcfplot.html">vcfplot</a></span><span class="op">(</span><span class="va">res</span>, pop <span class="op">=</span> <span class="va">popfile</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, main <span class="op">=</span> <span class="st">"Mean number of SNP &amp; INDEL variants"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; input is an object with vcfsummary class</span></span></code></pre></div>
+<p><img src="reference/figures/README-summary_sm-1.png" width="100%"></p>
+<p><strong>Complex structure variants</strong></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcfsummary.html">vcfsummary</a></span><span class="op">(</span><span class="va">svfile</span>, svtype <span class="op">=</span> <span class="cn">TRUE</span>, region <span class="op">=</span> <span class="st">"chr20"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/vcfplot.html">vcfplot</a></span><span class="op">(</span><span class="va">res</span>, main <span class="op">=</span> <span class="st">"Structure Variant Counts"</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span></span>
+<span><span class="co">#&gt; input is an object with vcfsummary class</span></span></code></pre></div>
+<p><img src="reference/figures/README-summary_sv-1.png" width="100%"></p>
+</div>
+<div class="section level2">
 <h2 id="vcftable-read-vcf-as-tabular-data">
 <code>vcftable</code>: read VCF as tabular data<a class="anchor" aria-label="anchor" href="#vcftable-read-vcf-as-tabular-data"></a>
 </h2>
 <p><code>vcftable</code> gives you fine control over what you want to extract from VCF/BCF files.</p>
 <p><strong>Read SNP variants</strong></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcftable.html">vcftable</a></span><span class="op">(</span><span class="va">phasedvcf</span>, <span class="st">"chr21:1-5100000"</span>, vartype <span class="op">=</span> <span class="st">"snps"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 10</span></span>
@@ -149,7 +182,7 @@
 <span><span class="co">#&gt;  $ gt     : int [1:194, 1:3202] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
 <span><span class="co">#&gt;  - attr(*, "class")= chr "vcftable"</span></span></code></pre></div>
 <p><strong>Read SNP variants with PL format and drop the INFO column in the VCF/BCF</strong></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcftable.html">vcftable</a></span><span class="op">(</span><span class="va">rawvcf</span>, <span class="st">"chr21:1-5100000"</span>, vartype <span class="op">=</span> <span class="st">"snps"</span>, format <span class="op">=</span> <span class="st">"PL"</span>, info <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 10</span></span>
@@ -165,7 +198,7 @@
 <span><span class="co">#&gt;  $ PL     : int [1:1383, 1:9606] NA 64 64 0 0 0 0 0 0 0 ...</span></span>
 <span><span class="co">#&gt;  - attr(*, "class")= chr "vcftable"</span></span></code></pre></div>
 <p><strong>Read INDEL variants with DP format in the VCF/BCF</strong></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcftable.html">vcftable</a></span><span class="op">(</span><span class="va">rawvcf</span>, <span class="st">"chr21:1-5100000"</span>, vartype <span class="op">=</span> <span class="st">"indels"</span>, format <span class="op">=</span> <span class="st">"DP"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 10</span></span>
@@ -180,39 +213,6 @@
 <span><span class="co">#&gt;  $ info   : chr [1:195] "AC=82;AF=0.0136439;AN=6010;BaseQRankSum=-0.55;ClippingRankSum=0;DP=18067;FS=0;InbreedingCoeff=0.0664;MLEAC=76;M"| __truncated__ "AC=19;AF=0.0030586;AN=6212;BaseQRankSum=0.358;ClippingRankSum=-0.594;DP=30725;FS=44.58;InbreedingCoeff=-1.1608;"| __truncated__ "AC=1;AF=0.00015753;AN=6348;BaseQRankSum=-1.793;ClippingRankSum=-0.48;DP=32486;FS=27.337;InbreedingCoeff=-0.0212"| __truncated__ "AC=2;AF=0.000314268;AN=6364;BaseQRankSum=1.59;ClippingRankSum=0.358;DP=44916;FS=0;InbreedingCoeff=-0.0092;MLEAC"| __truncated__ ...</span></span>
 <span><span class="co">#&gt;  $ DP     : int [1:195, 1:3202] 3 15 13 16 19 20 5 34 29 24 ...</span></span>
 <span><span class="co">#&gt;  - attr(*, "class")= chr "vcftable"</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="vcfcomp-compare-two-vcf-files-and-report-concordance">
-<code>vcfcomp</code>: compare two VCF files and report concordance<a class="anchor" aria-label="anchor" href="#vcfcomp-compare-two-vcf-files-and-report-concordance"></a>
-</h2>
-<p>Want to investigate the concordance between two VCF files? <code>vcfcomp</code> is the utility function you need! For example, in benchmarkings, we intend to calculate the genotype correlation between the test and the truth.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span>test <span class="op">=</span> <span class="va">rawvcf</span>, truth <span class="op">=</span> <span class="va">phasedvcf</span>,</span>
-<span>               region <span class="op">=</span> <span class="st">"chr21:1-5100000"</span>, stats <span class="op">=</span> <span class="st">"r2"</span>,</span>
-<span>               formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GT"</span>,<span class="st">"GT"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">5</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>, cex.lab <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/vcfplot.html">vcfplot</a></span><span class="op">(</span><span class="va">res</span>, what <span class="op">=</span> <span class="st">"r2"</span>, col <span class="op">=</span> <span class="fl">2</span>, cex <span class="op">=</span> <span class="fl">3</span>, lwd <span class="op">=</span> <span class="fl">4</span>, type <span class="op">=</span> <span class="st">"b"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Object is vcfcomp which hassamplesr2</span></span></code></pre></div>
-<p><img src="reference/figures/README-r2-1.png" width="100%"></p>
-<p>Check out the <a href="https://zilong-li.github.io/vcfppR/articles/" class="external-link">vignettes</a> for more!</p>
-</div>
-<div class="section level2">
-<h2 id="vcfsummary-variants-characterization">
-<code>vcfsummary</code>: variants characterization<a class="anchor" aria-label="anchor" href="#vcfsummary-variants-characterization"></a>
-</h2>
-<p>Want to summarize variants discovered by genotype caller e.g. GATK? <code>vcfsummary</code> is the utility function you need!</p>
-<p><strong>Small variants</strong></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcfsummary.html">vcfsummary</a></span><span class="op">(</span><span class="va">rawvcf</span>,<span class="st">"chr21:10000000-10010000"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/vcfplot.html">vcfplot</a></span><span class="op">(</span><span class="va">res</span>, pop <span class="op">=</span> <span class="va">popfile</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, main <span class="op">=</span> <span class="st">"Mean number of SNP &amp; INDEL variants"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Object is vcfsummary</span></span></code></pre></div>
-<p><img src="reference/figures/README-summary_sm-1.png" width="100%"></p>
-<p><strong>Complex structure variants</strong></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/vcfsummary.html">vcfsummary</a></span><span class="op">(</span><span class="va">svfile</span>, svtype <span class="op">=</span> <span class="cn">TRUE</span>, region <span class="op">=</span> <span class="st">"chr20"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/vcfplot.html">vcfplot</a></span><span class="op">(</span><span class="va">res</span>, main <span class="op">=</span> <span class="st">"Structure Variant Counts"</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Object is vcfsummary</span></span></code></pre></div>
-<p><img src="reference/figures/README-summary_sv-1.png" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="r-api-of-vcfpph">R API of vcfpp.h<a class="anchor" aria-label="anchor" href="#r-api-of-vcfpph"></a>

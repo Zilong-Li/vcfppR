@@ -11,6 +11,8 @@
 #'
 #' @param variant which type of variant are desired
 #'
+#' @param ... parameters passed to graphics
+#'
 #' @export
 vcfplot <- function(obj,
                     what = "r2",
@@ -41,7 +43,7 @@ vcfplot <- function(obj,
       return(barplot(svs, ylim = c(0, 1.1*max(svs)),...))
     }else{
       # get labels and do plottiing
-      ped <- read.table(popfile, h=T)
+      ped <- read.table(pop, header=TRUE)
       i <- grep("Super|Population", colnames(ped))
       
       if(length(i)>1) 

@@ -23,6 +23,8 @@ vcfplot(
 \item{pop}{file contains population information}
 
 \item{variant}{which type of variant are desired}
+
+\item{...}{parameters passed to graphics}
 }
 \description{
 Make sensible and beautiful plots based on various objects in vcfppR
