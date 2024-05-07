@@ -41,28 +41,6 @@ If you find it useful, please cite the
 ``` r
 library(vcfppR)
 citation("vcfppR")
-#> To cite package 'vcfppR' in publications use:
-#> 
-#>   Li Z (2024). "vcfpp: a C++ API for rapid processing of the variant
-#>   call format." _Bioinformatics_, *40*(2), btae049. ISSN 1367-4811,
-#>   doi:10.1093/bioinformatics/btae049
-#>   <https://doi.org/10.1093/bioinformatics/btae049>.
-#> 
-#> A BibTeX entry for LaTeX users is
-#> 
-#>   @Article{,
-#>     title = {vcfpp: a C++ API for rapid processing of the variant call format},
-#>     author = {Zilong Li},
-#>     journal = {Bioinformatics},
-#>     volume = {40},
-#>     number = {2},
-#>     pages = {btae049},
-#>     year = {2024},
-#>     month = {01},
-#>     issn = {1367-4811},
-#>     abstract = {Given the widespread use of the variant call format (VCF/BCF) coupled with continuous surge in big data, there remains a perpetual demand for fast and flexible methods to manipulate these comprehensive formats across various programming languages.This work presents vcfpp, a C++ API of HTSlib in a single file, providing an intuitive interface to manipulate VCF/BCF files rapidly and safely, in addition to being portable. Moreover, this work introduces the vcfppR package to demonstrate the development of a high-performance R package with vcfpp, allowing for rapid and straightforward variants analyses.vcfpp is available from https://github.com/Zilong-Li/vcfpp under MIT license. vcfppR is available from https://cran.r-project.org/web/packages/vcfppR.},
-#>     doi = {10.1093/bioinformatics/btae049},
-#>   }
 ```
 
 ## URL as filename
@@ -83,6 +61,7 @@ the utility function you need\! For example, in benchmarkings, we intend
 to calculate the genotype correlation between the test and the truth.
 
 ``` r
+library(vcfppR)
 res <- vcfcomp(test = rawvcf, truth = phasedvcf,
                region = "chr21:1-5100000", stats = "r2",
                formats = c("GT","GT"))
@@ -126,7 +105,7 @@ vcfplot(res, main = "Structure Variant Counts", col = 1:7)
 `vcftable` gives you fine control over what you want to extract from
 VCF/BCF files.
 
-**Read SNP variants**
+**Read SNP variants with GT format**
 
 ``` r
 res <- vcftable(phasedvcf, "chr21:1-5100000", vartype = "snps")
@@ -145,8 +124,7 @@ str(res)
 #>  - attr(*, "class")= chr "vcftable"
 ```
 
-**Read SNP variants with PL format and drop the INFO column in the
-VCF/BCF**
+**Read SNP variants with PL format and drop the INFO column**
 
 ``` r
 res <- vcftable(rawvcf, "chr21:1-5100000", vartype = "snps", format = "PL", info = FALSE)
@@ -165,7 +143,7 @@ str(res)
 #>  - attr(*, "class")= chr "vcftable"
 ```
 
-**Read INDEL variants with DP format in the VCF/BCF**
+**Read INDEL variants with DP format**
 
 ``` r
 res <- vcftable(rawvcf, "chr21:1-5100000", vartype = "indels", format = "DP")

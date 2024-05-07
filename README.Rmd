@@ -43,7 +43,7 @@ remotes::install_github("Zilong-Li/vcfppR") ## from latest github
 
 If you find it useful, please cite the [paper](https://doi.org/10.1093/bioinformatics/btae049)
 
-``` {r cite}
+```r
 library(vcfppR)
 citation("vcfppR")
 ```
@@ -64,6 +64,7 @@ popfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_25
 Want to investigate the concordance between two VCF files? `vcfcomp` is the utility function you need! For example, in benchmarkings, we intend to calculate the genotype correlation between the test and the truth.
 
 ```{r r2}
+library(vcfppR)
 res <- vcfcomp(test = rawvcf, truth = phasedvcf,
                region = "chr21:1-5100000", stats = "r2",
                formats = c("GT","GT"))
@@ -95,21 +96,21 @@ vcfplot(res, main = "Structure Variant Counts", col = 1:7)
 
 `vcftable` gives you fine control over what you want to extract from VCF/BCF files. 
 
-**Read SNP variants**
+**Read SNP variants with GT format**
 
 ```{r snp}
 res <- vcftable(phasedvcf, "chr21:1-5100000", vartype = "snps")
 str(res)
 ```
 
-**Read SNP variants with PL format and drop the INFO column in the VCF/BCF**
+**Read SNP variants with PL format and drop the INFO column**
 
 ```{r pl}
 res <- vcftable(rawvcf, "chr21:1-5100000", vartype = "snps", format = "PL", info = FALSE)
 str(res)
 ```
 
-**Read INDEL variants with DP format in the VCF/BCF**
+**Read INDEL variants with DP format**
 
 ```{r indel}
 res <- vcftable(rawvcf, "chr21:1-5100000", vartype = "indels", format = "DP")
