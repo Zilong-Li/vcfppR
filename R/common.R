@@ -1,3 +1,20 @@
+colorpalette<-function(x="colorblind") {
+  if(x=="line")
+    return(palette(c("#b2182b", "#2166ac", "#4DAF4A", "#FF7F00", "#F781BF","#984EA3")))
+  else if(x=="rasmus")
+    return(palette(c("mistyrose","lavender","lightyellow","lightblue","lightgreen","seashell","lightcyan")))
+  else if(x=="colorblind")
+    return(palette(c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")))
+  else if(x=="anders")
+    return(palette(c("darkgreen","#00A600FF","yellow","#E9BD3AFF","orange","coral4","red4","black")))
+  else if(x=="large")
+    return(palette(c("#1B9E77","#D95F02","#7570B3","#E7298A","#66A61E","#E6AB02","#A6761D","#666666","#8DD3C7","#FFFFB3","#BEBADA","#FB8072","#80B1D3","#FDB462","#B3DE69","#FCCDE5","#D9D9D9","#BC80BD","#CCEBC5","#FFED6F","#A6CEE3","#1F78B4","#B2DF8A","#33A02C","#FB9A99","#E31A1C","#FDBF6F","#FF7F00","#CAB2D6","#6A3D9A","#FFFF99","#B15928")))
+  else if(x=="ffs")
+    return(palette(c("#56B4E9", "#E69F00", "#009E73",  "#F0E442", "#0072B2", "#D55E00", "#CC79A7",'#444444')))
+  else if(x=="wong")
+    return(palette(c("#000000","#56B4E9","#009E73","#F0E442","#006699","#D55E00","#CC79A7","#E69F00")))
+}
+
 
 concordance_by_freq <- function(truthG, testDS, breaks, af, FUN,
                                 which_snps = NULL,
@@ -260,4 +277,44 @@ PSE <- function(test, truth,
     }
   })
   return(o)
+}
+
+
+plot_pse <- function(pse, extra = 1000, col = 2, main = "", xaxis = TRUE) {
+  xmin <- 0
+  COL <- palette()[col]
+  pos <- lapply(pse, function(p) split_coordinates(p$pos))
+  xmax <- max(unlist(pos)) + extra
+  plot(0, 0, col = "white", axes=FALSE, xlim = c(xmin, xmax), ylim = c(0, length(pse)+1),
+       xlab = "", ylab = "", cex.lab = 1.5, cex.main = 2.0, main = main)
+  if(xaxis) axis(1, at = c(0,1E7,2E7,3E7,4E7,5E7,6E7, xmax), cex.axis = 2.0,
+                 labels = c("0e+00", "1e+07", "2e+07", "3e+07","4e+07","5e+07","6e+07", ""))
+  for(n in seq_along(pos)) {
+    a <- c(0, pos[[n]], xmax) ## pad 0 and xmax
+    for(l in 2:length(a)) {
+      rect(a[l-1], n, a[l], n+1, col = ifelse(l %% 2 == 0, COL, add_alpha(COL, 0.5)), border = NULL, lwd=0.5)
+    }
+  }
+}
+
+get_bin <- function(d){
+  bins <- as.numeric(sapply(rownames(d), function(i){
+    res <- unlist(strsplit(i, ","))
+    gsub("]", "",res[2])
+  }))
+  bins <- as.numeric(sort(unique(as.vector(unlist(bins)))))
+  bins
+}
+
+
+split_coordinates <- function(sites) {
+  o <- lapply(sites, function(s) {
+    sort(as.integer(sapply(strsplit(s, "_"), "[[", 2)))
+  })
+  o
+}
+
+add_alpha <- function(col, alpha) {
+  x <- col2rgb(col, alpha = alpha) / 255
+  return(rgb(red = x[1], green = x[2], blue = x[3], alpha = alpha))
 }

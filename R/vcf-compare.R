@@ -134,7 +134,7 @@ vcfcomp <- function(test, truth,
                                   flip = flip, per_ind = by.sample, per_snp = by.variant)
     res.nrc <- concordance_by_freq(gt, ds, bins, af, NRC, which_snps = sites,
                                    flip = flip, per_ind = by.sample, per_snp = by.variant)
-    return(list(samples = d1$samples, r2=res.r2, f1=res.f1, nrc=res.nrc))
+    ret <- list(samples = d1$samples, r2=res.r2, f1=res.f1, nrc=res.nrc)
   } else {
     res <- switch(stats,
                   pse = PSE(ds, gt, sites, choose_random_start, return_pse_sites),
@@ -144,7 +144,10 @@ vcfcomp <- function(test, truth,
                                            flip = flip, per_ind = by.sample, per_snp = by.variant),
                   nrc = concordance_by_freq(gt, ds, bins, af, NRC, which_snps = sites,
                                             flip = flip, per_ind = by.sample, per_snp = by.variant))
-    return(list(samples = d1$samples, stats = res))
+    ret <- list(d1$samples, res)
+    names(ret) <- c("samples", stats)
   }
+  class(ret) <- "vcfcomp"
+  return(ret)
 }
 

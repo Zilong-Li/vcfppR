@@ -132,6 +132,7 @@ vcftable <- function(vcffile,
     if(is.list(res[[10]]) && collapse) res[[10]] <- do.call("rbind", res[[10]])
   }
   if(setid) res$id <- paste(res$chr, res$pos, res$ref, res$alt, sep = "_")
+  class(res) <- "vcftable"
   return(res)
 }
 

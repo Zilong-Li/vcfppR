@@ -4,14 +4,6 @@
 using namespace Rcpp;
 using namespace std;
 
-//' calculate the number of heterozygous SNPs for each sample
-//' @param vcffile path to the VCF file with index
-//' @param region  region to extract, default "" for all
-//' @param pass restrict to variants with FILTER==PASS
-//' @param qual restrict to variants with QUAL > qual.
-//' @param samples samples to extract, default "-" for all
-//' @return A list of heterozygosity couts for each sample along with its id in the vcf header
-//' @export
 // [[Rcpp::export]]
 List heterozygosity(std::string vcffile, std::string region = "", std::string samples = "-",
                     bool pass = false, double qual = 0) {
