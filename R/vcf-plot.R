@@ -7,9 +7,9 @@
 #'
 #' @param which.sample which sample among all to be plotted
 #'
-#' @param pop file contains population information
+#' @param variant which types of variant are desired
 #'
-#' @param variant which type of variant are desired
+#' @param pop file contains population information
 #'
 #' @param ... parameters passed to graphics
 #'
@@ -17,15 +17,15 @@
 vcfplot <- function(obj,
                     what = "r2",
                     which.sample = 1,
-                    pop = NULL,
                     variant = c("SNP","INDEL"),
+                    pop = NULL,
                     ...) {
-  stopifnot(is(obj, "vcfcomp") | is(obj, "vcfsummary"))
+  if(!is(obj, "vcfcomp") & !is(obj, "vcfsummary"))
+    stop("the input object is not vcfcomp or vcfsummary class")
   colorpalette("colorblind")
   
   if(is(obj, "vcfcomp")){
     obj.names <- names(obj)
-    message("input is an object with vcfcomp class")
     if("r2" %in% obj.names & what == "r2")
       plot_r2(obj$r2, ...)
     if("pse" %in% obj.names & what == "pse")
@@ -37,15 +37,13 @@ vcfplot <- function(obj,
   }
 
   if(is(obj, "vcfsummary")){
-    message("input is an object with vcfsummary class")
-    if(is.null(pop)){
+    if(is.null(pop)) {
       svs <- obj$summary[-1]
-      return(barplot(svs, ylim = c(0, 1.1*max(svs)),...))
-    }else{
+      barplot(svs, ylim = c(0, 1.1*max(svs)),...)
+    } else {
       # get labels and do plottiing
       ped <- read.table(pop, header=TRUE)
       i <- grep("Super|Population", colnames(ped))
-      
       if(length(i)>1) 
         i <- grep("Super", colnames(ped))[1]
       upops <- unique(ped[,i])
@@ -55,12 +53,14 @@ vcfplot <- function(obj,
         ord <- match(id, obj$samples)
         mat[variant,ord]
       })
-      return(boxplot(out, ...))
+      boxplot(out, ...)
     }
-  }
+  }  
 }
 
-plot_mat <- function(d, which.sample,rm.na = TRUE, w = NULL,
+
+plot_mat <- function(d, which.sample,
+                     rm.na = TRUE, bin = NULL,
                      ylim = c(0,1), main = "",
                      xlab = "Minor allele frequency %",
                      ylab = expression(italic(r^2)),
@@ -70,24 +70,24 @@ plot_mat <- function(d, which.sample,rm.na = TRUE, w = NULL,
   bins <- get_bin(d)
   x <- log10(bins)
   labels <- 100 * bins
-  if(is.null(w)) w <- seq_along(x)
+  if(is.null(bin)) bin <- seq_along(x)
   plot(0, 0,
        col = "transparent",
        axes = FALSE,
-       xlim = range(x[w]),
+       xlim = range(x[bin]),
        ylim = ylim,
        xlab = xlab,
        ylab = ylab,
        main = main)
   for(i in seq_along(which.sample))
-    points(x=x[w], y=d[w, which.sample[i]], col = i, ...)
-  axis(side = 1, at = x[w], labels = labels[w], cex.axis=2) 
+    points(x=x[bin], y=d[bin, which.sample[i]], col = i, ...)
+  axis(side = 1, at = x[bin], labels = labels[bin], cex.axis=2) 
   axis(side = 2, at = seq(0, 1, 0.2), cex.axis=2)
 }
 
 
-plot_r2 <- function(d, rm.na = TRUE, w = NULL, ylim = c(0,1),
-                    main = "",
+plot_r2 <- function(d, rm.na = TRUE, bin = NULL,
+                    ylim = c(0,1), main = "",
                     xlab = "Minor allele frequency %",
                     ylab = expression(italic(r^2)),
                     ...) {
@@ -95,28 +95,28 @@ plot_r2 <- function(d, rm.na = TRUE, w = NULL, ylim = c(0,1),
   bins <- get_bin(d)
   x <- log10(bins)
   labels <- 100 * bins
-  if(is.null(w)) w <- seq_along(x)
+  if(is.null(bin)) bin <- seq_along(x)
   plot(0, 0,
        col = "transparent",
        axes = FALSE,
-       xlim = range(x[w]),
+       xlim = range(x[bin]),
        ylim = ylim,
        xlab = xlab,
        ylab = ylab,
        main = main)
-  points(x=x[w], y=d[w, "concordance"], ...)
-  axis(side = 1, at = x[w], labels = labels[w], cex.axis=2) 
+  points(x=x[bin], y=d[bin, "concordance"], ...)
+  axis(side = 1, at = x[bin], labels = labels[bin], cex.axis=2) 
   axis(side = 2, at = seq(0, 1, 0.2), cex.axis=2)
 }
 
 
-plot_pse <- function(pse, extra = 100, col = 2, xaxt = "s",
+plot_pse <- function(pse, extra = 10, col = 2, xaxt = "s",
                      xlab = "Genomic coordinates", ylab = "",
                      main = "", at = NULL,...) {
   COL <- palette()[col]
   pos <- lapply(pse, function(p) split_coordinates(p$pos))
   xmax <- max(unlist(pos)) + extra
-  xmin <- 0
+  xmin <- max(c(0, min(unlist(pos))))
   plot(0, 0, col = "white", axes=FALSE,
        xlim = c(xmin, xmax), ylim = c(0, length(pse)),
        xlab = xlab, ylab = ylab, main = main)
@@ -125,10 +125,11 @@ plot_pse <- function(pse, extra = 100, col = 2, xaxt = "s",
     axis(1, at = at, ...)
   ## axis(1, at = axTicks(1))
   for(n in seq_along(pos)) {
-    a <- c(0, pos[[n]], xmax) ## pad 0 and xmax
+    a <- c(xmin, pos[[n]], xmax) ## pad xmin and xmax
     for(l in 2:length(a)) {
       rect(a[l-1], n-1, a[l], n, col = ifelse(l %% 2 == 0, COL, add_alpha(COL, 0.5)))
     }
   }
 }
+
 

@@ -8,8 +8,8 @@ vcfplot(
   obj,
   what = "r2",
   which.sample = 1,
-  pop = NULL,
   variant = c("SNP", "INDEL"),
+  pop = NULL,
   ...
 )
 }
@@ -20,9 +20,9 @@ vcfplot(
 
 \item{which.sample}{which sample among all to be plotted}
 
-\item{pop}{file contains population information}
+\item{variant}{which types of variant are desired}
 
-\item{variant}{which type of variant are desired}
+\item{pop}{file contains population information}
 
 \item{...}{parameters passed to graphics}
 }
