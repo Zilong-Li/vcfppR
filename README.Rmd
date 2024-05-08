@@ -117,7 +117,7 @@ str(res)
 **Read SNP variants with PL format and drop the INFO column**
 
 ```{r pl}
-res <- vcftable(rawvcf, "chr21:1-5100000", vartype = "snps", format = "PL", info = FALSE)
+res <- vcftable(rawvcf, "chr21:1-5100000", samples = "HG00673,NA10840", format = "PL", info = FALSE)
 str(res)
 ```
 
