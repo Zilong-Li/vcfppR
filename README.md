@@ -18,13 +18,13 @@ The vcfppR package implements various powerful functions for fast
 genomics analyses with VCF/BCF files using the C++ API of
 [vcfpp.h](https://github.com/Zilong-Li/vcfpp).
 
-  - Load/save content of VCF/BCF into R objects with highly customizable
-    options
-  - Visualize and chracterize variants
-  - Compare two VCF/BCF files and report various statistics
-  - Streaming read/write VCF/BCF files with fine control of everything
-  - [Paper](https://doi.org/10.1093/bioinformatics/btae049) shows vcfppR
-    is 20x faster than `vcfR`. Also, much faster than `cyvcf2`
+- Load/save content of VCF/BCF into R objects with highly customizable
+  options
+- Visualize and chracterize variants
+- Compare two VCF/BCF files and report various statistics
+- Streaming read/write VCF/BCF files with fine control of everything
+- [Paper](https://doi.org/10.1093/bioinformatics/btae049) shows vcfppR
+  is 20x faster than `vcfR`. Also, much faster than `cyvcf2`
 
 ## Installation
 
@@ -57,7 +57,7 @@ popfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_25
 ## `vcfcomp`: compare two VCF files and report concordance
 
 Want to investigate the concordance between two VCF files? `vcfcomp` is
-the utility function you need\! For example, in benchmarkings, we intend
+the utility function you need! For example, in benchmarkings, we intend
 to calculate the genotype correlation between the test and the truth.
 
 ``` r
@@ -66,8 +66,7 @@ res <- vcfcomp(test = rawvcf, truth = phasedvcf,
                stats = "r2", region = "chr21:1-5100000", 
                formats = c("GT","GT"))
 par(mar=c(5,5,2,2), cex.lab = 2)
-vcfplot(res, what = "r2", col = 2, cex = 2, lwd = 4, type = "b")
-#> input is an object with vcfcomp class
+vcfplot(res, col = 2, cex = 2, lwd = 3, type = "b")
 ```
 
 <img src="man/figures/README-r2-1.png" width="100%" />
@@ -75,30 +74,28 @@ vcfplot(res, what = "r2", col = 2, cex = 2, lwd = 4, type = "b")
 ``` r
 res <- vcfcomp(test = rawvcf, truth = phasedvcf,
                stats = "pse",
-               region = "chr21:5000000-6000000",
+               region = "chr21:5000000-5500000",
                samples = "HG00673,NA10840",
                return_pse_sites = TRUE)
 #> stats F1 or NRC or PSE only uses GT format
 vcfplot(res, what = "pse", which=1:2, main = "Phasing switch error", ylab = "HG00673,NA10840")
-#> input is an object with vcfcomp class
 ```
 
 <img src="man/figures/README-pse-1.png" width="100%" />
 
 Check out the [vignettes](https://zilong-li.github.io/vcfppR/articles/)
-for more\!
+for more!
 
 ## `vcfsummary`: variants characterization
 
 Want to summarize variants discovered by genotype caller e.g. GATK?
-`vcfsummary` is the utility function you need\!
+`vcfsummary` is the utility function you need!
 
 **Small variants**
 
 ``` r
 res <- vcfsummary(rawvcf,"chr21:10000000-10010000")
 vcfplot(res, pop = popfile, col = 1:5, main = "Number of SNP & INDEL variants per population")
-#> input is an object with vcfsummary class
 ```
 
 <img src="man/figures/README-summary_sm-1.png" width="100%" />
@@ -108,7 +105,6 @@ vcfplot(res, pop = popfile, col = 1:5, main = "Number of SNP & INDEL variants pe
 ``` r
 res <- vcfsummary(svfile, svtype = TRUE, region = "chr20")
 vcfplot(res, main = "Structure Variant Counts", col = 1:7)
-#> input is an object with vcfsummary class
 ```
 
 <img src="man/figures/README-summary_sv-1.png" width="100%" />
@@ -140,21 +136,19 @@ str(res)
 **Read SNP variants with PL format and drop the INFO column**
 
 ``` r
-res <- vcftable(rawvcf, "chr21:1-5100000", samples = "HG00673,NA10840", format = "PL", info = FALSE)
-#> Warning in rbind(c(0L, 3L, 35L, 0L, 9L, 104L), c(32L, 3L, 0L, 95L, 9L, 0L:
-#> number of columns of result is not a multiple of vector length (arg 7)
+res <- vcftable(rawvcf, "chr21:1-5100000", vartype = "snps", format = "PL", info = FALSE)
 str(res)
 #> List of 10
-#>  $ samples: chr [1:2] "HG00673" "NA10840"
-#>  $ chr    : chr [1:1682] "chr21" "chr21" "chr21" "chr21" ...
-#>  $ pos    : int [1:1682] 5030082 5030088 5030105 5030240 5030253 5030278 5030319 5030347 5030356 5030357 ...
-#>  $ id     : chr [1:1682] "." "." "." "." ...
-#>  $ ref    : chr [1:1682] "G" "C" "C" "AC" ...
-#>  $ alt    : chr [1:1682] "A" "T" "A" "A" ...
-#>  $ qual   : num [1:1682] 70.1 2773.1 3897.8 6872.4 102.6 ...
-#>  $ filter : chr [1:1682] "VQSRTrancheSNP99.80to100.00" "VQSRTrancheSNP99.80to100.00" "VQSRTrancheSNP99.80to100.00" "VQSRTrancheINDEL99.00to100.00" ...
+#>  $ samples: chr [1:3202] "HG00096" "HG00097" "HG00099" "HG00100" ...
+#>  $ chr    : chr [1:1383] "chr21" "chr21" "chr21" "chr21" ...
+#>  $ pos    : int [1:1383] 5030082 5030088 5030105 5030253 5030278 5030347 5030356 5030357 5030391 5030446 ...
+#>  $ id     : chr [1:1383] "." "." "." "." ...
+#>  $ ref    : chr [1:1383] "G" "C" "C" "G" ...
+#>  $ alt    : chr [1:1383] "A" "T" "A" "T" ...
+#>  $ qual   : num [1:1383] 70.1 2773.1 3897.8 102.6 868.9 ...
+#>  $ filter : chr [1:1383] "VQSRTrancheSNP99.80to100.00" "VQSRTrancheSNP99.80to100.00" "VQSRTrancheSNP99.80to100.00" "VQSRTrancheSNP99.80to100.00" ...
 #>  $ info   : chr(0) 
-#>  $ PL     : int [1:1682, 1:42] 0 32 66 0 0 0 0 0 0 0 ...
+#>  $ PL     : int [1:1383, 1:9606] NA 64 64 0 0 0 0 0 0 0 ...
 #>  - attr(*, "class")= chr "vcftable"
 ```
 

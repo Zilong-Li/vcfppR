@@ -7,6 +7,7 @@ output: github_document
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  warning = TRUE,
   comment = "#>",
   dpi = 100,
   fig.dim = c(6, 4),
@@ -71,13 +72,13 @@ res <- vcfcomp(test = rawvcf, truth = phasedvcf,
                stats = "r2", region = "chr21:1-5100000", 
                formats = c("GT","GT"))
 par(mar=c(5,5,2,2), cex.lab = 2)
-vcfplot(res, what = "r2", col = 2, cex = 2, lwd = 4, type = "b")
+vcfplot(res, col = 2, cex = 2, lwd = 3, type = "b")
 ```
 
 ```{r pse}
 res <- vcfcomp(test = rawvcf, truth = phasedvcf,
                stats = "pse",
-               region = "chr21:5000000-6000000",
+               region = "chr21:5000000-5500000",
                samples = "HG00673,NA10840",
                return_pse_sites = TRUE)
 vcfplot(res, what = "pse", which=1:2, main = "Phasing switch error", ylab = "HG00673,NA10840")
@@ -117,7 +118,7 @@ str(res)
 **Read SNP variants with PL format and drop the INFO column**
 
 ```{r pl}
-res <- vcftable(rawvcf, "chr21:1-5100000", samples = "HG00673,NA10840", format = "PL", info = FALSE)
+res <- vcftable(rawvcf, "chr21:1-5100000", vartype = "snps", format = "PL", info = FALSE)
 str(res)
 ```
 
