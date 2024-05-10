@@ -16,17 +16,23 @@ readme2:
 	Rscript -e 'rmarkdown::render("README.Rmd", "html_document")'
 
 build: rd
+	cd ..;\
 	R CMD build $(PKGSRC)
 
 install: build
+	cd ..;\
 	R CMD INSTALL $(PKGNAME)_$(PKGVERS).tar.gz
 
-check: 
+check:
+	cd ..;\
+	# Rscript -e 'rcmdcheck::rcmdcheck("$(PKGNAME)_$(PKGVERS).tar.gz", args="--as-cran")'
 	Rscript -e 'devtools::check()'
 
 check2: build
+	cd ..;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz
 
 clean:
+	cd ..;\
 	$(RM) -r $(PKGNAME).Rcheck/
 

@@ -18,13 +18,13 @@ The vcfppR package implements various powerful functions for fast
 genomics analyses with VCF/BCF files using the C++ API of
 [vcfpp.h](https://github.com/Zilong-Li/vcfpp).
 
-- Load/save content of VCF/BCF into R objects with highly customizable
-  options
-- Visualize and chracterize variants
-- Compare two VCF/BCF files and report various statistics
-- Streaming read/write VCF/BCF files with fine control of everything
-- [Paper](https://doi.org/10.1093/bioinformatics/btae049) shows vcfppR
-  is 20x faster than `vcfR`. Also, much faster than `cyvcf2`
+  - Load/save content of VCF/BCF into R objects with highly customizable
+    options
+  - Visualize and chracterize variants
+  - Compare two VCF/BCF files and report various statistics
+  - Streaming read/write VCF/BCF files with fine control of everything
+  - [Paper](https://doi.org/10.1093/bioinformatics/btae049) shows vcfppR
+    is 20x faster than `vcfR`. Also, much faster than `cyvcf2`
 
 ## Installation
 
@@ -57,7 +57,7 @@ popfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_25
 ## `vcfcomp`: compare two VCF files and report concordance
 
 Want to investigate the concordance between two VCF files? `vcfcomp` is
-the utility function you need! For example, in benchmarkings, we intend
+the utility function you need\! For example, in benchmarkings, we intend
 to calculate the genotype correlation between the test and the truth.
 
 ``` r
@@ -84,12 +84,12 @@ vcfplot(res, what = "pse", which=1:2, main = "Phasing switch error", ylab = "HG0
 <img src="man/figures/README-pse-1.png" width="100%" />
 
 Check out the [vignettes](https://zilong-li.github.io/vcfppR/articles/)
-for more!
+for more\!
 
 ## `vcfsummary`: variants characterization
 
 Want to summarize variants discovered by genotype caller e.g. GATK?
-`vcfsummary` is the utility function you need!
+`vcfsummary` is the utility function you need\!
 
 **Small variants**
 
