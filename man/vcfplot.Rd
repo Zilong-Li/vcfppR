@@ -4,21 +4,12 @@
 \alias{vcfplot}
 \title{Make sensible and beautiful plots based on various objects in vcfppR}
 \usage{
-vcfplot(
-  obj,
-  what = "r2",
-  which.sample = 1,
-  variant = c("SNP", "INDEL"),
-  pop = NULL,
-  ...
-)
+vcfplot(obj, which.sample = NULL, variant = c("SNP", "INDEL"), pop = NULL, ...)
 }
 \arguments{
-\item{obj}{object returned by vcfcomp}
+\item{obj}{object returned by vcftable, vcfcomp, vcfsummary}
 
-\item{what}{what statisitcs to be plotted}
-
-\item{which.sample}{which sample among all to be plotted}
+\item{which.sample}{which sample to be plotted. NULL will aggregate all samples.}
 
 \item{variant}{which types of variant are desired}
 

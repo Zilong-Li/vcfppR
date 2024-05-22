@@ -54,6 +54,40 @@ svfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_250
 popfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/20130606_g1k_3202_samples_ped_population.txt"
 ```
 
+## `vcftable`: read VCF as tabular data
+
+`vcftable` gives you fine control over what you want to extract from
+VCF/BCF files.
+
+**Read SNP variants with GT format and two samples**
+
+``` r
+library(vcfppR)
+res <- vcftable(phasedvcf, "chr21:1-5100000", samples = "HG00673,NA10840", vartype = "snps")
+str(res)
+#> List of 10
+#>  $ samples: chr [1:2] "HG00673" "NA10840"
+#>  $ chr    : chr [1:194] "chr21" "chr21" "chr21" "chr21" ...
+#>  $ pos    : int [1:194] 5030578 5030588 5030596 5030673 5030957 5030960 5031004 5031031 5031194 5031224 ...
+#>  $ id     : chr [1:194] "21:5030578:C:T" "21:5030588:T:C" "21:5030596:A:G" "21:5030673:G:A" ...
+#>  $ ref    : chr [1:194] "C" "T" "A" "G" ...
+#>  $ alt    : chr [1:194] "T" "C" "G" "A" ...
+#>  $ qual   : num [1:194] 2.14e+09 2.14e+09 2.14e+09 2.14e+09 2.14e+09 ...
+#>  $ filter : chr [1:194] "." "." "." "." ...
+#>  $ info   : chr [1:194] "AC=74;AF=0.0115553;CM=0;AN=6404;AN_EAS=1170;AN_AMR=980;AN_EUR=1266;AN_AFR=1786;AN_SAS=1202;AN_EUR_unrel=1006;AN"| __truncated__ "AC=53;AF=0.00827608;CM=1.78789e-05;AN=6404;AN_EAS=1170;AN_AMR=980;AN_EUR=1266;AN_AFR=1786;AN_SAS=1202;AN_EUR_un"| __truncated__ "AC=2;AF=0.000312305;CM=3.21821e-05;AN=6404;AN_EAS=1170;AN_AMR=980;AN_EUR=1266;AN_AFR=1786;AN_SAS=1202;AN_EUR_un"| __truncated__ "AC=2;AF=0.000312305;CM=0.00016985;AN=6404;AN_EAS=1170;AN_AMR=980;AN_EUR=1266;AN_AFR=1786;AN_SAS=1202;AN_EUR_unr"| __truncated__ ...
+#>  $ gt     : int [1:194, 1:2] 0 0 0 0 0 0 0 0 0 0 ...
+#>  - attr(*, "class")= chr "vcftable"
+```
+
+**Read INDEL variants with DP format and QUAL\>100**
+
+``` r
+res <- vcftable(rawvcf, "chr21:1-5100000", vartype = "indels", format = "DP", qual=100)
+vcfplot(res, which.sample = 10, ylim=c(0,60), col = 3, pch=19)
+```
+
+<img src="man/figures/README-dp-1.png" width="100%" />
+
 ## `vcfcomp`: compare two VCF files and report concordance
 
 Want to investigate the concordance between two VCF files? `vcfcomp` is
@@ -61,15 +95,22 @@ the utility function you need\! For example, in benchmarkings, we intend
 to calculate the genotype correlation between the test and the truth.
 
 ``` r
-library(vcfppR)
 res <- vcfcomp(test = rawvcf, truth = phasedvcf,
                stats = "r2", region = "chr21:1-5100000", 
                formats = c("GT","GT"))
 par(mar=c(5,5,2,2), cex.lab = 2)
-vcfplot(res, col = 2, cex = 2, lwd = 3, type = "b")
+vcfplot(res, col = 2,cex = 2, lwd = 3, type = "b")
 ```
 
 <img src="man/figures/README-r2-1.png" width="100%" />
+
+``` r
+res <- vcfcomp(test = rawvcf, truth = phasedvcf,
+               stats = "f1", region = "chr21:5100000-6000000", 
+               by.sample = T)
+par(mar=c(5,5,2,2), cex.lab = 2)
+vcfplot(res, cex = 2, lwd = 3, type = "b", which.sample = 1:3)
+```
 
 ``` r
 res <- vcfcomp(test = rawvcf, truth = phasedvcf,
@@ -78,7 +119,7 @@ res <- vcfcomp(test = rawvcf, truth = phasedvcf,
                samples = "HG00673,NA10840",
                return_pse_sites = TRUE)
 #> stats F1 or NRC or PSE only uses GT format
-vcfplot(res, what = "pse", which=1:2, main = "Phasing switch error", ylab = "HG00673,NA10840")
+vcfplot(res, which=1:2, main = "Phasing switch error", ylab = "HG00673,NA10840")
 ```
 
 <img src="man/figures/README-pse-1.png" width="100%" />
@@ -108,68 +149,6 @@ vcfplot(res, main = "Structure Variant Counts", col = 1:7)
 ```
 
 <img src="man/figures/README-summary_sv-1.png" width="100%" />
-
-## `vcftable`: read VCF as tabular data
-
-`vcftable` gives you fine control over what you want to extract from
-VCF/BCF files.
-
-**Read SNP variants with GT format and two samples**
-
-``` r
-res <- vcftable(phasedvcf, "chr21:1-5100000", samples = "HG00673,NA10840", vartype = "snps")
-str(res)
-#> List of 10
-#>  $ samples: chr [1:2] "HG00673" "NA10840"
-#>  $ chr    : chr [1:194] "chr21" "chr21" "chr21" "chr21" ...
-#>  $ pos    : int [1:194] 5030578 5030588 5030596 5030673 5030957 5030960 5031004 5031031 5031194 5031224 ...
-#>  $ id     : chr [1:194] "21:5030578:C:T" "21:5030588:T:C" "21:5030596:A:G" "21:5030673:G:A" ...
-#>  $ ref    : chr [1:194] "C" "T" "A" "G" ...
-#>  $ alt    : chr [1:194] "T" "C" "G" "A" ...
-#>  $ qual   : num [1:194] 2.14e+09 2.14e+09 2.14e+09 2.14e+09 2.14e+09 ...
-#>  $ filter : chr [1:194] "." "." "." "." ...
-#>  $ info   : chr [1:194] "AC=74;AF=0.0115553;CM=0;AN=6404;AN_EAS=1170;AN_AMR=980;AN_EUR=1266;AN_AFR=1786;AN_SAS=1202;AN_EUR_unrel=1006;AN"| __truncated__ "AC=53;AF=0.00827608;CM=1.78789e-05;AN=6404;AN_EAS=1170;AN_AMR=980;AN_EUR=1266;AN_AFR=1786;AN_SAS=1202;AN_EUR_un"| __truncated__ "AC=2;AF=0.000312305;CM=3.21821e-05;AN=6404;AN_EAS=1170;AN_AMR=980;AN_EUR=1266;AN_AFR=1786;AN_SAS=1202;AN_EUR_un"| __truncated__ "AC=2;AF=0.000312305;CM=0.00016985;AN=6404;AN_EAS=1170;AN_AMR=980;AN_EUR=1266;AN_AFR=1786;AN_SAS=1202;AN_EUR_unr"| __truncated__ ...
-#>  $ gt     : int [1:194, 1:2] 0 0 0 0 0 0 0 0 0 0 ...
-#>  - attr(*, "class")= chr "vcftable"
-```
-
-**Read SNP variants with PL format and drop the INFO column**
-
-``` r
-res <- vcftable(rawvcf, "chr21:1-5100000", vartype = "snps", format = "PL", info = FALSE)
-str(res)
-#> List of 10
-#>  $ samples: chr [1:3202] "HG00096" "HG00097" "HG00099" "HG00100" ...
-#>  $ chr    : chr [1:1383] "chr21" "chr21" "chr21" "chr21" ...
-#>  $ pos    : int [1:1383] 5030082 5030088 5030105 5030253 5030278 5030347 5030356 5030357 5030391 5030446 ...
-#>  $ id     : chr [1:1383] "." "." "." "." ...
-#>  $ ref    : chr [1:1383] "G" "C" "C" "G" ...
-#>  $ alt    : chr [1:1383] "A" "T" "A" "T" ...
-#>  $ qual   : num [1:1383] 70.1 2773.1 3897.8 102.6 868.9 ...
-#>  $ filter : chr [1:1383] "VQSRTrancheSNP99.80to100.00" "VQSRTrancheSNP99.80to100.00" "VQSRTrancheSNP99.80to100.00" "VQSRTrancheSNP99.80to100.00" ...
-#>  $ info   : chr(0) 
-#>  $ PL     : int [1:1383, 1:9606] NA 64 64 0 0 0 0 0 0 0 ...
-#>  - attr(*, "class")= chr "vcftable"
-```
-
-**Read INDEL variants with DP format and QUAL\>100**
-
-``` r
-res <- vcftable(rawvcf, "chr21:1-5100000", vartype = "indels", format = "DP", qual=100)
-str(res)
-#> List of 10
-#>  $ samples: chr [1:3202] "HG00096" "HG00097" "HG00099" "HG00100" ...
-#>  $ chr    : chr [1:180] "chr21" "chr21" "chr21" "chr21" ...
-#>  $ pos    : int [1:180] 5030240 5030912 5030937 5031018 5031125 5031147 5031747 5031881 5031919 5031984 ...
-#>  $ id     : chr [1:180] "." "." "." "." ...
-#>  $ ref    : chr [1:180] "AC" "CA" "T" "C" ...
-#>  $ alt    : chr [1:180] "A" "C" "TGGTGCACGCCTGCAGTCCCGGC" "CCTATGATCACACCGT" ...
-#>  $ qual   : num [1:180] 6872 321 233 270 58361 ...
-#>  $ filter : chr [1:180] "VQSRTrancheINDEL99.00to100.00" "PASS" "PASS" "PASS" ...
-#>  $ info   : chr [1:180] "AC=82;AF=0.0136439;AN=6010;BaseQRankSum=-0.55;ClippingRankSum=0;DP=18067;FS=0;InbreedingCoeff=0.0664;MLEAC=76;M"| __truncated__ "AC=19;AF=0.0030586;AN=6212;BaseQRankSum=0.358;ClippingRankSum=-0.594;DP=30725;FS=44.58;InbreedingCoeff=-1.1608;"| __truncated__ "AC=1;AF=0.00015753;AN=6348;BaseQRankSum=-1.793;ClippingRankSum=-0.48;DP=32486;FS=27.337;InbreedingCoeff=-0.0212"| __truncated__ "AC=2;AF=0.000314268;AN=6364;BaseQRankSum=1.59;ClippingRankSum=0.358;DP=44916;FS=0;InbreedingCoeff=-0.0092;MLEAC"| __truncated__ ...
-#>  $ DP     : int [1:180, 1:3202] 3 15 13 16 19 20 5 34 29 24 ...
-#>  - attr(*, "class")= chr "vcftable"
-```
 
 ## R API of vcfpp.h
 

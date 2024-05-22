@@ -62,17 +62,43 @@ svfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_250
 popfile <- "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/20130606_g1k_3202_samples_ped_population.txt"
 ```
 
+## `vcftable`: read VCF as tabular data
+
+`vcftable` gives you fine control over what you want to extract from VCF/BCF files. 
+
+**Read SNP variants with GT format and two samples**
+
+```{r snp}
+library(vcfppR)
+res <- vcftable(phasedvcf, "chr21:1-5100000", samples = "HG00673,NA10840", vartype = "snps")
+str(res)
+```
+
+**Read INDEL variants with DP format and QUAL>100**
+
+```{r dp}
+res <- vcftable(rawvcf, "chr21:1-5100000", vartype = "indels", format = "DP", qual=100)
+vcfplot(res, which.sample = 10, ylim=c(0,60), col = 3, pch=19)
+```
+
 ## `vcfcomp`: compare two VCF files and report concordance
 
 Want to investigate the concordance between two VCF files? `vcfcomp` is the utility function you need! For example, in benchmarkings, we intend to calculate the genotype correlation between the test and the truth.
 
 ```{r r2}
-library(vcfppR)
 res <- vcfcomp(test = rawvcf, truth = phasedvcf,
                stats = "r2", region = "chr21:1-5100000", 
                formats = c("GT","GT"))
 par(mar=c(5,5,2,2), cex.lab = 2)
-vcfplot(res, col = 2, cex = 2, lwd = 3, type = "b")
+vcfplot(res, col = 2,cex = 2, lwd = 3, type = "b")
+```
+
+```r
+res <- vcfcomp(test = rawvcf, truth = phasedvcf,
+               stats = "f1", region = "chr21:5100000-6000000", 
+               by.sample = T)
+par(mar=c(5,5,2,2), cex.lab = 2)
+vcfplot(res, cex = 2, lwd = 3, type = "b", which.sample = 1:3)
 ```
 
 ```{r pse}
@@ -81,7 +107,7 @@ res <- vcfcomp(test = rawvcf, truth = phasedvcf,
                region = "chr21:5000000-5500000",
                samples = "HG00673,NA10840",
                return_pse_sites = TRUE)
-vcfplot(res, what = "pse", which=1:2, main = "Phasing switch error", ylab = "HG00673,NA10840")
+vcfplot(res, which=1:2, main = "Phasing switch error", ylab = "HG00673,NA10840")
 ```
 
 Check out the [vignettes](https://zilong-li.github.io/vcfppR/articles/) for more!
@@ -102,31 +128,6 @@ vcfplot(res, pop = popfile, col = 1:5, main = "Number of SNP & INDEL variants pe
 ```{r summary_sv}
 res <- vcfsummary(svfile, svtype = TRUE, region = "chr20")
 vcfplot(res, main = "Structure Variant Counts", col = 1:7)
-```
-
-## `vcftable`: read VCF as tabular data
-
-`vcftable` gives you fine control over what you want to extract from VCF/BCF files. 
-
-**Read SNP variants with GT format and two samples**
-
-```{r snp}
-res <- vcftable(phasedvcf, "chr21:1-5100000", samples = "HG00673,NA10840", vartype = "snps")
-str(res)
-```
-
-**Read SNP variants with PL format and drop the INFO column**
-
-```{r pl}
-res <- vcftable(rawvcf, "chr21:1-5100000", vartype = "snps", format = "PL", info = FALSE)
-str(res)
-```
-
-**Read INDEL variants with DP format and QUAL>100**
-
-```{r indel}
-res <- vcftable(rawvcf, "chr21:1-5100000", vartype = "indels", format = "DP", qual=100)
-str(res)
 ```
 
 ## R API of vcfpp.h

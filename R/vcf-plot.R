@@ -1,11 +1,9 @@
 #' @title
 #' Make sensible and beautiful plots based on various objects in vcfppR
 #' 
-#' @param obj object returned by vcfcomp 
+#' @param obj object returned by vcftable, vcfcomp, vcfsummary
 #'
-#' @param what what statisitcs to be plotted
-#'
-#' @param which.sample which sample among all to be plotted
+#' @param which.sample which sample to be plotted. NULL will aggregate all samples.
 #'
 #' @param variant which types of variant are desired
 #'
@@ -15,25 +13,24 @@
 #'
 #' @export
 vcfplot <- function(obj,
-                    what = "r2",
-                    which.sample = 1,
+                    which.sample = NULL,
                     variant = c("SNP","INDEL"),
                     pop = NULL,
                     ...) {
-  if(!is(obj, "vcfcomp") & !is(obj, "vcfsummary"))
-    stop("the input object is not vcfcomp or vcfsummary class")
+  if(!(is(obj, "vcfcomp") | is(obj, "vcfsummary") | is(obj, "vcftable")))
+    stop("the input object is not vcftable, vcfcomp or vcfsummary class")
   colorpalette("colorblind")
   
   if(is(obj, "vcfcomp")){
     obj.names <- names(obj)
-    if("r2" %in% obj.names & what == "r2")
-      plot_r2(obj$r2, ...)
-    if("pse" %in% obj.names & what == "pse")
+    if("pse" %in% obj.names)
       plot_pse(obj$pse[which.sample], ...)
-    if("f1" %in% obj.names & what == "f1")
-      plot_mat(obj$f1, which.sample, ...)
-    if("nrc" %in% obj.names & what == "nrc")
-      plot_mat(obj$nrc, which.sample, ...)
+    else if("r2" %in% obj.names)
+      plot_comp(obj, "r2", which.sample, ...)
+    else if("f1" %in% obj.names)
+      plot_comp(obj, "f1", which.sample, ...)
+    else if("nrc" %in% obj.names)
+      plot_comp(obj, "nrc", which.sample, ...)
   }
 
   if(is(obj, "vcfsummary")){
@@ -55,22 +52,47 @@ vcfplot <- function(obj,
       })
       boxplot(out, ...)
     }
-  }  
+  }
+
+  if(is(obj, "vcftable")){
+    plot_scatter(obj, which.sample, ...)
+  }
 }
 
 
-plot_mat <- function(d, which.sample,
-                     rm.na = TRUE, bin = NULL,
-                     ylim = c(0,1), main = "",
-                     xlab = "Minor allele frequency %",
-                     ylab = expression(italic(r^2)),
-                     ...) {
-  d <- do.call(rbind, d[,"concordance"])
-  if(rm.na) d <- d[complete.cases(d[,which.sample]),]
+plot_comp <- function(obj, stats, which.sample,
+                      rm.na = TRUE, bin = NULL,
+                      ylim = c(0,1),
+                      ylab = NULL,
+                      main = NULL,
+                      xlab = "Minor allele frequency %",
+                      ...) {
+  bysample <- TRUE
+  d <- tryCatch({ do.call(rbind, obj[[stats]][,"concordance"])},
+                error = function(e){
+                  FALSE
+                })
+  if(!is.matrix(d)){
+    bysample <- FALSE
+    d <- obj[[stats]]
+  }
+  if(bysample & is.null(which.sample)){
+    message("which.sample is NULL. will set which.sample as 1")
+    which.sample <- 1
+  }
+  if(is.null(which.sample)){
+    if(rm.na)
+      d <- d[complete.cases(d[,"concordance"]),]
+  } else {
+    if(rm.na)
+      d <- d[complete.cases(d[,which.sample]),]
+  }
   bins <- get_bin(d)
   x <- log10(bins)
   labels <- 100 * bins
   if(is.null(bin)) bin <- seq_along(x)
+  if(is.null(ylab) && (stats!="r2")) ylab <- toupper(stats)
+  if(is.null(ylab) && (stats=="r2")) ylab <- expression(italic(r^2))
   plot(0, 0,
        col = "transparent",
        axes = FALSE,
@@ -79,40 +101,20 @@ plot_mat <- function(d, which.sample,
        xlab = xlab,
        ylab = ylab,
        main = main)
-  for(i in seq_along(which.sample))
-    points(x=x[bin], y=d[bin, which.sample[i]], col = i, ...)
-  axis(side = 1, at = x[bin], labels = labels[bin], cex.axis=2) 
-  axis(side = 2, at = seq(0, 1, 0.2), cex.axis=2)
-}
-
-
-plot_r2 <- function(d, rm.na = TRUE, bin = NULL,
-                    ylim = c(0,1), main = "",
-                    xlab = "Minor allele frequency %",
-                    ylab = expression(italic(r^2)),
-                    ...) {
-  if(rm.na) d <- d[complete.cases(d[,"concordance"]),]
-  bins <- get_bin(d)
-  x <- log10(bins)
-  labels <- 100 * bins
-  if(is.null(bin)) bin <- seq_along(x)
-  plot(0, 0,
-       col = "transparent",
-       axes = FALSE,
-       xlim = range(x[bin]),
-       ylim = ylim,
-       xlab = xlab,
-       ylab = ylab,
-       main = main)
-  points(x=x[bin], y=d[bin, "concordance"], ...)
+  if(is.null(which.sample)){
+    points(x=x[bin], y=d[bin, "concordance"], ...)
+  } else {
+    for(i in seq_along(which.sample))
+      points(x=x[bin], y=d[bin, which.sample[i]], col = i, ...)
+  }
   axis(side = 1, at = x[bin], labels = labels[bin], cex.axis=2) 
   axis(side = 2, at = seq(0, 1, 0.2), cex.axis=2)
 }
 
 
 plot_pse <- function(pse, extra = 10, col = 2, xaxt = "s",
-                     xlab = "Genomic coordinates", ylab = "",
-                     main = "", at = NULL,...) {
+                     xlab = "Genomic coordinates", ylab = NULL,
+                     main = NULL, at = NULL,...) {
   COL <- palette()[col]
   pos <- lapply(pse, function(p) split_coordinates(p$pos))
   xmax <- max(unlist(pos)) + extra
@@ -133,3 +135,33 @@ plot_pse <- function(pse, extra = 10, col = 2, xaxt = "s",
 }
 
 
+plot_scatter <- function(obj,
+                         which.sample,
+                         xlab = "Genomic coordinates",
+                         ylab = NULL,
+                         main = NULL,
+                         ...){
+  stopifnot(is(obj, "vcftable"))
+  if(!is.matrix(obj[[10]]))
+    warning("the format is not well aligned across all samples")
+  if(is.null(which.sample)){
+    message("which.sample is NULL. will set which.sample as 1")
+    which.sample <- 1
+  }
+  if(length(which.sample)>1){
+    message("which.sample has length > 1. select the first one")
+    which.sample <- which.sample[1]
+  }
+  x <- obj$pos
+  y <- obj[[10]]
+  objattr <- names(obj)
+  if(is.null(ylab))
+    ylab <- ""
+  if(is.null(main))
+    main <- objattr[10]
+  plot(x, y[,which.sample],
+       xlab = xlab,
+       ylab = ylab,
+       main = main,
+       ...)
+}
