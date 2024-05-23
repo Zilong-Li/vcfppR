@@ -106,14 +106,6 @@ vcfplot(res, col = 2,cex = 2, lwd = 3, type = "b")
 
 ``` r
 res <- vcfcomp(test = rawvcf, truth = phasedvcf,
-               stats = "f1", region = "chr21:5100000-6000000", 
-               by.sample = T)
-par(mar=c(5,5,2,2), cex.lab = 2)
-vcfplot(res, cex = 2, lwd = 3, type = "b", which.sample = 1:3)
-```
-
-``` r
-res <- vcfcomp(test = rawvcf, truth = phasedvcf,
                stats = "pse",
                region = "chr21:5000000-5500000",
                samples = "HG00673,NA10840",
@@ -136,7 +128,7 @@ Want to summarize variants discovered by genotype caller e.g. GATK?
 
 ``` r
 res <- vcfsummary(rawvcf,"chr21:10000000-10010000")
-vcfplot(res, pop = popfile, col = 1:5, main = "Number of SNP & INDEL variants per population")
+vcfplot(res, pop = popfile, col = 1:5, main = "Number of SNP & INDEL variants")
 ```
 
 <img src="man/figures/README-summary_sm-1.png" width="100%" />

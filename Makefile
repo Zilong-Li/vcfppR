@@ -8,9 +8,9 @@ rd:
 	Rscript -e 'roxygen2::roxygenise(".")'
 
 readme:
+	Rscript -e 'rmarkdown::render("README.Rmd")'
 	Rscript -e 'pkgdown::build_site()'
 	Rscript -e 'pkgdown::build_articles()'
-	Rscript -e 'rmarkdown::render("README.Rmd")'
 
 readme2:
 	Rscript -e 'rmarkdown::render("README.Rmd", "html_document")'
