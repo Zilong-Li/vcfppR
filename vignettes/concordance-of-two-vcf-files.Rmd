@@ -37,9 +37,6 @@ vcfcomp(testvcf, truthvcf, formats = c("MDS", "GT"), stats = "r2")
 vcfcomp(testvcf, truthvcf, formats = c("FDS", "GT"), stats = "r2")
 ```
 
-
-**Note:** In the absence of `DS` format in the testvcf, one can either fill the `DS` tag using the [vcf_addDS](https://github.com/Zilong-Li/vcfpp/blob/main/tools) command line tool or manipulate the testvcf in R using `vcftable`. 
-
 ## Case 2: Genotype concordance
 
 In this case, we are interested in the called genotype concordance and the sensitivity / specificity in genotype calling. In contrast to `stats="r2"`, we choose `stats="f1"` or `stats="nrc"` and specify the `formats=c("GT", "GT")`. Normally, we want the results for each sample, which can be achieved by using `by.sample=TRUE`.

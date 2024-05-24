@@ -1,3 +1,8 @@
+# vcfppR 0.4.6
+* add `vcfplot` function
+* fix bug in `vcftable` when FORMAT has unaligned list 
+* add vignette on `vcfcomp`
+
 # vcfppR 0.4.5
 
 * add `vcfcomp` function
