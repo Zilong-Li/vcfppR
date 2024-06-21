@@ -102,6 +102,8 @@ vcftable <- function(vcffile,
                      collapse = TRUE,
                      setid = FALSE,
                      mac = 0) {
+  if(!file.exists(vcffile))
+    stop("file doesn't exist")
   snps <- FALSE
   indels <- FALSE
   svs <- FALSE

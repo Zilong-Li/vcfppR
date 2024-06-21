@@ -45,6 +45,8 @@ vcfsummary <- function(vcffile,
                        pass = FALSE,
                        qual = 0,
                        svtype = FALSE) {
+  if(!file.exists(vcffile))
+    stop("file doesn't exist")
   if(svtype) {
     ret <- summarySVs(vcffile, region, samples, pass, qual)
   } else {

@@ -39,5 +39,7 @@ vcfpopgen <- function(vcffile,
                       pass = FALSE,
                       qual = 0,
                       fun = "heterozygosity") {
-    return(heterozygosity(vcffile, region, samples, pass, qual))
+  if(!file.exists(vcffile))
+    stop("file doesn't exist")
+  return(heterozygosity(vcffile, region, samples, pass, qual))
 }
