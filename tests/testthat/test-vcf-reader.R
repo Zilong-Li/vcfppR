@@ -193,7 +193,7 @@ test_that("vcfreader: remove tag from FORMAT", {
   expect_identical(s[9], "GT:DP:GQ:PL")
   expect_identical(s[10], "1/1:2:6:64,6,0")
   ## AD was removed, so we get integer(0)
-  ad <- br$formatInt("AD") 
+  ad <- br$formatInt("AD")
   expect_identical(length(ad),0L)
   ## output current variant to another vcf
   outvcf <- file.path(tempdir(), "test.vcf.gz")
@@ -206,5 +206,8 @@ test_that("vcfreader: remove tag from FORMAT", {
   br$variant()
   s <- unlist(strsplit(br$line(), "\t"))
   expect_identical(s[9], "GT:DP:GQ:PL")
+  expect_identical(s[10], "1/1:2:6:64,6,0")
+  ## AD doesn't exist. so we get error, is this a bad design?
   expect_error(br$formatInt("AD"))
 })
+

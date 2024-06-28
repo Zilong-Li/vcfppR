@@ -155,26 +155,38 @@ class vcfreader {
 
     int infoInt(std::string tag) {
         int i;
-        var.getINFO(tag, i);
-        return i;
+        if (var.getINFO(tag, i)) {
+            return i;
+        } else {
+            return NA_INTEGER;
+        }
     }
     double infoFloat(std::string tag) {
         float f;
-        var.getINFO(tag, f);
-        return (double)f;
+        if (var.getINFO(tag, f)) {
+            return (double)f;
+        } else {
+            return NA_REAL;
+        }
     }
     std::string infoStr(std::string tag) {
-        std::string s;
+        std::string s{""};
         var.getINFO(tag, s);
         return s;
     }
     vector<int> infoIntVec(std::string tag) {
-        var.getINFO(tag, v_int);
-        return v_int;
+        if (var.getINFO(tag, v_int)) {
+            return v_int;
+        } else {
+            return vector<int>();
+        }
     }
     vector<double> infoFloatVec(std::string tag) {
-        var.getINFO(tag, v_float);
-        return vector<double>(v_float.begin(), v_float.end());
+        if (var.getINFO(tag, v_float)) {
+            return vector<double>(v_float.begin(), v_float.end());
+        } else {
+            return vector<double>();
+        }
     }
 
     vector<int> genotypes(bool collapse) {
@@ -197,10 +209,7 @@ class vcfreader {
     }
 
     vector<int> formatInt(std::string tag) {
-        if (!var.getFORMAT(tag, v_int)) {
-            vector<int> vna;
-            return vna;
-        }
+        if (!var.getFORMAT(tag, v_int)) { return vector<int>(); }
         int nvals = v_int.size() / br.nsamples;  // how many values per sample
         for (int i = 0; i < br.nsamples; i++) {
             for (int j = 0; j < nvals; j++)
@@ -229,11 +238,11 @@ class vcfreader {
     }
 
     vector<std::string> formatStr(std::string tag) {
-        if (!var.getFORMAT(tag, v_str)) {
-            vector<std::string> vstr;
-            return vstr;
+        if (var.getFORMAT(tag, v_str)) {
+            return v_str;
+        } else {
+            return vector<std::string>();
         }
-        return v_str;
     }
 
     inline bool isSNP() const { return var.isSNP(); }

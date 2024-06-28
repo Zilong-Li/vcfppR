@@ -672,7 +672,7 @@ class BcfRecord
         fmt = bcf_get_fmt(header->hdr, line.get(), tag.c_str());
         if(!fmt)
         {
-            throw std::invalid_argument("no FORMAT=" + tag + " in the VCF header.\n");
+            throw std::invalid_argument("invalid FORMAT=" + tag + " for current variant.\n");
         }
         nvalues = fmt->n;
         // if ndst < (fmt->n+1)*nsmpl; then realloc is involved
