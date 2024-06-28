@@ -81,15 +81,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
             if (snps && (!var.isSNP())) continue;
             if (indels && (!var.isIndel())) continue;
             if (svs && (!var.isSV())) continue;
-            pos.push_back(var.POS());
-            qual.push_back(var.QUAL());
-            chr.push_back(var.CHROM());
-            id.push_back(var.ID());
-            ref.push_back(var.REF());
-            alt.push_back(var.ALT());
-            filter.push_back(var.FILTER());
-            if (INFO) info.push_back(var.allINFO());
-            var.getFORMAT(format, vec);
+            if (!var.getFORMAT(format, vec)) continue;
             int nvals = vec.size() / vcf.nsamples;  // how many values per sample
             for (int i = 0; i < vcf.nsamples; i++) {
                 for (int j = 0; j < nvals; j++)
@@ -99,6 +91,14 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
                         vec[i * nvals + j] = NA_INTEGER;
             }
             mat.push_back(vec);
+            pos.push_back(var.POS());
+            qual.push_back(var.QUAL());
+            chr.push_back(var.CHROM());
+            id.push_back(var.ID());
+            ref.push_back(var.REF());
+            alt.push_back(var.ALT());
+            filter.push_back(var.FILTER());
+            if (INFO) info.push_back(var.allINFO());
         }
         return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                             Named("pos") = pos, Named("id") = id, Named("ref") = ref,
@@ -117,15 +117,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
             if (snps && (!var.isSNP())) continue;
             if (indels && (!var.isIndel())) continue;
             if (svs && (!var.isSV())) continue;
-            pos.push_back(var.POS());
-            qual.push_back(var.QUAL());
-            chr.push_back(var.CHROM());
-            id.push_back(var.ID());
-            ref.push_back(var.REF());
-            alt.push_back(var.ALT());
-            filter.push_back(var.FILTER());
-            if (INFO) info.push_back(var.allINFO());
-            var.getFORMAT(format, vecf);
+            if (!var.getFORMAT(format, vecf)) continue;
             int nvals = vecf.size() / vcf.nsamples;  // how many values per sample
             vecd.resize(vecf.size());
             for (int i = 0; i < vcf.nsamples; i++) {
@@ -137,6 +129,14 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
                         vecd[i * nvals + j] = vecf[i * nvals + j];
             }
             mat.push_back(vecd);
+            pos.push_back(var.POS());
+            qual.push_back(var.QUAL());
+            chr.push_back(var.CHROM());
+            id.push_back(var.ID());
+            ref.push_back(var.REF());
+            alt.push_back(var.ALT());
+            filter.push_back(var.FILTER());
+            if (INFO) info.push_back(var.allINFO());
         }
         return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                             Named("pos") = pos, Named("id") = id, Named("ref") = ref,
@@ -154,6 +154,8 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
             if (snps && (!var.isSNP())) continue;
             if (indels && (!var.isIndel())) continue;
             if (svs && (!var.isSV())) continue;
+            if (!var.getFORMAT(format, vec)) continue;
+            mat.push_back(vec);
             pos.push_back(var.POS());
             qual.push_back(var.QUAL());
             chr.push_back(var.CHROM());
@@ -162,8 +164,6 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
             alt.push_back(var.ALT());
             filter.push_back(var.FILTER());
             if (INFO) info.push_back(var.allINFO());
-            var.getFORMAT(format, vec);
-            mat.push_back(vec);
         }
         return List::create(Named("samples") = vcf.header.getSamples(), Named("chr") = chr,
                             Named("pos") = pos, Named("id") = id, Named("ref") = ref,
