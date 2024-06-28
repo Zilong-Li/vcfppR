@@ -181,13 +181,20 @@ test_that("vcfreader: read and output variant", {
 
 test_that("vcfreader: remove tag from FORMAT", {
   br <- vcfreader$new(vcffile)
-  br$variant()
+  br$variant()  ## first variant
   s <- unlist(strsplit(br$line(), "\t"))
   expect_identical(s[9], "GT:AD:DP:GQ:PL")
+  br$variant()  ## second variant
   br$rmFormatTag("AD")
+  br$rmFormatTag("AB")
+  br$rmFormatTag("PGT")
+  br$rmFormatTag("PID")
   s <- unlist(strsplit(br$line(), "\t"))
   expect_identical(s[9], "GT:DP:GQ:PL")
-  expect_error(br$formatInt("AD"))
+  expect_identical(s[10], "1/1:2:6:64,6,0")
+  ## AD was removed, so we get integer(0)
+  ad <- br$formatInt("AD") 
+  expect_identical(length(ad),0L)
   ## output current variant to another vcf
   outvcf <- file.path(tempdir(), "test.vcf.gz")
   file.create(outvcf)

@@ -197,7 +197,10 @@ class vcfreader {
     }
 
     vector<int> formatInt(std::string tag) {
-        var.getFORMAT(tag, v_int);
+        if (!var.getFORMAT(tag, v_int)) {
+            vector<int> vna;
+            return vna;
+        }
         int nvals = v_int.size() / br.nsamples;  // how many values per sample
         for (int i = 0; i < br.nsamples; i++) {
             for (int j = 0; j < nvals; j++)
@@ -211,7 +214,7 @@ class vcfreader {
 
     vector<double> formatFloat(std::string tag) {
         vector<double> vecd;
-        var.getFORMAT(tag, v_float);
+        if (!var.getFORMAT(tag, v_float)) return vecd;
         int nvals = v_float.size() / br.nsamples;  // how many values per sample
         vecd.resize(v_float.size());
         for (int i = 0; i < br.nsamples; i++) {
@@ -226,7 +229,10 @@ class vcfreader {
     }
 
     vector<std::string> formatStr(std::string tag) {
-        var.getFORMAT(tag, v_str);
+        if (!var.getFORMAT(tag, v_str)) {
+            vector<std::string> vstr;
+            return vstr;
+        }
         return v_str;
     }
 
