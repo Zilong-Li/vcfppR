@@ -14,7 +14,7 @@ List heterozygosity(std::string vcffile, std::string region = "", std::string sa
     while (vcf.getNextVariant(var)) {
         if (pass && (var.FILTER() != "PASS")) continue;
         if ((qual > 0) && (var.QUAL() < qual)) continue;
-        var.getGenotypes(gt);
+        if(!var.getGenotypes(gt)) continue;
         // analyze SNP variant
         if (!var.isSNP()) continue;
         assert(var.ploidy() == 2);  // make sure it is diploidy

@@ -190,7 +190,7 @@ class vcfreader {
     }
 
     vector<int> genotypes(bool collapse) {
-        var.getGenotypes(v_int);
+        if (!var.getGenotypes(v_int)) { return vector<int>(); }
         if (var.ploidy() == 2 && collapse) {
             for (size_t i = 0; i < v_int.size(); i += 2) {
                 v_int[i + 1] += v_int[i];
