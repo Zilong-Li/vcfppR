@@ -64,8 +64,6 @@ vcfcomp <- function(test, truth,
                     choose_random_start = FALSE,
                     return_pse_sites = FALSE,
                     ...) {
-  if((!file.exists(test)) | (!file.exists(truth)))
-    stop("file doesn't exist")
   if(is.null(bins)){
     bins <- sort(unique(c(
       c(0, 0.01 / 1000, 0.02 / 1000, 0.05 / 1000),
