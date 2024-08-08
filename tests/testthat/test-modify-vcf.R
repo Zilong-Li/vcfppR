@@ -1,6 +1,7 @@
 library(testthat)
 
 test_that("modify the genotypes", {
+  
   ## skip_on_os(c("windows"), arch = NULL)
   outvcf <- paste0(tempfile(), ".vcf.gz")
   bw <- vcfwriter$new(outvcf, "VCF4.3")
@@ -29,9 +30,11 @@ test_that("modify the genotypes", {
   br$variant() ## get a variant record
   g3 <- br$genotypes(F)
   expect_identical(g0, g3)
+  
 })
 
-test_that("modify item in FORMAT", {
+test_that("modify item in FORMAT for all samples", {
+  
   ## skip_on_os(c("windows"), arch = NULL)
   ## creat a VCF with GP in FORMAT
   outvcf <- paste0(tempfile(), ".vcf.gz")
@@ -44,9 +47,10 @@ test_that("modify item in FORMAT", {
   s1 <- "chr20\t2006060\trs146931526\tG\tC\t100\tPASS\tAF=0.000998403\tGP\t0.966,0.034,0\t0.003,0.872,0.125"
   bw$writeline(s1)
   bw$close()
+  
   ## tests
   br <- vcfreader$new(outvcf)
-  expect_true(br$variant()) ## get a variant record
+  br$variant() ## get a variant record
   br$string()
   gp <- br$formatFloat("GP")
   gp <- array(gp, c(3, br$nsamples()))
@@ -71,4 +75,52 @@ test_that("modify item in FORMAT", {
   expect_false(br$setFormatStr("STR","HHH,JJJ")) ## length(s) %% nsamples != 0
   expect_true(br$setFormatStr("STR","HHHJJJ")) ## length(s) %% nsamples == 0
   ## print(br$string())
+  
+})
+
+
+test_that("modify item in FORMAT for specific sample", {
+  
+  ## skip_on_os(c("windows"), arch = NULL)
+  ## creat a VCF with GP in FORMAT
+  outvcf <- paste0(tempfile(), ".vcf.gz")
+  bw <- vcfwriter$new(outvcf, "VCF4.3")
+  bw$addContig("chr20")
+  bw$addINFO("AF", "A", "Float", "Estimated allele frequency in the range (0,1)");
+  bw$addFORMAT("GP", "3", "Float", "Posterior genotype probability of 0/0, 0/1, and 1/1");
+  bw$addSample("NA12878")
+  bw$addSample("NA12879")
+  s1 <- "chr20\t2006060\trs146931526\tG\tC\t100\tPASS\tAF=0.000998403\tGP\t0.966,0.034,0\t0.003,0.872,0.125"
+  bw$writeline(s1)
+  bw$close()
+  
+  ## tests
+  br <- vcfreader$new(outvcf, region = "", samples = "NA12878")
+  br$variant() ## get a variant record
+  br$string()
+  br$samples()
+  gp <- br$formatFloat("GP")
+  gp <- array(gp, c(3, br$nsamples()))
+  ds <- gp[2,] + gp[3,] * 2
+  ## now open another file for output 
+  newvcf <- paste0(tempfile(), ".vcf.gz")
+  br$output(newvcf)
+  ## add INFO, DS in header first
+  br$addINFO("INFO", "1", "Float", "INFO score of imputation")
+  br$addFORMAT("DS", "1", "Float", "Diploid dosage")
+  br$addFORMAT("AC", "1", "Integer", "Allele counts")
+  br$addFORMAT("STR", "1", "String", "Test String type")
+  ## print(br$header())
+  ## set DS in FORMAT now
+  br$setFormatFloat("DS", ds[1])
+  
+  ## test if DS presents 
+  expect_identical(br$formatFloat("DS"), ds[1])
+  br$string()
+
+  br$write()
+  br$close()
+  vcf <- vcftable(newvcf, format = "DS")
+  expect_true(vcf$DS==ds[1])
+
 })

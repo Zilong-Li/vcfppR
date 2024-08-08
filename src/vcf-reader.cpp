@@ -138,6 +138,7 @@ class vcfreader {
         if (!samples.empty()) br.setSamples(samples);
         if (!region.empty()) br.setRegion(region);
         var.initHeader(br.header);
+        samples_in = samples;
     }
 
     ~vcfreader() {}
@@ -275,15 +276,28 @@ class vcfreader {
     // WRITE
     inline void output(const std::string& vcffile) {
         bw.open(vcffile);
-        bw.copyHeader(fin);
-        var.resetHeader(bw.header);
+        bw.initalHeader(br.header);
         writable = true;
     }
+    inline void modify() {
+        bw.copyHeader(fin);
+        if (!samples_in.empty()) bw.header.setSamples(samples_in);
+        var.resetHeader(bw.header);
+        modifiable = true;
+    }
     inline void write() {
-        if (writable) bw.writeRecord(var);
+        if (writable) {
+            bw.writeRecord(var);
+        } else {
+            Rcpp::Rcout << "please call the `output()` function first to creat an output VCF\n";
+        }
     }
     inline void close() {
-        if (writable) bw.close();
+        if (writable) {
+            bw.close();
+        } else {
+            Rcpp::Rcout << "please call the `output()` function first to creat an output VCF\n";
+        }
     }
 
     inline void setCHR(std::string s) { var.setCHR(s.c_str()); }
@@ -324,21 +338,27 @@ class vcfreader {
     inline void rmFormatTag(std::string s) { var.removeFORMAT(s); }
     inline void addINFO(const std::string& id, const std::string& number, const std::string& type,
                         const std::string& desc) {
-        if (writable)
-            bw.header.addINFO(id, number, type, desc);
-        else
-            Rcpp::Rcout << "please call the `output(filename)` function first\n";
+        if (!writable) {
+            Rcpp::Rcout << "please call the `output()` function first to creat an output VCF\n";
+            return;
+        }
+        if (!modifiable) { modify(); }
+        bw.header.addINFO(id, number, type, desc);
     }
     inline void addFORMAT(const std::string& id, const std::string& number, const std::string& type,
                           const std::string& desc) {
-        if (writable)
-            bw.header.addFORMAT(id, number, type, desc);
-        else
-            Rcpp::Rcout << "please call the `output(filename)` function first\n";
+        if (!writable) {
+            Rcpp::Rcout << "please call the `output()` function first to creat an output VCF\n";
+            return;
+        }
+        if (!modifiable) { modify(); }
+        bw.header.addFORMAT(id, number, type, desc);
     }
 
    private:
+    bool modifiable = false;
     bool writable = false;
+    std::string samples_in = "";
     const std::string fin;
     vcfpp::BcfReader br;
     vcfpp::BcfRecord var;

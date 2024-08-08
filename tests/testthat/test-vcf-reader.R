@@ -211,3 +211,19 @@ test_that("vcfreader: remove tag from FORMAT", {
   expect_error(br$formatInt("AD"))
 })
 
+
+test_that("can set genotypes for single sample", {
+  
+  br <- vcfreader$new(svfile, "", "HG00096")
+  br$variant()
+  br$genotypes(F)
+  br$setGenotypes(c(1L,1L))
+  outfile <- paste0(tempfile(), ".vcf.gz")
+  br$output(outfile)
+  br$write()
+  br$close()
+
+  vcf <- vcftable(outfile)
+  expect_true(vcf$gt==2)
+  
+})
