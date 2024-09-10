@@ -108,9 +108,9 @@ vcfcomp <- function(test, truth,
     stop("the samples name in two VCF files is inconsistent. please set `names`")
   if(!collapse) ord <- c(sapply(ord, function(i) c(2*i-1, 2*i)))
   ds <- as.matrix(d1[[10]])
-  ds <- ds[match(sites, d1$id), ]
+  ds <- as.matrix(ds[match(sites, d1$id), ])
   gt <- as.matrix(d2[[10]])
-  gt <- gt[match(sites, d2$id), ord]
+  gt <- as.matrix(gt[match(sites, d2$id), ord])
   rownames(gt) <- sites
   rownames(ds) <- sites
   if(is.null(af)){
