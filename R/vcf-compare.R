@@ -48,7 +48,7 @@
 #' test <- system.file("extdata", "imputed.gt.vcf.gz", package="vcfppR")
 #' truth <- system.file("extdata", "imputed.gt.vcf.gz", package="vcfppR")
 #' samples <- "HG00133,HG00143,HG00262"
-#' res <- vcfcomp(test, truth, stats="f1", format=c('GT','GT'), samples=samples)
+#' res <- vcfcomp(test, truth, stats="f1", format=c('GT','GT'), samples=samples, setid=TRUE)
 #' str(res)
 #' @export
 vcfcomp <- function(test, truth,
