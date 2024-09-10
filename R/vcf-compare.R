@@ -79,10 +79,10 @@ vcfcomp <- function(test, truth,
   }
   collapse <- ifelse(stats=="pse", FALSE, TRUE)
   d1 <- tryCatch( { suppressWarnings(readRDS(test)) }, error = function(e) {
-    vcftable(test, format = formats[1], setid = TRUE, collapse = collapse, ...)
+    vcftable(test, format = formats[1], collapse = collapse, ...)
   } )
   d2 <- tryCatch( { suppressWarnings(readRDS(truth)) }, error = function(e) {
-    vcftable(truth, format = formats[2], setid = TRUE, collapse = collapse, ...)
+    vcftable(truth, format = formats[2], collapse = collapse, ...)
   } )
   if(!is.null(names) & is.vector(names)) d1$samples <- names
   ## chr pos ref alt af
