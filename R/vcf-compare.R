@@ -5,9 +5,9 @@
 #' \code{vcfcomp} implements various statisitcs to compare two VCF/BCF files,
 #' e.g. report genotype concocrdance, correlation stratified by allele frequency.
 #' 
-#' @param test path to the first VCF/BCF file referred as test, or saved RDS file.
+#' @param test path to the comparision file (test), which can be a VCF/BCF file, vcftable object  or saved RDS file.
 #'
-#' @param truth path to the second VCF/BCF file referred as truth, or saved RDS file.
+#' @param truth path to the baseline file (truth),which can be a VCF/BCF file, vcftable object  or saved RDS file.
 #'
 #' @param formats character vector. the FORMAT tags to extract for the test and truth respectively.
 #'               default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.
@@ -48,7 +48,7 @@
 #' test <- system.file("extdata", "imputed.gt.vcf.gz", package="vcfppR")
 #' truth <- system.file("extdata", "imputed.gt.vcf.gz", package="vcfppR")
 #' samples <- "HG00133,HG00143,HG00262"
-#' res <- vcfcomp(test, truth, stats="f1", format=c('GT','GT'), samples=samples, setid=TRUE)
+#' res <- vcfcomp(test, truth, stats="f1", samples=samples, setid=TRUE)
 #' str(res)
 #' @export
 vcfcomp <- function(test, truth,
@@ -78,12 +78,17 @@ vcfcomp <- function(test, truth,
     formats[1] <- "GT"
   }
   collapse <- ifelse(stats=="pse", FALSE, TRUE)
-  d1 <- tryCatch( { suppressWarnings(readRDS(test)) }, error = function(e) {
-    vcftable(test, format = formats[1], collapse = collapse, ...)
-  } )
-  d2 <- tryCatch( { suppressWarnings(readRDS(truth)) }, error = function(e) {
-    vcftable(truth, format = formats[2], collapse = collapse, ...)
-  } )
+  if(is(test, "vcftable") & is(truth, "vcftable")) {
+    d1 <- test
+    d2 <- truth
+  } else {
+    d1 <- tryCatch( { suppressWarnings(readRDS(test)) }, error = function(e) {
+      vcftable(test, format = formats[1], collapse = collapse, ...)
+    } )
+    d2 <- tryCatch( { suppressWarnings(readRDS(truth)) }, error = function(e) {
+      vcftable(truth, format = formats[2], collapse = collapse, ...)
+    } )
+  }
   if(!is.null(names) & is.vector(names)) d1$samples <- names
   ## chr pos ref alt af
   sites <- intersect(d1$id,  d2$id)
@@ -126,7 +131,7 @@ vcfcomp <- function(test, truth,
     if(stats == "r2")
       return(list(samples = d1$samples, r2=res.r2))
     ## F1 and NRC
-    d1 <- vcftable(test, format = "GT", setid = TRUE, ...)
+    d1 <- vcftable(test, format = "GT", ...)
     ds <- d1[[10]]
     ds <- ds[match(sites, d1$id), ]
     rownames(ds) <- sites

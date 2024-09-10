@@ -22,9 +22,9 @@ vcfcomp(
 )
 }
 \arguments{
-\item{test}{path to the first VCF/BCF file referred as test, or saved RDS file.}
+\item{test}{path to the comparision file (test), which can be a VCF/BCF file, vcftable object  or saved RDS file.}
 
-\item{truth}{path to the second VCF/BCF file referred as truth, or saved RDS file.}
+\item{truth}{path to the baseline file (truth),which can be a VCF/BCF file, vcftable object  or saved RDS file.}
 
 \item{formats}{character vector. the FORMAT tags to extract for the test and truth respectively.
 default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.}
@@ -72,7 +72,7 @@ library('vcfppR')
 test <- system.file("extdata", "imputed.gt.vcf.gz", package="vcfppR")
 truth <- system.file("extdata", "imputed.gt.vcf.gz", package="vcfppR")
 samples <- "HG00133,HG00143,HG00262"
-res <- vcfcomp(test, truth, stats="f1", format=c('GT','GT'), samples=samples)
+res <- vcfcomp(test, truth, stats="f1", samples=samples, setid=TRUE)
 str(res)
 }
 \author{

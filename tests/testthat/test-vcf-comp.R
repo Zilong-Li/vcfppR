@@ -57,3 +57,14 @@ test_that("can work for PSE", {
 })
 
 
+
+test_that("can work for vcftable objects", {
+  skip_on_os(c("windows"), arch = NULL)
+  samples <- "HG00673,NA10840"
+  test <- vcftable(rawvcf, samples = samples, setid = T)
+  truth <- vcftable(imputedvcf, samples = samples, setid = T)
+  res <- vcfcomp(test, truth, stats = "nrc", samples = samples,
+                 by.sample = TRUE, bins = c(0,1), setid = TRUE)
+  expect_identical(paste0(res$samples, collapse = ","), samples)  
+  expect_identical(unlist(res[[2]][[3]]), rep(1,2))
+})
