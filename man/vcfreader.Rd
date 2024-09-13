@@ -101,6 +101,10 @@ Type the name of the class to see the details and methods
 
 \item{\code{output}}{Init an output object for streaming out the variants to another vcf}
 
+\item{\code{updateSamples}}{update samples name in the output VCF
+\itemize{
+\item Parameter: s - A comma-seperated string for new samples names}}
+
 \item{\code{write}}{Streaming out current variant the output vcf}
 
 \item{\code{close}}{Close the connection to the output vcf}

@@ -58,6 +58,9 @@ heterozygosity <- function(vcffile, region = "", samples = "-", pass = FALSE, qu
 #' @field string Return the raw string of current variant including newline
 #' @field line Return the raw string of current variant without newline
 #' @field output Init an output object for streaming out the variants to another vcf
+#' @field updateSamples update samples name in the output VCF
+#' \itemize{
+#' \item Parameter: s - A comma-seperated string for new samples names}
 #' @field write Streaming out current variant the output vcf
 #' @field close Close the connection to the output vcf
 #' @field setCHR Modify the CHR of current variant \itemize{ \item Parameter: s - A string for CHR}

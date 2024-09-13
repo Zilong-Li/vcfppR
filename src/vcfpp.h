@@ -2,7 +2,7 @@
  * @file        https://github.com/Zilong-Li/vcfpp/vcfpp.h
  * @author      Zilong Li
  * @email       zilong.dk@gmail.com
- * @version     v0.4.1
+ * @version     v0.5.1
  * @breif       a single C++ file for manipulating VCF
  * Copyright (C) 2022-2023.The use of this code is governed by the LICENSE file.
  ******************************************************************************/
@@ -372,8 +372,35 @@ class BcfHeader
     }
 
     /**
+     * @brief update the sample id in the header
+     * @param samples a comma-separated string for multiple new samples
+     * @note this only update the samples name in a given sequential order
+     * */
+    inline void updateSamples(const std::string & samples) const
+    {
+        int sid = 0; // index of the sample to modify
+        for(auto s : split_string(samples, ","))
+        {
+            if(sid < nSamples())
+            {
+                hdr->samples[sid] = strdup(s.c_str());
+                sid++;
+            }
+            else
+            {
+#    if defined(VERBOSE)
+                std::cerr << "you provided too many samples";
+#    endif
+                break;
+            }
+        }
+        int ret = bcf_hdr_sync(hdr);
+        if(ret != 0) throw std::runtime_error("could not modify " + samples + " in the header\n");
+    }
+
+    /**
      * @brief explicitly set samples to be extracted
-     * @param samples samples to include or exclude  as a comma-separated string
+     * @param samples samples to include or exclude as a comma-separated string
      * */
     inline void setSamples(const std::string & samples) const
     {
@@ -1231,9 +1258,9 @@ class BcfRecord
     }
 
     /** @brief modify CHROM value */
-    inline void setCHR(const char * chr)
+    inline void setCHR(const std::string & s)
     {
-        line->rid = bcf_hdr_name2id(header->hdr, chr);
+        line->rid = bcf_hdr_name2id(header->hdr, s.c_str());
     }
 
     /** @brief modify position given 1-based value */
@@ -1243,15 +1270,34 @@ class BcfRecord
     }
 
     /** @brief update ID */
-    inline void setID(const char * s)
+    inline void setID(const std::string & s)
     {
-        bcf_update_id(header->hdr, line.get(), s);
+        bcf_update_id(header->hdr, line.get(), s.c_str());
     }
 
     /** @brief set REF and ALT alleles given a string seperated by comma */
-    inline void setRefAlt(const char * alleles_string)
+    inline void setRefAlt(const std::string & s)
     {
-        bcf_update_alleles_str(header->hdr, line.get(), alleles_string);
+        bcf_update_alleles_str(header->hdr, line.get(), s.c_str());
+    }
+
+    /** @brief modify the QUAL value */
+    inline void setQUAL(float q)
+    {
+        line->qual = q;
+    }
+
+    /** @brief modify the QUAL value */
+    inline void setQUAL(char q)
+    {
+        bcf_float_set_missing(line->qual);
+    }
+
+    /** @brief modify the FILTER value */
+    inline void setFILTER(const std::string & s)
+    {
+        int32_t tmpi = bcf_hdr_id2int(header->hdr, BCF_DT_ID, s.c_str());
+        bcf_add_filter(header->hdr, line.get(), tmpi);
     }
 
     /** @brief return 0-base start of the variant (can be any type) */
@@ -1750,12 +1796,23 @@ class BcfWriter
         hp = &h;
     }
 
-    /// copy header of given VCF
-    void copyHeader(const std::string & vcffile)
+    /// copy header of given VCF and restrict on samples. if samples=="", FORMAT removed and only sites left
+    void copyHeader(const std::string & vcffile, std::string samples = "-")
     {
         htsFile * fp2 = hts_open(vcffile.c_str(), "r");
         if(!fp2) throw std::invalid_argument("I/O error: input file is invalid");
-        header.hdr = bcf_hdr_read(fp2);
+        if(samples == "")
+        { // site-only
+            bcf_hdr_t * hfull = bcf_hdr_read(fp2);
+            header.hdr = bcf_hdr_subset(hfull, 0, 0, 0);
+            bcf_hdr_remove(header.hdr, BCF_HL_FMT, NULL);
+            bcf_hdr_destroy(hfull);
+        }
+        else
+        {
+            header.hdr = bcf_hdr_read(fp2);
+            header.setSamples(samples);
+        }
         hts_close(fp2);
         initalHeader(header);
     }

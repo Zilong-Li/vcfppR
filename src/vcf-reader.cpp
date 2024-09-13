@@ -56,6 +56,9 @@ using namespace std;
 //' @field string Return the raw string of current variant including newline
 //' @field line Return the raw string of current variant without newline
 //' @field output Init an output object for streaming out the variants to another vcf
+//' @field updateSamples update samples name in the output VCF
+//' \itemize{
+//' \item Parameter: s - A comma-seperated string for new samples names}
 //' @field write Streaming out current variant the output vcf
 //' @field close Close the connection to the output vcf
 //' @field setCHR Modify the CHR of current variant \itemize{ \item Parameter: s - A string for CHR}
@@ -285,6 +288,10 @@ class vcfreader {
         var.resetHeader(bw.header);
         modifiable = true;
     }
+    inline void updateSamples(const std::string& s) {
+        if (!modifiable) { modify(); }
+        bw.header.updateSamples(s);
+    }
     inline void write() {
         if (writable) {
             bw.writeRecord(var);
@@ -300,21 +307,23 @@ class vcfreader {
         }
     }
 
-    inline void setCHR(std::string s) { var.setCHR(s.c_str()); }
-    inline void setID(std::string s) { var.setID(s.c_str()); }
+    inline void setCHR(const std::string& s) { var.setCHR(s); }
+    inline void setID(const std::string& s) { var.setID(s); }
     inline void setPOS(int pos) { var.setPOS(pos); }
-    inline void setRefAlt(const std::string& s) { var.setRefAlt(s.c_str()); }
-    inline bool setInfoInt(std::string tag, int v) { return var.setINFO(tag, v); }
-    inline bool setInfoFloat(std::string tag, double v) { return var.setINFO(tag, v); }
-    inline bool setInfoStr(std::string tag, const std::string& s) { return var.setINFO(tag, s); }
-    inline bool setFormatInt(std::string tag, const vector<int>& v) {
+    inline void setRefAlt(const std::string& s) { var.setRefAlt(s); }
+    inline bool setInfoInt(const std::string& tag, int v) { return var.setINFO(tag, v); }
+    inline bool setInfoFloat(const std::string& tag, double v) { return var.setINFO(tag, v); }
+    inline bool setInfoStr(const std::string& tag, const std::string& s) {
+        return var.setINFO(tag, s);
+    }
+    inline bool setFormatInt(const std::string& tag, const vector<int>& v) {
         return var.setFORMAT(tag, v);
     }
-    inline bool setFormatFloat(std::string tag, const vector<double>& v) {
+    inline bool setFormatFloat(const std::string& tag, const vector<double>& v) {
         vector<float> f(v.begin(), v.end());
         return var.setFORMAT(tag, f);
     }
-    inline bool setFormatStr(std::string tag, const std::string& s) {
+    inline bool setFormatStr(const std::string& tag, const std::string& s) {
         if (s.length() % nsamples() != 0) {
             Rcpp::Rcout << "the length of s must be divisable by nsamples()";
             return false;
@@ -334,8 +343,8 @@ class vcfreader {
         var.setPhasing(c);
     }
 
-    inline void rmInfoTag(std::string s) { var.removeINFO(s); }
-    inline void rmFormatTag(std::string s) { var.removeFORMAT(s); }
+    inline void rmInfoTag(const std::string& s) { var.removeINFO(s); }
+    inline void rmFormatTag(const std::string& s) { var.removeFORMAT(s); }
     inline void addINFO(const std::string& id, const std::string& number, const std::string& type,
                         const std::string& desc) {
         if (!writable) {
@@ -415,6 +424,7 @@ RCPP_MODULE(vcfreader) {
         .method("string", &vcfreader::string)
         .method("line", &vcfreader::line)
         .method("output", &vcfreader::output)
+        .method("updateSamples", &vcfreader::updateSamples)
         .method("write", &vcfreader::write)
         .method("close", &vcfreader::close)
         .method("setCHR", &vcfreader::setCHR)
