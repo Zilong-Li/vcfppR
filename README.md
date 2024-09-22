@@ -97,7 +97,7 @@ to calculate the genotype correlation between the test and the truth.
 ``` r
 res <- vcfcomp(test = rawvcf, truth = phasedvcf,
                stats = "r2", region = "chr21:1-5100000", 
-               formats = c("GT","GT"))
+               formats = c("GT","GT"), setid = TRUE)
 par(mar=c(5,5,2,2), cex.lab = 2)
 vcfplot(res, col = 2,cex = 2, lwd = 3, type = "b")
 ```
@@ -106,7 +106,7 @@ vcfplot(res, col = 2,cex = 2, lwd = 3, type = "b")
 
 ``` r
 res <- vcfcomp(test = rawvcf, truth = phasedvcf,
-               stats = "pse",
+               stats = "pse", setid = TRUE,
                region = "chr21:5000000-5500000",
                samples = "HG00673,NA10840",
                return_pse_sites = TRUE)
@@ -146,8 +146,23 @@ vcfplot(res, main = "Structure Variant Counts", col = 1:7)
 
 There are two classes i.e. ***vcfreader*** and ***vcfwriter*** offering
 the full R-bindings of vcfpp.h. Check out the examples in the
-[tests](tests/testthat) folder or refer to the manual.
+[tests](tests/testthat) folder or refer to the manual,
+e.g. `?vcfppR::vcfreader`.
 
 ``` r
-?vcfppR::vcfreader
+library(testthat)
+test_that("can change samples name and set genotypes for single sample", {
+  br <- vcfreader$new(svfile, "", "HG00096")
+  br$variant()
+  br$genotypes(F)
+  br$setGenotypes(c(1L,1L))
+  outfile <- paste0(tempfile(), ".vcf.gz")
+  br$output(outfile)
+  br$updateSamples("ZZZZZ")
+  br$write()
+  br$close()
+  vcf <- vcftable(outfile)
+  expect_true(vcf$gt==2)
+  expect_true(vcf$samples=="ZZZZZ")
+})
 ```

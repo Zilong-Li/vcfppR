@@ -1,3 +1,11 @@
+# vcfppR 0.5.0
+* upgrade `vcfpp.h` to v0.5.1
+* add `bcfreader$updateSamples()` function
+* `vcfcomp`: can take `vcftable` object as input
+* `vcfcomp`: defaults changed `setid=FALSE`
+* bug fix
+
+
 # vcfppR 0.4.6
 * add `vcfplot` function
 * fix bug in `vcftable` when FORMAT has unaligned list 

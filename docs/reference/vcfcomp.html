@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">vcfppR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,11 +78,11 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>test</dt>
-<dd><p>path to the first VCF/BCF file referred as test, or saved RDS file.</p></dd>
+<dd><p>path to the comparision file (test), which can be a VCF/BCF file, vcftable object  or saved RDS file.</p></dd>
 
 
 <dt>truth</dt>
-<dd><p>path to the second VCF/BCF file referred as truth, or saved RDS file.</p></dd>
+<dd><p>path to the baseline file (truth),which can be a VCF/BCF file, vcftable object  or saved RDS file.</p></dd>
 
 
 <dt>formats</dt>
@@ -162,7 +162,8 @@ e.g. report genotype concocrdance, correlation stratified by allele frequency.</
 <span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"imputed.gt.vcf.gz"</span>, package<span class="op">=</span><span class="st">"vcfppR"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">truth</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"imputed.gt.vcf.gz"</span>, package<span class="op">=</span><span class="st">"vcfppR"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="st">"HG00133,HG00143,HG00262"</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">vcfcomp</span><span class="op">(</span><span class="va">test</span>, <span class="va">truth</span>, stats<span class="op">=</span><span class="st">"f1"</span>, format<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'GT'</span>,<span class="st">'GT'</span><span class="op">)</span>, samples<span class="op">=</span><span class="va">samples</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">vcfcomp</span><span class="op">(</span><span class="va">test</span>, <span class="va">truth</span>, stats<span class="op">=</span><span class="st">"f1"</span>, samples<span class="op">=</span><span class="va">samples</span>, setid<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> stats F1 or NRC or PSE only uses GT format</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>F1 should be used only for a sample with genotypes of all types, hom ref(0), het(1) and hom alt(2)</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 2</span>
