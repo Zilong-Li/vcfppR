@@ -18,11 +18,11 @@
 #'              "nrc": Non-Reference Concordance rate
 #'              "pse": Phasing Switch Error rate
 #' 
-#' @param by.sample logical. calculate concordance for each samples, then average by bins.
+#' @param by.sample logical. calculate sample-wise concordance, which can be stratified by MAF bin.
 #' 
-#' @param by.variant logical. calculate concordance for each variant, then average by bins.
-#'                  if both bysample and by variant are TRUE, then do average on all samples first.
-#'                  if both bysample and by variant are FALSE, then do average on all samples and variants.
+#' @param by.variant logical. calculate variant-wise concordance, which can be stratified by MAF bin.
+#'                  If by.sample is TRUE, then do sample-wise calculation only regardless the value of by.variant.
+#'                  If both by.sample and by.variant are FALSE, then do calculations for all samples and variants together in a bin.
 #' 
 #' @param flip logical. flip the ref and alt variants
 #' 

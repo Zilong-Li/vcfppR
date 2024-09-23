@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">vcfppR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,13 +99,13 @@ default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.</p></dd
 
 
 <dt>by.sample</dt>
-<dd><p>logical. calculate concordance for each samples, then average by bins.</p></dd>
+<dd><p>logical. calculate sample-wise concordance, which can be stratified by MAF bin.</p></dd>
 
 
 <dt>by.variant</dt>
-<dd><p>logical. calculate concordance for each variant, then average by bins.
-if both bysample and by variant are TRUE, then do average on all samples first.
-if both bysample and by variant are FALSE, then do average on all samples and variants.</p></dd>
+<dd><p>logical. calculate variant-wise concordance, which can be stratified by MAF bin.
+If by.sample is TRUE, then do sample-wise calculation only regardless the value of by.variant.
+If both by.sample and by.variant are FALSE, then do calculations for all samples and variants together in a bin.</p></dd>
 
 
 <dt>flip</dt>

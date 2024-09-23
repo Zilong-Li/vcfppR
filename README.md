@@ -151,11 +151,14 @@ e.g. `?vcfppR::vcfreader`.
 
 ``` r
 library(testthat)
+svfile <- system.file("extdata", "sv.vcf.gz", package="vcfppR")
 test_that("can change samples name and set genotypes for single sample", {
   br <- vcfreader$new(svfile, "", "HG00096")
   br$variant()
-  br$genotypes(F)
+  expect_identical(br$infoStr("SVTYPE"), "DUP")
+  expect_identical(br$genotypes(F), c(0L, 0L))
   br$setGenotypes(c(1L,1L))
+  expect_identical(br$genotypes(F), c(1L, 1L))
   outfile <- paste0(tempfile(), ".vcf.gz")
   br$output(outfile)
   br$updateSamples("ZZZZZ")
@@ -165,4 +168,5 @@ test_that("can change samples name and set genotypes for single sample", {
   expect_true(vcf$gt==2)
   expect_true(vcf$samples=="ZZZZZ")
 })
+#> Test passed
 ```
