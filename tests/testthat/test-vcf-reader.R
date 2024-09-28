@@ -244,3 +244,28 @@ test_that("can change samples name and set genotypes for single sample", {
   expect_true(vcf$gt==2)
   expect_true(vcf$samples=="ZZZZZ")
 })
+
+test_that("can getStatus of a region", {
+  
+  br <- vcfreader$new(svfile)
+  expect_identical(br$getStatus("chr22"),-2L)
+  expect_identical(br$getStatus("XXX-1-9999"),-2L)
+  expect_identical(br$getStatus("chr21:5029001-5029100"), 0L)
+  expect_identical(br$getStatus("chr21"), 1L)
+  
+})
+
+test_that("can set region back and forth", {
+  
+  br <- vcfreader$new(svfile)
+  br$setRegion("chr21:5227411")
+  br$variant()
+  expect_identical(br$infoStr("SVTYPE"), "INS")
+  ## set region back
+  br$setRegion("chr21:5114000")
+  br$variant()
+  expect_identical(br$infoStr("SVTYPE"), "DUP")
+  
+})
+
+
