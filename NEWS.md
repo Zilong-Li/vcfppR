@@ -1,3 +1,8 @@
+# vcfppR 0.6.0
+* upgrade `vcfpp.h` to v0.6.0
+* new API `vcfreader$setRegion`
+* new API `vcfreader$getStatus`
+
 # vcfppR 0.5.0
 * upgrade `vcfpp.h` to v0.5.1
 * add `bcfreader$updateSamples()` function

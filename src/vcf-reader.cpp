@@ -19,6 +19,8 @@ using namespace std;
 //' \item Parameter: region - The region to be constrained
 //' \item Parameter: samples - The samples to be constrained. Comma separated list of samples to include (or exclude with "^" prefix).
 //' }
+//' @field setRegion try to set specific region to work with. will throw errors if no index or region found. Use getStatus to check if the region is valid or empty!
+//' @field getStatus return 1: region is valid and not empty. 0: region is valid but empty. -1: no index file. -2: region not found or invalid region form
 //' @field variant Try to get next variant record. return FALSE if there are no more variants or hit the end of file, otherwise TRUE.
 //' @field chr Return the CHROM field of current variant
 //' @field pos Return the POS field of current variant
@@ -146,7 +148,10 @@ class vcfreader {
 
     ~vcfreader() {}
 
-    bool variant() { return br.getNextVariant(var); }
+    inline void setRegion(const std::string& region) { br.setRegion(region); }
+    inline int getStatus(const std::string& region) { return br.getStatus(region); }
+
+    inline bool variant() { return br.getNextVariant(var); }
 
     inline std::string chr() const { return var.CHROM(); }
     inline std::string id() const { return var.ID(); }
@@ -194,7 +199,9 @@ class vcfreader {
     }
 
     vector<int> genotypes(bool collapse) {
-        if (!var.getGenotypes(v_int)) { return vector<int>(); }
+        if (!var.getGenotypes(v_int)) {
+            return vector<int>();
+        }
         if (var.ploidy() == 2 && collapse) {
             for (size_t i = 0; i < v_int.size(); i += 2) {
                 v_int[i + 1] += v_int[i];
@@ -213,7 +220,9 @@ class vcfreader {
     }
 
     vector<int> formatInt(std::string tag) {
-        if (!var.getFORMAT(tag, v_int)) { return vector<int>(); }
+        if (!var.getFORMAT(tag, v_int)) {
+            return vector<int>();
+        }
         int nvals = v_int.size() / br.nsamples;  // how many values per sample
         for (int i = 0; i < br.nsamples; i++) {
             for (int j = 0; j < nvals; j++)
@@ -289,7 +298,9 @@ class vcfreader {
         modifiable = true;
     }
     inline void updateSamples(const std::string& s) {
-        if (!modifiable) { modify(); }
+        if (!modifiable) {
+            modify();
+        }
         bw.header.updateSamples(s);
     }
     inline void write() {
@@ -351,7 +362,9 @@ class vcfreader {
             Rcpp::Rcout << "please call the `output()` function first to creat an output VCF\n";
             return;
         }
-        if (!modifiable) { modify(); }
+        if (!modifiable) {
+            modify();
+        }
         bw.header.addINFO(id, number, type, desc);
     }
     inline void addFORMAT(const std::string& id, const std::string& number, const std::string& type,
@@ -360,7 +373,9 @@ class vcfreader {
             Rcpp::Rcout << "please call the `output()` function first to creat an output VCF\n";
             return;
         }
-        if (!modifiable) { modify(); }
+        if (!modifiable) {
+            modify();
+        }
         bw.header.addFORMAT(id, number, type, desc);
     }
 
@@ -385,6 +400,8 @@ RCPP_MODULE(vcfreader) {
         .constructor<std::string, std::string>("construct vcfreader given vcffile and region")
         .constructor<std::string, std::string, std::string>(
             "construct vcfreader given vcf file, region and samples")
+        .method("setRegion", &vcfreader::setRegion, "set region to work with")
+        .method("getStatus", &vcfreader::getStatus, "query the status of a region")
         .method("variant", &vcfreader::variant, "get next variant record")
         .method("chr", &vcfreader::chr, "get CHROM")
         .method("id", &vcfreader::id, "get ID")

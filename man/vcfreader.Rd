@@ -27,6 +27,10 @@ Type the name of the class to see the details and methods
 \item Parameter: samples - The samples to be constrained. Comma separated list of samples to include (or exclude with "^" prefix).
 }}
 
+\item{\code{setRegion}}{try to set specific region to work with. will throw errors if no index or region found. Use getStatus to check if the region is valid or empty!}
+
+\item{\code{getStatus}}{return 1: region is valid and not empty. 0: region is valid but empty. -1: no index file. -2: region not found or invalid region form}
+
 \item{\code{variant}}{Try to get next variant record. return FALSE if there are no more variants or hit the end of file, otherwise TRUE.}
 
 \item{\code{chr}}{Return the CHROM field of current variant}

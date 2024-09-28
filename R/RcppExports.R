@@ -21,6 +21,8 @@ heterozygosity <- function(vcffile, region = "", samples = "-", pass = FALSE, qu
 #' \item Parameter: region - The region to be constrained
 #' \item Parameter: samples - The samples to be constrained. Comma separated list of samples to include (or exclude with "^" prefix).
 #' }
+#' @field setRegion try to set specific region to work with. will throw errors if no index or region found. Use getStatus to check if the region is valid or empty!
+#' @field getStatus return 1: region is valid and not empty. 0: region is valid but empty. -1: no index file. -2: region not found or invalid region form
 #' @field variant Try to get next variant record. return FALSE if there are no more variants or hit the end of file, otherwise TRUE.
 #' @field chr Return the CHROM field of current variant
 #' @field pos Return the POS field of current variant
