@@ -104,18 +104,6 @@ vcfplot(res, col = 2,cex = 2, lwd = 3, type = "b")
 
 <img src="man/figures/README-r2-1.png" width="100%" />
 
-``` r
-res <- vcfcomp(test = rawvcf, truth = phasedvcf,
-               stats = "pse", setid = TRUE,
-               region = "chr21:5000000-5500000",
-               samples = "HG00673,NA10840",
-               return_pse_sites = TRUE)
-#> stats F1 or NRC or PSE only uses GT format
-vcfplot(res, which=1:2, main = "Phasing switch error", ylab = "HG00673,NA10840")
-```
-
-<img src="man/figures/README-pse-1.png" width="100%" />
-
 Check out the [vignettes](https://zilong-li.github.io/vcfppR/articles/)
 for more\!
 

@@ -7,12 +7,12 @@ all: rd check clean
 rd:
 	Rscript -e 'roxygen2::roxygenise(".")'
 
-readme:
+readme: rd
 	Rscript -e 'rmarkdown::render("README.Rmd")'
-	Rscript -e 'pkgdown::build_site()'
+	Rscript -e 'pkgdown::build_site(examples=FALSE)'
 	Rscript -e 'pkgdown::build_articles()'
 
-readme2:
+readme2: rd
 	Rscript -e 'rmarkdown::render("README.Rmd", "html_document")'
 
 build: rd

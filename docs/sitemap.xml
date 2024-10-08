@@ -1,60 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/PULL_REQUEST_TEMPLATE.html</loc>
-  </url>
-  <url>
-    <loc>/articles/concordance-of-two-vcf-files.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/heterozygosity.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/vcfcomp.html</loc>
-  </url>
-  <url>
-    <loc>/reference/vcfplot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/vcfpopgen.html</loc>
-  </url>
-  <url>
-    <loc>/reference/vcfppR-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/vcfreader.html</loc>
-  </url>
-  <url>
-    <loc>/reference/vcfsummary.html</loc>
-  </url>
-  <url>
-    <loc>/reference/vcftable.html</loc>
-  </url>
-  <url>
-    <loc>/reference/vcfwriter.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/CONTRIBUTING.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/PULL_REQUEST_TEMPLATE.html</loc></url>
+<url><loc>/articles/concordance-of-two-vcf-files.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/vcfcomp.html</loc></url>
+<url><loc>/reference/vcfplot.html</loc></url>
+<url><loc>/reference/vcfpopgen.html</loc></url>
+<url><loc>/reference/vcfppR-package.html</loc></url>
+<url><loc>/reference/vcfreader.html</loc></url>
+<url><loc>/reference/vcfsummary.html</loc></url>
+<url><loc>/reference/vcftable.html</loc></url>
+<url><loc>/reference/vcfwriter.html</loc></url>
 </urlset>
+

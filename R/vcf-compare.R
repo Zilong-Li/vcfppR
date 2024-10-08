@@ -13,10 +13,10 @@
 #'               default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.
 #'
 #' @param stats the statistics to be calculated. supports the following.
-#'              "r2": pearson correlation coefficient ** 2.
-#'              "f1": F1-score, good balance between sensitivity and precision.
-#'              "nrc": Non-Reference Concordance rate
-#'              "pse": Phasing Switch Error rate
+#'              "r2": the Pearson correlation coefficient square.
+#'              "f1": the F1-score, good balance between sensitivity and precision.
+#'              "nrc": the Non-Reference Concordance rate
+#'              "pse": the Phasing Switch Error rate
 #' 
 #' @param by.sample logical. calculate sample-wise concordance, which can be stratified by MAF bin.
 #' 
@@ -41,6 +41,7 @@
 #' @param ... options passed to \code{vcftable}
 #'
 #' @return a list of various statistics
+#' 
 #' @author Zilong Li \email{zilong.dk@gmail.com}
 #'
 #' @examples

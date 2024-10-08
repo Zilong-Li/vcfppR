@@ -20,6 +20,7 @@
 #'                e.g. "id01,id02", "^id01,id02".
 #'
 #' @param vartype restrict to specific type of variants. supports "snps","indels", "sv", "multisnps","multiallelics"
+#' 
 #' @param format the FORMAT tag to extract. default "GT" is extracted.
 #'
 #' @param ids  character vector. restrict to sites with ID in the given vector. default NULL won't filter any sites.
