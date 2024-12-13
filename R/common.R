@@ -129,10 +129,16 @@ NRC <- function(a, b) {
   o <- table(as.vector(a), as.vector(b), useNA = "always")
   ## make table square
   if(nrow(o)!=ncol(o)){
+    if(min(dim(o)!=3)) {
+      warning("NRC should be used only for a sample with genotypes of all types, hom ref(0), het(1) and hom alt(2)")
+      return(NA)
+    }
     if(nrow(o) == ncol(o)+1){
       o <- o[-nrow(o),]
+      o <- o[,c(3,1,2)] # move NA col to leftmost
     } else if (nrow(o)+1==ncol(o)){
       o <- o[,-ncol(o)]
+      o <- o[c(3,1,2),] # move NA row to topmost
     } else{
       warning("ONLY homozygous (0) found in either truth or test data")
       return(NA)
@@ -140,10 +146,6 @@ NRC <- function(a, b) {
   }
   if(all(dim(o)==c(4,4)))
     o <- o[1:3,1:3]
-  if(all(dim(o)!=c(3,3))) {
-    warning("NRC should be used only for a sample with genotypes of all types, hom ref(0), het(1) and hom alt(2)")
-    return(NA)
-  }
   mismatches <-  sum(c(o[1,2:3], o[2,1], o[2,3], o[3,1:2]))
   matches <- sum(c(o[2,2], o[3,3]))
   res <- mismatches / (mismatches+matches)
