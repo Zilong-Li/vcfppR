@@ -1,4 +1,4 @@
 #!/bin/sh
 
-rm -f src/htslib-1.18/config.h src/*.o src/*.so src/*.dll src/*.dylib 
-cd src/htslib-1.18/ && make clean && cd -
+rm -f src/htslib-1.21/config.h src/*.o src/*.so src/*.dll src/*.dylib 
+cd src/htslib-1.21/ && make clean && cd -

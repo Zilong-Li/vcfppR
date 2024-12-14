@@ -22,9 +22,9 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-CC     = gcc
-AR     = ar
-RANLIB = ranlib
+CC       := $(shell ${R_HOME}/bin/R CMD config CC)
+AR       := $(shell ${R_HOME}/bin/R CMD config AR)
+RANLIB   := $(shell ${R_HOME}/bin/R CMD config RANLIB)
 
 # Default libraries to link if configure is not used
 htslib_default_libs = -lz -lm -lbz2 -llzma -lcurl
@@ -35,7 +35,7 @@ CPPFLAGS =
 # TODO: probably update cram code to make it compile cleanly with -Wc++-compat
 # For testing strict C99 support add -std=c99 -D_XOPEN_SOURCE=600
 #CFLAGS   = -g -Wall -O2 -pedantic -std=c99 -D_XOPEN_SOURCE=600
-CFLAGS   = -g -Wall -O2 -fvisibility=hidden
+CFLAGS   = -g -Wall -O2 -fvisibility=hidden -fPIC
 EXTRA_CFLAGS_PIC = -fpic
 TARGET_CFLAGS =
 LDFLAGS  = -fvisibility=hidden
