@@ -25,6 +25,8 @@
 CC       := $(shell ${R_HOME}/bin/R CMD config CC)
 AR       := $(shell ${R_HOME}/bin/R CMD config AR)
 RANLIB   := $(shell ${R_HOME}/bin/R CMD config RANLIB)
+CFLAGS   := $(shell ${R_HOME}/bin/R CMD config CFLAGS)
+LDFLAGS  := $(shell ${R_HOME}/bin/R CMD config LDFLAGS)
 
 # Default libraries to link if configure is not used
 htslib_default_libs = -lz -lm -lbz2 -llzma -lcurl
@@ -35,10 +37,10 @@ CPPFLAGS =
 # TODO: probably update cram code to make it compile cleanly with -Wc++-compat
 # For testing strict C99 support add -std=c99 -D_XOPEN_SOURCE=600
 #CFLAGS   = -g -Wall -O2 -pedantic -std=c99 -D_XOPEN_SOURCE=600
-CFLAGS   = -g -Wall -O2 -fvisibility=hidden -fPIC
-EXTRA_CFLAGS_PIC = -fpic
+CFLAGS   += -g -Wall -O2 -fvisibility=hidden
+EXTRA_CFLAGS_PIC =
 TARGET_CFLAGS =
-LDFLAGS  = -fvisibility=hidden
+LDFLAGS  += -fvisibility=hidden
 VERSION_SCRIPT_LDFLAGS = -Wl,-version-script,$(srcprefix)htslib.map
 LIBS     = $(htslib_default_libs)
 
