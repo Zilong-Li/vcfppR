@@ -1,24 +1,10 @@
-HTSLIB_DIR='htslib-1.19.1'
+HTSLIB_DIR='htslib-1.21'
 PKG_CPPFLAGS = -I${HTSLIB_DIR} -I../inst/include
 PKG_LIBS = ${HTSLIB_DIR}/libhts.a -fPIC -lz -lm -lbz2 -llzma -lcurl
 
-.PHONY: all clean HTSLIB
+.PHONY: all clean 
 
 all : $(SHLIB)
-
-$(SHLIB) : HTSLIB
-
-CC=$(shell "R CMD config CC")
-CXX=$(shell "R CMD config CXX")
-AR=$(shell "R CMD config AR")
-RANLIB=$(shell "R CMD config RANLIB")
-LDFLAGS=$(shell "R CMD config LDFLAGS")
-# CFLAGS=$(shell "R CMD config CFLAGS")
-# CPPFLAGS=$(shell "R CMD config CPPFLAGS")
-
-HTSLIB:
-	(cd ${HTSLIB_DIR} && $(MAKE) -f Makefile.vcfppR libhts.a && cd ..)
-
 
 clean:
 	$(RM) *.o

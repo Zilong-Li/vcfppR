@@ -1,4 +1,4 @@
-HTSLIB_DIR=htslib-1.18
+HTSLIB_DIR='htslib-1.21'
 PKG_CPPFLAGS = -I${HTSLIB_DIR} -I../inst/include -D_FILE_OFFSET_BITS=64
 PKG_LIBS=${HTSLIB_DIR}/libhts.a
 
@@ -11,20 +11,9 @@ else
   PKG_CPPFLAGS += $(shell pkg-config --cflags libcurl)
 endif
 
-.PHONY: all clean HTSLIB
+.PHONY: all clean 
 
 all : $(SHLIB)
-
-$(SHLIB) : HTSLIB
-
-# CC=$(shell "R CMD config CC")
-# CXX=$(shell "R CMD config CXX")
-# CPPFLAGS=$(shell "R CMD config CPPFLAGS")
-# LDFLAGS=$(shell "R CMD config LDFLAGS")
-
-HTSLIB:
-	cd ${HTSLIB_DIR} && $(MAKE) -f Makefile.win libhts.a && cd ..
-
 
 clean:
 	$(RM) *.o

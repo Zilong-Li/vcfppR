@@ -1,0 +1,5 @@
+#!/bin/sh
+
+HTSLIB_DIR="src/htslib-1.21"
+echo "Configuring HTSlib in $HTSLIB_DIR"
+cd $HTSLIB_DIR && ./configure && make
