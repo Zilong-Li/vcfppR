@@ -38,7 +38,7 @@ CPPFLAGS =
 # For testing strict C99 support add -std=c99 -D_XOPEN_SOURCE=600
 #CFLAGS   = -g -Wall -O2 -pedantic -std=c99 -D_XOPEN_SOURCE=600
 CFLAGS   += -g -Wall -O2 -fvisibility=hidden
-EXTRA_CFLAGS_PIC =
+EXTRA_CFLAGS_PIC = -fPIC
 TARGET_CFLAGS =
 LDFLAGS  += -fvisibility=hidden
 VERSION_SCRIPT_LDFLAGS = -Wl,-version-script,$(srcprefix)htslib.map

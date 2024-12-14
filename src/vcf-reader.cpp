@@ -163,7 +163,7 @@ class vcfreader {
     inline std::string info() { return var.allINFO(); }
 
     int infoInt(std::string tag) {
-        int i;
+        int i = NA_INTEGER;
         if (var.getINFO(tag, i)) {
             return i;
         } else {
@@ -171,7 +171,7 @@ class vcfreader {
         }
     }
     double infoFloat(std::string tag) {
-        float f;
+        float f = NA_REAL;
         if (var.getINFO(tag, f)) {
             return (double)f;
         } else {
