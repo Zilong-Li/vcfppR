@@ -1,5 +1,17 @@
 #!/bin/sh
+# Configure script for R package with htslib integration
+
+# Exit on any error
+set -e
 
 HTSLIB_DIR="src/htslib-1.21"
 echo "Configuring HTSlib in $HTSLIB_DIR"
-cd $HTSLIB_DIR && ./configure --enable-static --disable-shared --without-libdeflate && make
+cd $HTSLIB_DIR
+./configure \
+    --disable-shared \
+    --enable-static \
+    --without-libdeflate \
+    CFLAGS="-O2 -fPIC"
+
+make
+

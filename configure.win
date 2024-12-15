@@ -2,4 +2,12 @@
 
 HTSLIB_DIR="src/htslib-1.21"
 echo "Configuring HTSlib in $HTSLIB_DIR"
-cd $HTSLIB_DIR && ./configure --without-libdeflate && make
+cd $HTSLIB_DIR
+./configure \
+    --disable-shared \
+    --enable-static \
+    --without-libdeflate \
+    CFLAGS="-O2 -fPIC"
+
+make
+
