@@ -5,7 +5,7 @@ echo "Configuring HTSlib in $HTSLIB_DIR"
 cd $HTSLIB_DIR
 ## fix symbolic linking error
 cp htscodecs_bundled.mk htscodecs.mk 
-./configure CFLAGS="-O2 -fPIC"
+./configure --without-libdeflate  CFLAGS="-O2 -fPIC"
 
 make libhts.a
 
