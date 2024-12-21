@@ -6952,7 +6952,7 @@ fi
 
 ac_config_files="$ac_config_files config.mk htslib.pc.tmp:htslib.pc.in"
 
-ac_config_links="$ac_config_links htscodecs.mk:$selected_htscodecs_mk"
+# ac_config_links="$ac_config_links htscodecs.mk:$selected_htscodecs_mk"
 
 
 if test "$srcdir" != .; then
