@@ -7,9 +7,7 @@ set -e
 HTSLIB_DIR="src/htslib-1.21"
 echo "Configuring HTSlib in $HTSLIB_DIR"
 cd $HTSLIB_DIR
-./configure \
-    CFLAGS="-O2 -fPIC" \
-    LDFLAGS=$(${R_HOME}/bin/R CMD config LDFLAG)
+./configure CFLAGS="-O2 -fPIC" 
     
 make libhts.a
 

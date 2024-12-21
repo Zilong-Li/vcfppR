@@ -5,9 +5,7 @@ echo "Configuring HTSlib in $HTSLIB_DIR"
 cd $HTSLIB_DIR
 ## fix symbolic linking error
 cp htscodecs_bundled.mk htscodecs.mk 
-./configure \
-    CFLAGS="-O2 -fPIC" \
-    LDFLAGS=$(${R_HOME}/bin/R CMD config LDFLAG)
+./configure CFLAGS="-O2 -fPIC"
 
 make libhts.a
 
