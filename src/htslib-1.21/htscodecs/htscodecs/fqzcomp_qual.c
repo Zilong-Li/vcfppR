@@ -270,45 +270,6 @@ static void dump_map(unsigned int *map, int size, char *name) {
     fprintf(stderr, "}\n");
 }
 
-/* #pragma GCC diagnostic ignored "-Wunused-function" */
-static void dump_params(fqz_gparams *gp) {
-    fprintf(stderr, "Global params = {\n");
-    fprintf(stderr, "\tvers\t%d\n", gp->vers);
-    fprintf(stderr, "\tgflags\t0x%02x\n", gp->gflags);
-    fprintf(stderr, "\tnparam\t%d\n", gp->nparam);
-    fprintf(stderr, "\tmax_sel\t%d\n", gp->max_sel);
-    fprintf(stderr, "\tmax_sym\t%d\n", gp->max_sym);
-    if (gp->gflags & GFLAG_HAVE_STAB)
-        dump_table(gp->stab, 256, "stab");
-    fprintf(stderr, "}\n");
-
-    int i;
-    for (i = 0; i < gp->nparam; i++) {
-        fqz_param *pm = &gp->p[i];
-        fprintf(stderr, "\nParam[%d] = {\n", i);
-        fprintf(stderr, "\tcontext\t0x%04x\n", pm->context);
-        fprintf(stderr, "\tpflags\t0x%02x\n",  pm->pflags);
-        fprintf(stderr, "\tmax_sym\t%d\n",  pm->max_sym);
-        fprintf(stderr, "\tqbits\t%d\n",   pm->qbits);
-        fprintf(stderr, "\tqshift\t%d\n",  pm->qshift);
-        fprintf(stderr, "\tqloc\t%d\n",    pm->qloc);
-        fprintf(stderr, "\tsloc\t%d\n",    pm->sloc);
-        fprintf(stderr, "\tploc\t%d\n",    pm->ploc);
-        fprintf(stderr, "\tdloc\t%d\n",    pm->dloc);
-
-        if (pm->pflags & PFLAG_HAVE_QMAP)
-            dump_map(pm->qmap, 256, "qmap");
-
-        if (pm->pflags & PFLAG_HAVE_QTAB)
-            dump_table(pm->qtab, 256, "qtab");
-        if (pm->pflags & PFLAG_HAVE_PTAB)
-            dump_table(pm->ptab, 1024, "ptab");
-        if (pm->pflags & PFLAG_HAVE_DTAB)
-            dump_table(pm->dtab, 256, "dtab");
-        fprintf(stderr, "}\n");
-    }
-}
-
 typedef struct {
     SIMPLE_MODEL(QMAX,_) *qual;
     SIMPLE_MODEL(256,_)   len[4];
