@@ -13,5 +13,5 @@ cd $HTSLIB_DIR
     --without-libdeflate \
     CFLAGS="-O2 -fPIC"
 
-make
+make libhts.a
 

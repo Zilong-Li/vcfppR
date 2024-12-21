@@ -1,3 +1,9 @@
+# vcfppR 0.7.0
+* fix parsing BCF when subsetting sample ids and the genomic region at the same time
+* fix `vcfcomp` with `stats="nrc"` when the input vectors have different length
+* use the latest version of htslib v1.21
+* reduce the size of installation
+
 # vcfppR 0.6.0
 * upgrade `vcfpp.h` to v0.6.0
 * new API `vcfreader$setRegion`
