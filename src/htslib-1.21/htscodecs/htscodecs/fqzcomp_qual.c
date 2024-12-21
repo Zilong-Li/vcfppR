@@ -226,50 +226,6 @@ typedef struct {
     unsigned int ctx;
 } fqz_state;
 
-static void dump_table(unsigned int *tab, int size, char *name) {
-    int i, last = -99, run = 0;
-    fprintf(stderr, "\t%s\t{", name);
-    for (i = 0; i < size; i++) {
-        if (tab[i] == last) {
-            run++;
-        } else if (run == 1 && tab[i] == last+1) {
-            int first = last;
-            do {
-                last = tab[i];
-                i++;
-            } while (i < size && tab[i] == last+1);
-            i--;
-
-            // Want 0,1,2,3,3,3 as 0..2 3x3, not 0..3 3x2
-            if (tab[i] == tab[i+1])
-                i--;
-            if (tab[i] != first)
-                fprintf(stderr, "..%d", tab[i]);
-            run = 1;
-            last = -99;
-        } else {
-            if (run > 1)
-                fprintf(stderr, " x %d%s%d", run, i?", ":"", tab[i]);
-            else
-                fprintf(stderr, "%s%d", i?", ":"", tab[i]);
-            run = 1;
-            last = tab[i];
-        }
-    }
-    if (run > 1)
-        fprintf(stderr, " x %d", run);
-    fprintf(stderr, "}\n");
-}
-
-static void dump_map(unsigned int *map, int size, char *name) {
-    int i, c = 0;
-    fprintf(stderr, "\t%s\t{", name);
-    for (i = 0; i < size; i++)
-        if (map[i] != INT_MAX)
-            fprintf(stderr, "%s%d=%d", c++?", ":"", i, map[i]);
-    fprintf(stderr, "}\n");
-}
-
 typedef struct {
     SIMPLE_MODEL(QMAX,_) *qual;
     SIMPLE_MODEL(256,_)   len[4];
