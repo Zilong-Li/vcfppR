@@ -8,8 +8,12 @@ HTSLIB_DIR="src/htslib-1.21"
 echo "Configuring HTSlib in $HTSLIB_DIR"
 cd $HTSLIB_DIR
 ## copy file instead of symbolic linking
-cp htscodecs_bundled.mk htscodecs.mk 
-./configure CFLAGS="-O2 -fPIC" 
+cp htscodecs_bundled.mk htscodecs.mk
+if [ "$(uname)" = "Darwin" ]; then
+    ./configure --without-libdeflate  CFLAGS="-O2 -fPIC"
+else
+    ./configure CFLAGS="-O2 -fPIC"
+fi    
     
 make libhts.a
 
