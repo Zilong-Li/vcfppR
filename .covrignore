@@ -1,3 +1,2 @@
 src/vcfpp.h
-src/htslib-1.19.1/
-src/htslib-1.18/
+src/htslib-1.21/
