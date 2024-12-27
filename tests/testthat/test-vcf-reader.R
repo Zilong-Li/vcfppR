@@ -1,5 +1,6 @@
 library(testthat)
 
+bcffile <- system.file("extdata", "test.bcf", package="vcfppR")
 vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
 svfile <- system.file("extdata", "sv.vcf.gz", package="vcfppR")
 
@@ -268,4 +269,14 @@ test_that("can set region back and forth", {
   
 })
 
-
+test_that("bcfreader: subset samples and region for BCF", {
+  br <- vcfreader$new(bcffile, "1:10000-13000", "I1,I10")
+  expect_true(br$variant())
+  expect_identical(br$genotypes(F), c(1L, 1L, 0L, 1L))
+  expect_true(br$variant())
+  expect_identical(br$genotypes(F), c(0L, 0L, 0L, 0L))
+  expect_true(br$variant())
+  expect_identical(br$genotypes(F), c(1L, 0L, 0L, 0L))
+  expect_true(br$variant())
+  expect_identical(br$genotypes(F), c(1L, 1L, 0L, 1L))
+})

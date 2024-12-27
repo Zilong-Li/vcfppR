@@ -1,5 +1,6 @@
 library(testthat)
 
+bcffile <- system.file("extdata", "test.bcf", package="vcfppR")
 vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
 svfile <- system.file("extdata", "sv.vcf.gz", package="vcfppR")
 
@@ -75,4 +76,10 @@ test_that("extract EV (String, number=1) from sv file", {
 
 test_that("query a non-existing region", {
   expect_error(res <- vcftable(vcffile, region = "chr14:0-1000"))
+})
+
+test_that("subset samples and region for BCF", {
+  res <- vcftable(bcffile, region =  "1:10000-13000", samples =  "I1,I30", vartype = "snps", format = "DS")
+  m <- matrix(c(2.000, 2.000,  0.195, 0.000, 1.000, 0.000, 2.000, 0.036), byrow = TRUE, ncol = 2)
+  expect_equal(res[[10]], m, tolerance = 1e6)
 })
