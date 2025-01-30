@@ -1,3 +1,6 @@
+# vcfppR 0.7.2
+* make `htslib` available for including and linking by other packages
+
 # vcfppR 0.7.0
 * fix parsing BCF when subsetting sample ids and the genomic region at the same time
 * fix `vcfcomp` with `stats="nrc"` when the input vectors have different length
