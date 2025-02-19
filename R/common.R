@@ -89,22 +89,10 @@ R2 <- function(a, b) {
 ## 2      FN     FP/FN     TP
 ## f1 = 2 * TP / (2 * TP + FP + FN)
 F1 <- function(a, b) {
-  o <- table(as.vector(a), as.vector(b), useNA = "always")
-  ## make table square
-  if(nrow(o)!=ncol(o)){
-    if(nrow(o) == ncol(o)+1){
-      o <- o[-nrow(o),]
-    } else if (nrow(o)+1==ncol(o)){
-      o <- o[,-ncol(o)]
-    } else{
-      warning("ONLY homozygous (0) found in either truth or test data")
-      return(NA)
-    }
-  }
-  if(all(dim(o)==c(4,4)))
-    o <- o[1:3,1:3]
-  if(all(dim(o)!=c(3,3))) {
-    warning("F1 should be used only for a sample with genotypes of all types, hom ref(0), het(1) and hom alt(2)")
+  o <- table(as.vector(a), as.vector(b))
+  ## make sure table is valid
+  if( !(nrow(o) == ncol(o)) && (nrow(o) == 3) ) {
+    warning("NRC should be used only for a sample with genotypes of all types, hom ref(0), het(1) and hom alt(2)")
     return(NA)
   }
   TP <- o[2,2] + o[3,3]
@@ -122,30 +110,15 @@ F1 <- function(a, b) {
 ## 1      e1     m1    e1
 ## 2      e2     e2  m2
 ## a <- c(1, 2, 0, 1,1)
-## b <- c(1, 1, 0, 0,1)
+## b <- c(1, 2, 0, 0,1)
 ## NRC(a, b)
-## 
 NRC <- function(a, b) {
-  o <- table(as.vector(a), as.vector(b), useNA = "always")
-  ## make table square
-  if(nrow(o)!=ncol(o)){
-    if(min(dim(o)!=3)) {
-      warning("NRC should be used only for a sample with genotypes of all types, hom ref(0), het(1) and hom alt(2)")
-      return(NA)
-    }
-    if(nrow(o) == ncol(o)+1){
-      o <- o[-nrow(o),]
-      o <- o[,c(3,1,2)] # move NA col to leftmost
-    } else if (nrow(o)+1==ncol(o)){
-      o <- o[,-ncol(o)]
-      o <- o[c(3,1,2),] # move NA row to topmost
-    } else{
-      warning("ONLY homozygous (0) found in either truth or test data")
-      return(NA)
-    }
+  o <- table(as.vector(a), as.vector(b))
+  ## make sure table is valid
+  if( !(nrow(o) == ncol(o)) && (nrow(o) == 3) ) {
+    warning("NRC should be used only for a sample with genotypes of all types, hom ref(0), het(1) and hom alt(2)")
+    return(NA)
   }
-  if(all(dim(o)==c(4,4)))
-    o <- o[1:3,1:3]
   mismatches <-  sum(c(o[1,2:3], o[2,1], o[2,3], o[3,1:2]))
   matches <- sum(c(o[2,2], o[3,3]))
   res <- mismatches / (mismatches+matches)
