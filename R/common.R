@@ -91,7 +91,7 @@ R2 <- function(a, b) {
 F1 <- function(a, b) {
   o <- table(as.vector(a), as.vector(b))
   ## make sure table is valid
-  if( !(nrow(o) == ncol(o)) && (nrow(o) == 3) ) {
+  if( !((nrow(o) == ncol(o)) && (nrow(o) == 3)) ) {
     warning("NRC should be used only for a sample with genotypes of all types, hom ref(0), het(1) and hom alt(2)")
     return(NA)
   }
@@ -115,7 +115,7 @@ F1 <- function(a, b) {
 NRC <- function(a, b) {
   o <- table(as.vector(a), as.vector(b))
   ## make sure table is valid
-  if( !(nrow(o) == ncol(o)) && (nrow(o) == 3) ) {
+  if( !((nrow(o) == ncol(o)) && (nrow(o) == 3)) ) {
     warning("NRC should be used only for a sample with genotypes of all types, hom ref(0), het(1) and hom alt(2)")
     return(NA)
   }
