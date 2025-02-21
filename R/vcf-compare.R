@@ -21,7 +21,6 @@
 #' @param by.sample logical. calculate sample-wise concordance, which can be stratified by MAF bin.
 #' 
 #' @param by.variant logical. calculate variant-wise concordance, which can be stratified by MAF bin.
-#'                  If by.sample is TRUE, then do sample-wise calculation only regardless the value of by.variant.
 #'                  If both by.sample and by.variant are FALSE, then do calculations for all samples and variants together in a bin.
 #' 
 #' @param flip logical. flip the ref and alt variants
@@ -126,9 +125,9 @@ vcfcomp <- function(test, truth,
   }
   names(af) <- sites
   if(stats == "all") {
-    ## F2
+    ## R2
     res.r2 <- concordance_by_freq(gt, ds, bins, af, R2, which_snps = sites,
-                                  flip = flip, per_ind = FALSE, per_snp = by.variant)
+                                  flip = flip, per_ind = by.sample, per_snp = by.variant)
     if(stats == "r2")
       return(list(samples = d1$samples, r2=res.r2))
     ## F1 and NRC
