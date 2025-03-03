@@ -12,7 +12,7 @@ Description: The 'vcfpp.h' (<https://github.com/Zilong-Li/vcfpp>) provides an ea
 Encoding: UTF-8
 Depends: R (>= 3.6.0)
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Suggests: 
     knitr,
     rmarkdown,

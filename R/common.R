@@ -104,26 +104,49 @@ F1 <- function(a, b) {
 
 ## follow GLIMPSE2_concordance
 ## None Reference Concordnace = 1 - (e0 + e1 + e2) / (e0 + e1 + e2 + m1 + m2)
+## = (m1 + m2) / (sum(m) - m[ref,ref])
 ## truth\imputed
 ##        0      1      2
 ## 0      ignore e0    e0
 ## 1      e1     m1    e1
 ## 2      e2     e2  m2
 ## a <- c(1, 2, 0, 1,1)
-## b <- c(1, 2, 0, 0,1)
+## b <- c(1, 2, 1, 1,1)
 ## NRC(a, b)
-NRC <- function(a, b) {
-  o <- table(as.vector(a), as.vector(b))
-  ## make sure table is valid
-  if( !((nrow(o) == ncol(o)) && (nrow(o) == 3)) ) {
-    warning("NRC should be used only for a sample with genotypes of all types, hom ref(0), het(1) and hom alt(2)")
-    return(NA)
+## a <- c(1, 2, 0, 1,1)
+## b <- c(0, 2, 1, 1,1)
+## NRC(a, b)
+## a <- c(1, 2, 1, 1,1)
+## b <- c(2, 1, 1, 1,1)
+## NRC(a, b)
+## a <- c(1, 2, 1, 1,1)
+## b <- c(1, 1, 1, 1,1)
+## NRC(a, b)
+NRC <- function(a, b, ref = 0) {
+  # Ensure vectors are treated as factors with all common levels
+  all_levels <- union(unique(a), unique(b))
+  a_fct <- factor(a, levels = all_levels)
+  b_fct <- factor(b, levels = all_levels)
+  tbl <- table(a_fct, b_fct)
+  ref_char <- as.character(ref)
+  # Get reference-reference count
+  if (ref_char %in% rownames(tbl) && ref_char %in% colnames(tbl)) {
+    ref_ref <- tbl[ref_char, ref_char]
+  } else {
+    ref_ref <- 0
   }
-  mismatches <-  sum(c(o[1,2:3], o[2,1], o[2,3], o[3,1:2]))
-  matches <- sum(c(o[2,2], o[3,3]))
-  res <- mismatches / (mismatches+matches)
-  return(1-res)
+
+  total_concordant <- sum(diag(tbl))
+  non_ref_concordant <- total_concordant - ref_ref
+  total_non_ref <- sum(tbl) - ref_ref
+  
+  if (total_non_ref == 0) {
+    return(NA)  # Handle case with no non-reference pairs
+  } else {
+    return(non_ref_concordant / total_non_ref)
+  }
 }
+
 
 calculate_pse_2ways <- function(test,
                                 truth,
