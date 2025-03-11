@@ -1,12 +1,21 @@
 #!/bin/sh
-# Configure script for R package with htslib integration
 
 # Exit on any error
 set -e
 
-HTSLIB_DIR="src/htslib-1.21"
+HTSLIB_DIR="htslib-1.21"
+SRC_MAKEVAR="src/Makevars"
+echo "Create Makevar file"
+echo "PKG_CPPFLAGS=-I${HTSLIB_DIR} -I../inst/include" >$SRC_MAKEVAR
+
+if [ "$(uname)" = "Darwin" ]; then
+    echo "PKG_LIBS=${HTSLIB_DIR}/libhts.a -lz -lm -lbz2 -llzma -lcurl" >>$SRC_MAKEVAR
+else
+    echo "PKG_LIBS=${HTSLIB_DIR}/libhts.a -ldeflate -lz -lm -lbz2 -llzma -lcurl" >>$SRC_MAKEVAR
+fi    
+
 echo "Configuring HTSlib in $HTSLIB_DIR"
-cd $HTSLIB_DIR
+cd src/$HTSLIB_DIR
 ## copy file instead of symbolic linking
 cp htscodecs_bundled.mk htscodecs.mk
 if [ "$(uname)" = "Darwin" ]; then
