@@ -12,7 +12,7 @@ cp htscodecs_bundled.mk htscodecs.mk
 if [ "$(uname)" = "Darwin" ]; then
     ./configure --without-libdeflate  CFLAGS="-O2 -fPIC"
 else
-    ./configure CFLAGS="-O2 -fPIC"
+    ./configure --with-libdeflate CFLAGS="-O2 -fPIC"
 fi    
     
 make libhts.a
