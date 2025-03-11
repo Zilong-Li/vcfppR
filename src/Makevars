@@ -1,6 +1,6 @@
 HTSLIB_DIR='htslib-1.21'
 PKG_CPPFLAGS = -I${HTSLIB_DIR} -I../inst/include
-PKG_LIBS = ${HTSLIB_DIR}/libhts.a -fPIC -lz -lm -lbz2 -llzma -lcurl
+PKG_LIBS = ${HTSLIB_DIR}/libhts.a -ldeflate -lz -lm -lbz2 -llzma -lcurl
 
 .PHONY: all clean 
 
