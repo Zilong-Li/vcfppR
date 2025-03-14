@@ -4,25 +4,27 @@
 set -e
 
 HTSLIB_DIR="htslib-1.21"
-SRC_MAKEVAR="src/Makevars"
-echo "Create Makevar file"
-echo "PKG_CPPFLAGS=-I${HTSLIB_DIR} -I../inst/include" >$SRC_MAKEVAR
-
-if [ "$(uname)" = "Darwin" ]; then
-    echo "PKG_LIBS=${HTSLIB_DIR}/libhts.a -lz -lm -lbz2 -llzma -lcurl" >>$SRC_MAKEVAR
-else
-    echo "PKG_LIBS=${HTSLIB_DIR}/libhts.a -ldeflate -lz -lm -lbz2 -llzma -lcurl" >>$SRC_MAKEVAR
-fi    
 
 echo "Configuring HTSlib in $HTSLIB_DIR"
 cd src/$HTSLIB_DIR
 ## copy file instead of symbolic linking
 cp htscodecs_bundled.mk htscodecs.mk
-if [ "$(uname)" = "Darwin" ]; then
-    ./configure --without-libdeflate  CFLAGS="-O2 -fPIC"
-else
-    ./configure --with-libdeflate CFLAGS="-O2 -fPIC"
-fi    
+./configure CFLAGS="-O2 -fPIC"
+
+hasdeflate="no"
+if grep -wq "#define HAVE_LIBDEFLATE 1" config.h;then
+    hasdeflate="yes"
+fi
     
 make libhts.a
 
+echo "Create Makevar file"
+cd ../../
+SRC_MAKEVAR="src/Makevars"
+echo "PKG_CPPFLAGS=-I${HTSLIB_DIR} -I../inst/include" >$SRC_MAKEVAR
+
+if [ $hasdeflate = "no" ]; then
+    echo "PKG_LIBS=${HTSLIB_DIR}/libhts.a -lz -lm -lbz2 -llzma -lcurl" >>$SRC_MAKEVAR
+else
+    echo "PKG_LIBS=${HTSLIB_DIR}/libhts.a -ldeflate -lz -lm -lbz2 -llzma -lcurl" >>$SRC_MAKEVAR
+fi    

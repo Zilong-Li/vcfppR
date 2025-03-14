@@ -1,3 +1,12 @@
+# vcfppR 0.7.5
+* fix issue #14 to handle libdeflate dependency on linux
+
+# vcfppR 0.7.4
+* fix issue #13 to speedup setRegion
+
+# vcfppR 0.7.3
+* enable libdeflate on linux
+
 # vcfppR 0.7.2
 * make `htslib` available for including and linking by other packages
 
