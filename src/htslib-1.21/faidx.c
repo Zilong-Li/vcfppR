@@ -812,7 +812,7 @@ static int fai_get_val(const faidx_t *fai, const char *str,
     iter = kh_get(s, h, faidx_iseq(fai, id));
     if (iter >= kh_end(h)) {
         // should have already been caught above
-        abort();
+        return -1;
     }
     *val = kh_value(h, iter);
 

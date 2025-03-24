@@ -5234,7 +5234,7 @@ int bcf_update_info(const bcf_hdr_t *hdr, bcf1_t *line, const char *key, const v
     {
         if (n != 1) {
             hts_log_error("Only storing a single BCF_HT_LONG value is supported at %s:%"PRIhts_pos, bcf_seqname_safe(hdr,line), line->pos+1);
-            abort();
+            return;
         }
         bcf_enc_long1(&str, *(int64_t *) values);
     }
@@ -5242,7 +5242,7 @@ int bcf_update_info(const bcf_hdr_t *hdr, bcf1_t *line, const char *key, const v
     else
     {
         hts_log_error("The type %d not implemented yet at %s:%"PRIhts_pos, type, bcf_seqname_safe(hdr,line), line->pos+1);
-        abort();
+        return -1;
     }
 
     // Is the INFO tag already present
@@ -5381,7 +5381,7 @@ int bcf_update_format(const bcf_hdr_t *hdr, bcf1_t *line, const char *key, const
     else
     {
         hts_log_error("The type %d not implemented yet at %s:%"PRIhts_pos, type, bcf_seqname_safe(hdr,line), line->pos+1);
-        abort();
+        return -1;
     }
 
     if ( !fmt )

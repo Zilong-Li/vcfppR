@@ -1542,7 +1542,7 @@ htsFile *hts_hopen(hFILE *hfile, const char *fn, const char *mode)
             case fastq_format: fmt->compression = no_compression; break;
             case fasta_format: fmt->compression = no_compression; break;
             case text_format: fmt->compression = no_compression; break;
-            default: abort();
+            default: break;
             }
         }
 
@@ -2017,7 +2017,7 @@ int hts_getline(htsFile *fp, int delimiter, kstring_t *str)
     int ret;
     if (! (delimiter == KS_SEP_LINE || delimiter == '\n')) {
         hts_log_error("Unexpected delimiter %d", delimiter);
-        abort();
+        return -1;
     }
 
     switch (fp->format.compression) {
@@ -2035,7 +2035,7 @@ int hts_getline(htsFile *fp, int delimiter, kstring_t *str)
         break;
 
     default:
-        abort();
+        return -1;
     }
 
     ++fp->lineno;
@@ -2781,7 +2781,7 @@ int hts_idx_save(const hts_idx_t *idx, const char *fn, int fmt)
     case HTS_FMT_BAI: strcat(fnidx, ".bai"); break;
     case HTS_FMT_CSI: strcat(fnidx, ".csi"); break;
     case HTS_FMT_TBI: strcat(fnidx, ".tbi"); break;
-    default: abort();
+    default: return -1;
     }
 
     ret = hts_idx_save_as(idx, fn, fnidx, fmt);
@@ -2805,7 +2805,7 @@ static int hts_idx_write_out(const hts_idx_t *idx, BGZF *fp, int fmt)
         check(bgzf_write(fp, "TBI\1", 4));
     } else if (fmt == HTS_FMT_BAI) {
         check(bgzf_write(fp, "BAI\1", 4));
-    } else abort();
+    } else return -1;
 
     check(idx_save_core(idx, fp, fmt));
 
@@ -5077,7 +5077,7 @@ int hts_resize_array_(size_t item_size, size_t num, size_t size_sz,
         switch (size_sz) {
         case 4: old_size = *((uint32_t *) size_in_out); break;
         case 8: old_size = *((uint64_t *) size_in_out); break;
-        default: abort();
+        default: return -1;
         }
         if (new_size > old_size) {
             memset((char *) new_ptr + old_size * item_size, 0,
@@ -5088,7 +5088,7 @@ int hts_resize_array_(size_t item_size, size_t num, size_t size_sz,
     switch (size_sz) {
     case 4: *((uint32_t *) size_in_out) = new_size; break;
     case 8: *((uint64_t *) size_in_out) = new_size; break;
-    default: abort();
+    default: return -1;
     }
 
     *ptr_in_out = new_ptr;

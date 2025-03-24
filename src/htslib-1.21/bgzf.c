@@ -2150,7 +2150,7 @@ int bgzf_check_EOF(BGZF *fp) {
             case CLOSE:
                 continue;
             default:
-                abort();  // Should not get to any other state
+              ;
             }
         } while (fp->mt->command != HAS_EOF_DONE);
         fp->mt->command = NONE;
@@ -2200,7 +2200,7 @@ static inline int64_t bgzf_seek_common(BGZF* fp,
                 pthread_cond_signal(&fp->mt->command_c);
                 break;
             default:
-                abort();  // Should not get to any other state
+              return -1;
             }
         } while (fp->mt->command != SEEK_DONE);
         fp->mt->command = NONE;

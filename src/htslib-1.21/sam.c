@@ -1727,7 +1727,7 @@ static hts_itr_t *cram_itr_query(const hts_idx_t *idx, int tid, hts_pos_t beg, h
         break;
     default:
         hts_log_error("Query with tid=%d not implemented for CRAM files", tid);
-        abort();
+        return NULL;
         break;
     }
 

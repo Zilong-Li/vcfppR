@@ -271,7 +271,7 @@ static void share_unlock(CURL *handle, curl_lock_data data, void *userptr) {
 
 static void free_auth(auth_token *tok) {
     if (!tok) return;
-    if (pthread_mutex_destroy(&tok->lock)) abort();
+    if (pthread_mutex_destroy(&tok->lock)) return;
     free(tok->path);
     free(tok->token);
     free(tok);

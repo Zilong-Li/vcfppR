@@ -543,7 +543,7 @@ static int _reader_seek(bcf_sr_t *reader, const char *seq, hts_pos_t start, hts_
     }
     if (!reader->itr) {
         hts_log_error("Could not seek: %s:%"PRIhts_pos"-%"PRIhts_pos, seq, start + 1, end + 1);
-        abort();
+        return -1;
     }
     return 0;
 }

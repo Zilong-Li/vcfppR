@@ -619,7 +619,7 @@ cram_codec *cram_external_encode_init(cram_stats *st,
         else if (option == E_BYTE_ARRAY || option == E_BYTE)
             c->encode = cram_external_encode_char;
         else
-            abort();
+            return NULL;
     }
     c->store = cram_external_encode_store;
     c->flush = NULL;
@@ -3926,7 +3926,7 @@ cram_codec *cram_encoder_init(enum cram_encoding codec,
         return r;
     } else {
         hts_log_error("Unimplemented codec of type %s", cram_encoding2str(codec));
-        abort();
+        return NULL;
     }
 }
 
