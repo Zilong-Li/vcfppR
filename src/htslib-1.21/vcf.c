@@ -2752,7 +2752,7 @@ int bcf_fmt_array(kstring_t *s, int n, int type, void *data)
             case BCF_BT_INT16: BRANCH(int16_t, le_to_i16, v==bcf_int16_missing, v==bcf_int16_vector_end, kputw(v, s)); break;
             case BCF_BT_INT32: BRANCH(int32_t, le_to_i32, v==bcf_int32_missing, v==bcf_int32_vector_end, kputw(v, s)); break;
             case BCF_BT_FLOAT: BRANCH(uint32_t, le_to_u32, v==bcf_float_missing, v==bcf_float_vector_end, kputd(le_to_float(p), s)); break;
-            default: hts_log_error("Unexpected type %d", type); exit(1); break;
+            default: hts_log_error("Unexpected type %d", type); return -1; break;
         }
         #undef BRANCH
     }
@@ -4647,7 +4647,7 @@ int bcf_translate(const bcf_hdr_t *dst_hdr, bcf_hdr_t *src_hdr, bcf1_t *line)
     {
         char errordescription[1024] = "";
         hts_log_error("Unchecked error (%d %s) at %s:%"PRIhts_pos", exiting", line->errcode, bcf_strerror(line->errcode, errordescription, sizeof(errordescription)),  bcf_seqname_safe(src_hdr,line), line->pos+1);
-        exit(1);
+        return -1;
     }
     if ( src_hdr->ntransl==-1 ) return 0;    // no need to translate, all tags have the same id
     if ( !src_hdr->ntransl )  // called for the first time, see what needs translating
@@ -5098,7 +5098,7 @@ int bcf_get_variant_types(bcf1_t *rec)
     if ( rec->d.var_type==-1 ) {
         if (bcf_set_variant_types(rec) != 0) {
             hts_log_error("Couldn't get variant types: %s", strerror(errno));
-            exit(1); // Due to legacy API having no way to report failures
+            return -1; // Due to legacy API having no way to report failures
         }
     }
     return rec->d.var_type & ORIG_VAR_TYPES;
@@ -5109,12 +5109,12 @@ int bcf_get_variant_type(bcf1_t *rec, int ith_allele)
     if ( rec->d.var_type==-1 ) {
         if (bcf_set_variant_types(rec) != 0) {
             hts_log_error("Couldn't get variant types: %s", strerror(errno));
-            exit(1); // Due to legacy API having no way to report failures
+            return -1; // Due to legacy API having no way to report failures
         }
     }
     if (ith_allele < 0 || ith_allele >= rec->n_allele) {
         hts_log_error("Requested allele outside valid range");
-        exit(1);
+            return -1; // Due to legacy API having no way to report failures
     }
     return rec->d.var[ith_allele].type & ORIG_VAR_TYPES;
 }
@@ -5873,7 +5873,7 @@ int bcf_get_format_values(const bcf_hdr_t *hdr, bcf1_t *line, const char *tag, v
         case BCF_BT_INT16: BRANCH(int16_t, le_to_i16, p==bcf_int16_missing, p==bcf_int16_vector_end, *tmp=bcf_int32_missing, *tmp=bcf_int32_vector_end, *tmp=p, int32_t); break;
         case BCF_BT_INT32: BRANCH(int32_t, le_to_i32, p==bcf_int32_missing, p==bcf_int32_vector_end, *tmp=bcf_int32_missing, *tmp=bcf_int32_vector_end, *tmp=p, int32_t); break;
         case BCF_BT_FLOAT: BRANCH(uint32_t, le_to_u32, p==bcf_float_missing, p==bcf_float_vector_end, bcf_float_set_missing(*tmp), bcf_float_set_vector_end(*tmp), bcf_float_set(tmp, p), float); break;
-        default: hts_log_error("Unexpected type %d at %s:%"PRIhts_pos, fmt->type, bcf_seqname_safe(hdr,line), line->pos+1); exit(1);
+        default: hts_log_error("Unexpected type %d at %s:%"PRIhts_pos, fmt->type, bcf_seqname_safe(hdr,line), line->pos+1); return -1;
     }
     #undef BRANCH
     return nsmpl*fmt->n;

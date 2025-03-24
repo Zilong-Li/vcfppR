@@ -77,13 +77,13 @@ int bcf_calc_ac(const bcf_hdr_t *header, bcf1_t *line, int *ac, int which)
                 case BCF_BT_INT8:  BRANCH_INT(int8_t,  le_to_i8); break;
                 case BCF_BT_INT16: BRANCH_INT(int16_t, le_to_i16); break;
                 case BCF_BT_INT32: BRANCH_INT(int32_t, le_to_i32); break;
-                default: hts_log_error("Unexpected type %d at %s:%"PRIhts_pos, ac_type, header->id[BCF_DT_CTG][line->rid].key, line->pos+1); exit(1); break;
+                default: hts_log_error("Unexpected type %d at %s:%"PRIhts_pos, ac_type, header->id[BCF_DT_CTG][line->rid].key, line->pos+1); return -1; break;
             }
             #undef BRANCH_INT
             if ( an<nac )
             {
                 hts_log_error("Incorrect AN/AC counts at %s:%"PRIhts_pos, header->id[BCF_DT_CTG][line->rid].key, line->pos+1);
-                exit(1);
+                return -1;
             }
             ac[0] = an - nac;
             return 1;
@@ -113,7 +113,7 @@ int bcf_calc_ac(const bcf_hdr_t *header, bcf1_t *line, int *ac, int which)
                     if ( val>>1 > line->n_allele ) \
                     { \
                         hts_log_error("Incorrect allele (\"%d\") in %s at %s:%"PRIhts_pos, (val>>1)-1, header->samples[i], header->id[BCF_DT_CTG][line->rid].key, line->pos+1); \
-                        exit(1); \
+                        return -1; \
                     } \
                     ac[(val>>1)-1]++; \
                 } \
@@ -123,7 +123,7 @@ int bcf_calc_ac(const bcf_hdr_t *header, bcf1_t *line, int *ac, int which)
             case BCF_BT_INT8:  BRANCH_INT(int8_t,  le_to_i8,  bcf_int8_vector_end); break;
             case BCF_BT_INT16: BRANCH_INT(int16_t, le_to_i16, bcf_int16_vector_end); break;
             case BCF_BT_INT32: BRANCH_INT(int32_t, le_to_i32, bcf_int32_vector_end); break;
-            default: hts_log_error("Unexpected type %d at %s:%"PRIhts_pos, fmt_gt->type, header->id[BCF_DT_CTG][line->rid].key, line->pos+1); exit(1); break;
+            default: hts_log_error("Unexpected type %d at %s:%"PRIhts_pos, fmt_gt->type, header->id[BCF_DT_CTG][line->rid].key, line->pos+1); return -1; break;
         }
         #undef BRANCH_INT
         return 1;
@@ -167,7 +167,7 @@ int bcf_gt_type(bcf_fmt_t *fmt_ptr, int isample, int *_ial, int *_jal)
         case BCF_BT_INT8:  BRANCH_INT(int8_t,  le_to_i8,  bcf_int8_vector_end); break;
         case BCF_BT_INT16: BRANCH_INT(int16_t, le_to_i16, bcf_int16_vector_end); break;
         case BCF_BT_INT32: BRANCH_INT(int32_t, le_to_i32, bcf_int32_vector_end); break;
-        default: hts_log_error("Unexpected type %d", fmt_ptr->type); exit(1); break;
+        default: hts_log_error("Unexpected type %d", fmt_ptr->type); return -1; break;
     }
     #undef BRANCH_INT
 

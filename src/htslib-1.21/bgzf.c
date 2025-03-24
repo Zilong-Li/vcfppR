@@ -917,7 +917,7 @@ static int load_block_from_cache(BGZF *fp, int64_t block_address)
     {
         // todo: move the error up
         hts_log_error("Could not hseek to %" PRId64, p->end_offset);
-        exit(1);
+        return -1;
     }
     return p->size;
 }

@@ -483,7 +483,7 @@ static int bcf_sr_sort_set(bcf_srs_t *readers, sr_sort_t *srt, const char *chr, 
         if ( kbs_resize(&srt->var[ivar].mask, srt->ngrp) < 0 )
         {
             fprintf(stderr, "[%s:%d %s] kbs_resize failed\n", __FILE__,__LINE__,__func__);
-            exit(1);
+            return -1;
         }
         kbs_clear(srt->var[ivar].mask);
     }
@@ -511,7 +511,7 @@ static int bcf_sr_sort_set(bcf_srs_t *readers, sr_sort_t *srt, const char *chr, 
         if ( kbs_resize(&vset->mask, srt->ngrp) < 0 )
         {
             fprintf(stderr, "[%s:%d %s] kbs_resize failed\n", __FILE__,__LINE__,__func__);
-            exit(1);
+            return -1;
         }
         kbs_clear(vset->mask);
         kbs_bitwise_or(vset->mask, var->mask);

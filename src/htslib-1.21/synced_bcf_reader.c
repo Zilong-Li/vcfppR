@@ -521,7 +521,7 @@ static int _reader_seek(bcf_sr_t *reader, const char *seq, hts_pos_t start, hts_
     if ( end>=MAX_CSI_COOR )
     {
         hts_log_error("The coordinate is out of csi index limit: %"PRIhts_pos, end+1);
-        exit(1);
+        return -1;
     }
     if ( reader->itr )
     {
@@ -652,7 +652,7 @@ static int _reader_fill_buffer(bcf_srs_t *files, bcf_sr_t *reader)
             else
             {
                 hts_log_error("Fixme: not ready for this");
-                exit(1);
+                return -1;
             }
         }
         else if ( reader->tbx_idx )
@@ -688,7 +688,7 @@ static int _reader_fill_buffer(bcf_srs_t *files, bcf_sr_t *reader)
             else
             {
                 hts_log_error("This should never happen, just to keep clang compiler happy: %d",BCF_SR_AUX(files)->targets_overlap);
-                exit(1);
+                return -1;
             }
             if ( beg <= files->regions->prev_end || end < files->regions->start || beg > files->regions->end ) continue;
         }
@@ -715,7 +715,7 @@ static int _reader_fill_buffer(bcf_srs_t *files, bcf_sr_t *reader)
     if ( files->require_index==ALLOW_NO_IDX_ && reader->buffer[reader->nbuffer]->rid < reader->buffer[1]->rid )
     {
          hts_log_error("Sequences out of order, cannot stream multiple unindexed files: %s", reader->fname);
-         exit(1);
+         return -1;
     }
     return 0; // FIXME: Check for more errs in this function
 }
@@ -800,7 +800,7 @@ static int next_line(bcf_srs_t *files)
                 else
                 {
                     hts_log_error("This should never happen, just to keep clang compiler happy: %d",BCF_SR_AUX(files)->targets_overlap);
-                    exit(1);
+                    return -1;
                 }
                 int overlap = bcf_sr_regions_overlap(files->targets, chr, beg, end)==0 ? 1 : 0;
                 if ( (!files->targets_exclude && !overlap) || (files->targets_exclude && overlap) )
@@ -1414,7 +1414,7 @@ int bcf_sr_regions_next(bcf_sr_regions_t *reg)
     {
         hts_log_error("Broken tabix index? The sequence \"%s\" not in dictionary [%s]",
             chr, reg->line.s);
-        exit(1);
+        return -1;
     }
     *chr_end = '\t';
 
@@ -1429,7 +1429,7 @@ static int _regions_match_alleles(bcf_sr_regions_t *reg, int als_idx, bcf1_t *re
     {
         // payload is not supported for in-memory regions, switch to regidx instead in future
         hts_log_error("Compressed and indexed targets file is required");
-        exit(1);
+        return -1;
     }
 
     int i = 0, max_len = 0;

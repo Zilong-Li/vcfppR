@@ -5018,7 +5018,7 @@ size_t hts_realloc_or_die(size_t n, size_t m, size_t m_sz, size_t size,
 
  die:
     hts_log_error("%s", strerror(errno));
-    exit(1);
+    return -1;
 }
 
 /*
