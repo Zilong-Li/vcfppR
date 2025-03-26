@@ -160,7 +160,7 @@ unsigned char *rans_compress_O0_32x16(unsigned char *in,
                     RansEncPutSymbol_branched(&ransN[z-3], &ptr, s3);
                 }
             }
-            if (z < -1) abort();
+            if (z < -1) return NULL;
         }
     } else {
         // Branchless version optimises poorly with gcc unless we have
@@ -237,7 +237,7 @@ unsigned char *rans_compress_O0_32x16(unsigned char *in,
                     rp[3-k] += sy[k]->bias + q*sy[k]->cmpl_freq;
                 }
             }
-            if (z < -1) abort();
+            if (z < -1) return NULL;
         }
         ptr = (uint8_t *)ptr16;
     }

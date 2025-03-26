@@ -1520,7 +1520,7 @@ int main(int argc, char **argv) {
         fprintf(stderr, "ordered1        # Main thread with non-block API\n");
         fprintf(stderr, "ordered2        # Dispatch thread, blocking API\n");
         fprintf(stderr, "pipe            # Multi-stage pipeline, several queues\n");
-        exit(1);
+        return 1;
     }
 
     n = atoi(argv[2]);
@@ -1530,6 +1530,6 @@ int main(int argc, char **argv) {
     if (strcmp(argv[1], "pipe") == 0)      return test_pipe(n);
 
     fprintf(stderr, "Unknown sub-command\n");
-    exit(1);
+    return 1;
 }
 #endif

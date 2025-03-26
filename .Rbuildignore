@@ -3,7 +3,9 @@
 ^\.clangd$
 ^\.clang-format$
 ^.*\.tbi$
-^src/htslib-1.18/htscodecs/tests
+^src/htslib-1.21/htscodecs/tests
+^src/htslib-1.21/.*\.o$
+^src/.*\.o$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
 \.github

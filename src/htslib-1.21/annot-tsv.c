@@ -124,7 +124,7 @@ error(const char *format, ...)
     vfprintf(stderr, format, ap);
     va_end(ap);
     fflush(stderr);
-    exit(EXIT_FAILURE);
+    /* exit(EXIT_FAILURE); */
 }
 
 static nbp_t *nbp_init(void)
@@ -986,7 +986,7 @@ int main(int argc, char **argv)
             case 's': args->src.fname = optarg; break;
             case 'f': args->transfer_str = optarg; break;
             case 'x': args->mode = PRINT_NONMATCHING; break;
-            case  4 : printf("\nVersion: %s\n%s\n",hts_version(),usage_text()); exit(EXIT_SUCCESS); break;
+            case  4 : printf("\nVersion: %s\n%s\n",hts_version(),usage_text()); break;
             case '?': // fall through
             default: error("\nVersion: %s\n%s\n",hts_version(),usage_text()); break;
         }

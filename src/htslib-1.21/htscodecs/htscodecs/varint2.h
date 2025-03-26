@@ -181,26 +181,26 @@ static inline int var_put_u32(uint8_t *cp, const uint8_t *endp, uint32_t x) {
     uint8_t *op = cp;
 
     if (x < 177) {
-        if (endp && endp - cp < 1) abort();//return 0;
+        if (endp && endp - cp < 1) return 0;
         // 0 to 176 in single byte as-is
         *cp++ = x;
     } else if (x < 16561) {
-        if (endp && endp - cp < 2) abort();//return 0;
+        if (endp && endp - cp < 2) return 0;
         *cp++ = ((x-177)>>8)+177;
         *cp++ = x-177;
     } else if (x < 540849) {
-        if (endp && endp - cp < 3) abort();//return 0;
+        if (endp && endp - cp < 3) return 0;
         *cp++ = ((x-16561)>>16)+241;
         *cp++ = (x-16561)>>8;
         *cp++ = x-16561;
     } else if (x < (1<<24)) {
-        if (endp && endp - cp < 4) abort();//return 0;
+        if (endp && endp - cp < 4) return 0;
         *cp++ = 249;
         *cp++ = x>>16;
         *cp++ = x>>8;
         *cp++ = x;
     } else {
-        if (endp && endp - cp < 5) abort();//return 0;
+        if (endp && endp - cp < 5) return 0;
         *cp++ = 250;
         *cp++ = x>>24;
         *cp++ = x>>16;

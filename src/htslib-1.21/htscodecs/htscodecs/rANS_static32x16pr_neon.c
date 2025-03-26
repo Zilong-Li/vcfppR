@@ -295,7 +295,7 @@ unsigned char *rans_compress_O0_32x16_neon(unsigned char *in,
             vst1q_u32(&R[z-3], Rv1);
             vst1q_u32(&R[z-7], Rv2);
         }
-        if (z < -1) abort();
+        if (z < -1) return NULL;
     }
     for (z = NX-1; z >= 0; z--)
       RansEncFlush(&R[z], &ptr);

@@ -66,7 +66,7 @@ error(const char *format, ...)
     vfprintf(stderr, format, ap);
     va_end(ap);
     fflush(stderr);
-    exit(EXIT_FAILURE);
+    /* exit(EXIT_FAILURE); */
 }
 
 static void HTS_FORMAT(HTS_PRINTF_FMT, 1, 2) HTS_NORETURN
@@ -86,7 +86,7 @@ error_errno(const char *format, ...)
         fprintf(stderr, "\n");
     }
     fflush(stderr);
-    exit(EXIT_FAILURE);
+    /* exit(EXIT_FAILURE); */
 }
 
 

@@ -30,7 +30,7 @@ check:
 
 check2: build
 	cd ..;\
-	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz
+	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz  --as-cran
 
 clean:
 	cd ..;\
