@@ -71,8 +71,8 @@ gcs_rewrite(const char *gsurl, const char *mode, int mode_has_colon,
 
     kputs(path, &url);
 
-    if (hts_verbose >= 8)
-        fprintf(stderr, "[M::gcs_open] rewrote URL as %s\n", url.s);
+    /* if (hts_verbose >= 8) */
+    /*     fprintf(stderr, "[M::gcs_open] rewrote URL as %s\n", url.s); */
 
     // TODO Find the access token in a more standard way
     access_token = getenv("GCS_OAUTH_TOKEN");
@@ -148,8 +148,8 @@ int PLUGIN_GLOBAL(hfile_plugin_init,_gcs)(struct hFILE_plugin *self)
 #ifdef ENABLE_PLUGINS
     // Embed version string for examination via strings(1) or what(1)
     static const char id[] = "@(#)hfile_gcs plugin (htslib)\t" HTS_VERSION_TEXT;
-    if (hts_verbose >= 9)
-        fprintf(stderr, "[M::hfile_gcs.init] version %s\n", strchr(id, '\t')+1);
+    /* if (hts_verbose >= 9) */
+    /*     fprintf(stderr, "[M::hfile_gcs.init] version %s\n", strchr(id, '\t')+1); */
 #endif
 
     self->name = "Google Cloud Storage";

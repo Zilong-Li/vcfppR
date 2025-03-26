@@ -82,8 +82,6 @@ void *mfsteal(mFILE *mf, size_t *size_out);
 char *mfgets(char *s, int size, mFILE *mf);
 int mfflush(mFILE *mf);
 mFILE *mstdin(void);
-mFILE *mstdout(void);
-mFILE *mstderr(void);
 void mfascii(mFILE *mf);
 
 #ifdef __cplusplus

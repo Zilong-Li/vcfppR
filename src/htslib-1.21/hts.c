@@ -158,7 +158,8 @@ const char *hts_test_feature(unsigned int id) {
         return HTS_CPPFLAGS;
 
     default:
-        fprintf(stderr, "Unknown feature code: %u\n", id);
+      ;
+        /* fprintf(stderr, "Unknown feature code: %u\n", id); */
     }
 
     return NULL;
@@ -2257,46 +2258,6 @@ static char * idx_format_name(int fmt) {
     }
 }
 
-#ifdef DEBUG_INDEX
-static void idx_dump(const hts_idx_t *idx) {
-    int i;
-    int64_t j;
-
-    if (!idx) fprintf(stderr, "Null index\n");
-
-    fprintf(stderr, "format='%s', min_shift=%d, n_lvls=%d, n_bins=%d, l_meta=%u ",
-            idx_format_name(idx->fmt), idx->min_shift, idx->n_lvls, idx->n_bins, idx->l_meta);
-    fprintf(stderr, "n=%d, m=%d, n_no_coor=%"PRIu64"\n", idx->n, idx->m, idx->n_no_coor);
-    for (i = 0; i < idx->n; i++) {
-        bidx_t *bidx = idx->bidx[i];
-        lidx_t *lidx = &idx->lidx[i];
-        if (bidx) {
-            fprintf(stderr, "======== BIN Index - tid=%d, n_buckets=%d, size=%d\n", i, bidx->n_buckets, bidx->size);
-            int b;
-            for (b = 0; b < META_BIN(idx); b++) {
-                khint_t k;
-                if ((k = kh_get(bin, bidx, b)) != kh_end(bidx)) {
-                    bins_t *entries = &kh_value(bidx, k);
-                    int l = hts_bin_level(b);
-                    int64_t bin_width = 1LL << ((idx->n_lvls - l) * 3 + idx->min_shift);
-                    fprintf(stderr, "\tbin=%d, level=%d, parent=%d, n_chunks=%d, loff=%"PRIu64", interval=[%"PRId64" - %"PRId64"]\n",
-                        b, l, hts_bin_parent(b), entries->n, entries->loff, (b-hts_bin_first(l))*bin_width+1, (b+1-hts_bin_first(l))*bin_width);
-                    for (j = 0; j < entries->n; j++)
-                        fprintf(stderr, "\t\tchunk=%"PRId64", u=%"PRIu64", v=%"PRIu64"\n", j, entries->list[j].u, entries->list[j].v);
-                }
-            }
-        }
-        if (lidx) {
-            fprintf(stderr, "======== LINEAR Index - tid=%d, n_values=%"PRId64"\n", i, lidx->n);
-            for (j = 0; j < lidx->n; j++) {
-                fprintf(stderr, "\t\tentry=%"PRId64", offset=%"PRIu64", interval=[%"PRId64" - %"PRId64"]\n",
-                    j, lidx->offset[j], j*(1<<idx->min_shift)+1, (j+1)*(1<<idx->min_shift));
-            }
-        }
-    }
-}
-#endif
-
 static inline int insert_to_b(bidx_t *b, int bin, uint64_t beg, uint64_t end)
 {
     khint_t k;
@@ -2761,9 +2722,6 @@ static int idx_save_core(const hts_idx_t *idx, BGZF *fp, int fmt)
         check(idx_write_uint64(fp, idx->n_no_coor));
     }
 
-#ifdef DEBUG_INDEX
-    idx_dump(idx);
-#endif
 
     return 0;
     #undef check
@@ -2927,9 +2885,6 @@ static int idx_read_core(hts_idx_t *idx, BGZF *fp, int fmt)
     }
     if (bgzf_read(fp, &idx->n_no_coor, 8) != 8) idx->n_no_coor = 0;
     if (is_be) ed_swap_8p(&idx->n_no_coor);
-#ifdef DEBUG_INDEX
-    idx_dump(idx);
-#endif
 
     return 0;
 }
@@ -5140,13 +5095,13 @@ void hts_log(enum htsLogLevel severity, const char *context, const char *format,
     if (severity <= hts_verbose) {
         va_list argptr;
 
-        fprintf(stderr, "[%c::%s] ", get_severity_tag(severity), context);
+        /* fprintf(stderr, "[%c::%s] ", get_severity_tag(severity), context); */
 
         va_start(argptr, format);
-        vfprintf(stderr, format, argptr);
+        /* vfprintf(stderr, format, argptr); */
         va_end(argptr);
 
-        fprintf(stderr, "\n");
+        /* fprintf(stderr, "\n"); */
     }
     errno = save_errno;
 }

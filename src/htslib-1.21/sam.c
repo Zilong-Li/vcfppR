@@ -3637,7 +3637,6 @@ static void *sam_dispatcher_read(void *vp) {
         }
 
         l->serial = fd->serial++;
-        //fprintf(stderr, "Dispatching %p, %d bytes, serial %d\n", l, l->data_size, l->serial);
         if (hts_tpool_dispatch3(fd->p, fd->q, sam_parse_worker, l,
                                 cleanup_sp_lines, cleanup_sp_bams, 0) < 0)
             goto err;
@@ -5471,7 +5470,6 @@ static inline int resolve_cigar2(bam_pileup1_t *p, hts_pos_t pos, cstate_t *s)
     uint32_t *cigar = bam_get_cigar(b);
     int k;
     // determine the current CIGAR operation
-    //fprintf(stderr, "%s\tpos=%ld\tend=%ld\t(%d,%ld,%d)\n", bam_get_qname(b), pos, s->end, s->k, s->x, s->y);
     if (s->k == -1) { // never processed
         p->qpos = 0;
         if (c->n_cigar == 1) { // just one operation, save a loop
@@ -5955,7 +5953,6 @@ static int tweak_overlap_quality(bam1_t *a, bam1_t *b)
             }
         }
 
-        // fprintf(stderr, "a_cig=%ld,%ld b_cig=%ld,%ld iref=%ld "
         //         "a_iref=%ld b_iref=%ld a_iseq=%ld b_iseq=%ld\n",
         //         a_cigar-bam_get_cigar(a), a_icig,
         //         b_cigar-bam_get_cigar(b), b_icig,

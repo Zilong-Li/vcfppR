@@ -168,38 +168,6 @@ static void init_mstdin(void) {
     done_stdin = 1;
 }
 
-/*
- * Creates and returns m_channel[1]. This is the fake for stdout. It starts as
- * an empty buffer which is physically written out only when mfflush or
- * mfclose are called.
- */
-mFILE *mstdout(void) {
-    if (m_channel[1])
-        return m_channel[1];
-
-    m_channel[1] = mfcreate(NULL, 0);
-    if (NULL == m_channel[1]) return NULL;
-    m_channel[1]->fp = stdout;
-    m_channel[1]->mode = MF_WRITE;
-    return m_channel[1];
-}
-
-/*
- * Stderr as an mFILE.
- * The code handles stderr by returning m_channel[2], but also checking
- * for stderr in fprintf (the common usage of it) to auto-flush.
- */
-mFILE *mstderr(void) {
-    if (m_channel[2])
-        return m_channel[2];
-
-    m_channel[2] = mfcreate(NULL, 0);
-    if (NULL == m_channel[2]) return NULL;
-    m_channel[2]->fp = stderr;
-    m_channel[2]->mode = MF_WRITE;
-    return m_channel[2];
-}
-
 
 /*
  * For creating existing mFILE pointers directly from memory buffers.

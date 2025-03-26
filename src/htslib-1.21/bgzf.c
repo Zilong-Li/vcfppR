@@ -1837,7 +1837,7 @@ static int mt_destroy(mtaux_t *mt)
         free(mt->idx_cache.e);
 
     free(mt);
-    fflush(stderr);
+    /* fflush(stderr); */
 
     return ret;
 }

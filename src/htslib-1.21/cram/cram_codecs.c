@@ -798,7 +798,7 @@ cram_codec *cram_varint_decode_init(cram_block_compression_hdr *hdr,
     c->u.varint.offset     = vv->varint_get64s(&cp, cp_end, NULL);
 
     if (cp - data != size) {
-        fprintf(stderr, "Malformed varint header stream\n");
+        /* fprintf(stderr, "Malformed varint header stream\n"); */
         free(c);
         return NULL;
     }
@@ -992,7 +992,7 @@ cram_codec *cram_const_decode_init(cram_block_compression_hdr *hdr,
     c->u.xconst.val = vv->varint_get64s(&cp, data+size, NULL);
 
     if (cp - data != size) {
-        fprintf(stderr, "Malformed const header stream\n");
+        /* fprintf(stderr, "Malformed const header stream\n"); */
         free(c);
         return NULL;
     }
@@ -1453,7 +1453,7 @@ cram_codec *cram_xpack_decode_init(cram_block_compression_hdr *hdr,
     else if (option == E_BYTE_ARRAY || option == E_BYTE)
         c->decode = cram_xpack_decode_char;
     else {
-        fprintf(stderr, "BYTE_ARRAYs not supported by this codec\n");
+        /* fprintf(stderr, "BYTE_ARRAYs not supported by this codec\n"); */
         goto malformed;
     }
     c->free = cram_xpack_decode_free;
@@ -1487,7 +1487,7 @@ cram_codec *cram_xpack_decode_init(cram_block_compression_hdr *hdr,
     if (cp - data != size
         || c->u.xpack.nbits < 0 || c->u.xpack.nbits > 8 * sizeof(int64_t)) {
     malformed:
-        fprintf(stderr, "Malformed xpack header stream\n");
+        /* fprintf(stderr, "Malformed xpack header stream\n"); */
         cram_xpack_decode_free(c);
         return NULL;
     }
@@ -1638,7 +1638,7 @@ cram_codec *cram_xpack_encode_init(cram_stats *st,
         if (e->map[i] != -1)
             c->u.e_xpack.rmap[n++] = i;               // 0,1,2,3 to P,A,C,K
     if (n != e->nval) {
-        fprintf(stderr, "Incorrectly specified number of map items in PACK\n");
+        /* fprintf(stderr, "Incorrectly specified number of map items in PACK\n"); */
         return NULL;
     }
 
@@ -1731,7 +1731,7 @@ int cram_xdelta_decode_block(cram_slice *slice, cram_codec *c, cram_block *in,
             break;
         }
         default:
-            fprintf(stderr, "Unsupported word size by XDELTA\n");
+            /* fprintf(stderr, "Unsupported word size by XDELTA\n"); */
             return -1;
         }
     }
@@ -1807,7 +1807,7 @@ cram_codec *cram_xdelta_decode_init(cram_block_compression_hdr *hdr,
 
     if (cp - data != size) {
     malformed:
-        fprintf(stderr, "Malformed xdelta header stream\n");
+        /* fprintf(stderr, "Malformed xdelta header stream\n"); */
         cram_xdelta_decode_free(c);
         return NULL;
     }
@@ -2184,7 +2184,7 @@ cram_codec *cram_xrle_decode_init(cram_block_compression_hdr *hdr,
     else if (option == E_BYTE_ARRAY || option == E_BYTE)
         c->decode = cram_xrle_decode_char;
     else {
-        fprintf(stderr, "BYTE_ARRAYs not supported by this codec\n");
+        /* fprintf(stderr, "BYTE_ARRAYs not supported by this codec\n"); */
         free(c);
         return NULL;
     }
@@ -2231,7 +2231,7 @@ cram_codec *cram_xrle_decode_init(cram_block_compression_hdr *hdr,
     return c;
 
  malformed:
-    fprintf(stderr, "Malformed xrle header stream\n");
+    /* fprintf(stderr, "Malformed xrle header stream\n"); */
     cram_xrle_decode_free(c);
     return NULL;
 }

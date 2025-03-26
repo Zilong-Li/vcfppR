@@ -775,9 +775,9 @@ error:
 
 
 static hFILE *hopen_s3_write(const char *url, const char *mode) {
-    if (hts_verbose >= 1) {
-        fprintf(stderr, "[E::%s] s3w:// URLs should not be used directly; use s3:// instead.\n", __func__);
-    }
+    /* if (hts_verbose >= 1) { */
+    /*     fprintf(stderr, "[E::%s] s3w:// URLs should not be used directly; use s3:// instead.\n", __func__); */
+    /* } */
     return NULL;
 }
 
@@ -845,9 +845,9 @@ int PLUGIN_GLOBAL(hfile_plugin_init,_s3_write)(struct hFILE_plugin *self) {
         "@(#)hfile_s3_write plugin (htslib)\t" HTS_VERSION_TEXT;
     const char *version = strchr(id, '\t') + 1;
 
-    if (hts_verbose >= 9)
-        fprintf(stderr, "[M::hfile_s3_write.init] version %s\n",
-                version);
+    /* if (hts_verbose >= 9) */
+    /*     fprintf(stderr, "[M::hfile_s3_write.init] version %s\n", */
+    /*             version); */
 #else
     const char *version = hts_version();
 #endif

@@ -919,9 +919,9 @@ unsigned char *(*rans_enc_func(int do_simd, int order))
 #else
     int err = pthread_once(&rans_cpu_once, htscodecs_tls_cpu_init);
     if (err != 0) {
-        fprintf(stderr, "Initialising TLS data failed: pthread_once: %s\n",
-                strerror(err));
-        fprintf(stderr, "Using scalar code only\n");
+        /* fprintf(stderr, "Initialising TLS data failed: pthread_once: %s\n", */
+        /*         strerror(err)); */
+        /* fprintf(stderr, "Using scalar code only\n"); */
     }
 #endif
 
@@ -993,9 +993,9 @@ unsigned char *(*rans_dec_func(int do_simd, int order))
 #else
     int err = pthread_once(&rans_cpu_once, htscodecs_tls_cpu_init);
     if (err != 0) {
-        fprintf(stderr, "Initialising TLS data failed: pthread_once: %s\n",
-                strerror(err));
-        fprintf(stderr, "Using scalar code only\n");
+        /* fprintf(stderr, "Initialising TLS data failed: pthread_once: %s\n", */
+        /*         strerror(err)); */
+        /* fprintf(stderr, "Using scalar code only\n"); */
     }
 #endif
 

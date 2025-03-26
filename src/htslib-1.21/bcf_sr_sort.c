@@ -259,46 +259,6 @@ static int cmpstringp(const void *p1, const void *p2)
     return strcmp(* (char * const *) p1, * (char * const *) p2);
 }
 
-#define DEBUG_VSETS 0
-#if DEBUG_VSETS
-void debug_vsets(sr_sort_t *srt)
-{
-    int i,j,k;
-    for (i=0; i<srt->nvset; i++)
-    {
-        fprintf(stderr,"dbg_vset %d:", i);
-        for (j=0; j<srt->vset[i].mask->n; j++) fprintf(stderr,"%c%lu",j==0?' ':':',srt->vset[i].mask->b[j]);
-        fprintf(stderr,"\t");
-        for (j=0; j<srt->vset[i].nvar; j++)
-        {
-            var_t *var = &srt->var[srt->vset[i].var[j]];
-            fprintf(stderr,"\t%s",var->str);
-            for (k=0; k<var->nvcf; k++)
-                fprintf(stderr,"%c%d", k==0?':':',',var->vcf[k]);
-        }
-        fprintf(stderr,"\n");
-    }
-}
-#endif
-
-#define DEBUG_VBUF 0
-#if DEBUG_VBUF
-void debug_vbuf(sr_sort_t *srt)
-{
-    int i, j;
-    for (j=0; j<srt->vcf_buf[0].nrec; j++)
-    {
-        fprintf(stderr,"dbg_vbuf %d:\t", j);
-        for (i=0; i<srt->sr->nreaders; i++)
-        {
-            vcf_buf_t *buf = &srt->vcf_buf[i];
-            fprintf(stderr,"\t%"PRIhts_pos, buf->rec[j] ? buf->rec[j]->pos+1 : 0);
-        }
-        fprintf(stderr,"\n");
-    }
-}
-#endif
-
 static char *grp_create_key(sr_sort_t *srt)
 {
     if ( !srt->str.l ) return strdup("");
@@ -482,7 +442,7 @@ static int bcf_sr_sort_set(bcf_srs_t *readers, sr_sort_t *srt, const char *chr, 
     {
         if ( kbs_resize(&srt->var[ivar].mask, srt->ngrp) < 0 )
         {
-            fprintf(stderr, "[%s:%d %s] kbs_resize failed\n", __FILE__,__LINE__,__func__);
+            /* fprintf(stderr, "[%s:%d %s] kbs_resize failed\n", __FILE__,__LINE__,__func__); */
             return -1;
         }
         kbs_clear(srt->var[ivar].mask);
@@ -510,7 +470,7 @@ static int bcf_sr_sort_set(bcf_srs_t *readers, sr_sort_t *srt, const char *chr, 
         vset->cnt   = var->nvcf;
         if ( kbs_resize(&vset->mask, srt->ngrp) < 0 )
         {
-            fprintf(stderr, "[%s:%d %s] kbs_resize failed\n", __FILE__,__LINE__,__func__);
+            /* fprintf(stderr, "[%s:%d %s] kbs_resize failed\n", __FILE__,__LINE__,__func__); */
             return -1;
         }
         kbs_clear(vset->mask);
@@ -527,9 +487,6 @@ static int bcf_sr_sort_set(bcf_srs_t *readers, sr_sort_t *srt, const char *chr, 
         }
         var->type = type;
     }
-#if DEBUG_VSETS
-    debug_vsets(srt);
-#endif
 
     // initialize the pairing matrix
     hts_expand(int, srt->ngrp*srt->nvset, srt->mpmat, srt->pmat);
@@ -545,10 +502,6 @@ static int bcf_sr_sort_set(bcf_srs_t *readers, sr_sort_t *srt, const char *chr, 
     // pair the lines
     while ( srt->nvset )
     {
-#if DEBUG_VSETS
-    fprintf(stderr,"\n");
-    debug_vsets(srt);
-#endif
 
         int imax = 0;
         for (ivset=1; ivset<srt->nvset; ivset++)
@@ -613,10 +566,6 @@ int bcf_sr_sort_next(bcf_srs_t *readers, sr_sort_t *srt, const char *chr, hts_po
     if ( !srt->chr || srt->pos!=min_pos || strcmp(srt->chr,chr) ) bcf_sr_sort_set(readers, srt, chr, min_pos);
 
     if ( !srt->vcf_buf[0].nrec ) return 0;
-
-#if DEBUG_VBUF
-    debug_vbuf(srt);
-#endif
 
     int nret = 0;
     for (i=0; i<srt->sr->nreaders; i++)
