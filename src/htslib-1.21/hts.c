@@ -5069,25 +5069,25 @@ enum htsLogLevel hts_get_log_level(void)
     return hts_verbose;
 }
 
-static char get_severity_tag(enum htsLogLevel severity)
-{
-    switch (severity) {
-    case HTS_LOG_ERROR:
-        return 'E';
-    case HTS_LOG_WARNING:
-        return 'W';
-    case HTS_LOG_INFO:
-        return 'I';
-    case HTS_LOG_DEBUG:
-        return 'D';
-    case HTS_LOG_TRACE:
-        return 'T';
-    default:
-        break;
-    }
+/* static char get_severity_tag(enum htsLogLevel severity) */
+/* { */
+/*     switch (severity) { */
+/*     case HTS_LOG_ERROR: */
+/*         return 'E'; */
+/*     case HTS_LOG_WARNING: */
+/*         return 'W'; */
+/*     case HTS_LOG_INFO: */
+/*         return 'I'; */
+/*     case HTS_LOG_DEBUG: */
+/*         return 'D'; */
+/*     case HTS_LOG_TRACE: */
+/*         return 'T'; */
+/*     default: */
+/*         break; */
+/*     } */
 
-    return '*';
-}
+/*     return '*'; */
+/* } */
 
 void hts_log(enum htsLogLevel severity, const char *context, const char *format, ...)
 {

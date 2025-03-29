@@ -1,5 +1,5 @@
 HTSLIB_DIR='htslib-1.21'
-PKG_CPPFLAGS = -I${HTSLIB_DIR} -I../inst/include -D_FILE_OFFSET_BITS=64
+PKG_CPPFLAGS = -I${HTSLIB_DIR} -I../inst/include
 PKG_LIBS=${HTSLIB_DIR}/libhts.a
 
 ifeq (,$(shell pkg-config --version 2>/dev/null))

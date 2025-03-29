@@ -1,3 +1,6 @@
+# vcfppR 0.7.6
+* fix CRAN notes
+
 # vcfppR 0.7.5
 * fix issue #14 to handle libdeflate dependency on linux
 

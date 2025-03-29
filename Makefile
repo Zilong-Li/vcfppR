@@ -33,6 +33,7 @@ check2: build
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz  --as-cran
 
 clean:
+	./cleanup;\
 	cd ..;\
 	$(RM) -r $(PKGNAME).Rcheck/
 

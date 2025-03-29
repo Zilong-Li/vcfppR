@@ -9,7 +9,7 @@ echo "Configuring HTSlib in $HTSLIB_DIR"
 cd src/$HTSLIB_DIR
 ## copy file instead of symbolic linking
 cp htscodecs_bundled.mk htscodecs.mk
-./configure CFLAGS="-O2 -fPIC -D_FILE_OFFSET_BITS=64"
+./configure CFLAGS="-g -O2 -fPIC -D_FILE_OFFSET_BITS=64"
 
 hasdeflate="no"
 if grep -wq "#define HAVE_LIBDEFLATE 1" config.h;then
