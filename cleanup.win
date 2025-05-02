@@ -1,5 +1,5 @@
 #!/bin/sh
 
 HTSLIB_DIR="src/htslib-1.21"
-rm -f ${HTSLIB_DIR}/config.h src/*.o src/*.so src/*.dll src/*.dylib 
+rm -f ${HTSLIB_DIR}/config.h src/*.o src/*.dll src/*.so src/*.dylib 
 cd $HTSLIB_DIR && make clean && cd -

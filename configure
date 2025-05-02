@@ -1,30 +1,43 @@
 #!/bin/sh
 
-# Exit on any error
 set -e
+
+MAKE=`"${R_HOME}/bin/R" CMD config MAKE`
+CC=`"${R_HOME}/bin/R" CMD config CC`
+AR=`"${R_HOME}/bin/R" CMD config AR`
+RANLIB=`"${R_HOME}/bin/R" CMD config RANLIB`
+R_CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
+R_CFLAGS=`"${R_HOME}/bin/R" CMD config CFLAGS`
+R_CPICFLAGS=`"${R_HOME}/bin/R" CMD config CPICFLAGS`
+
+# -fPIC is ensential for shared lib
+# CFLAGS="${R_CFLAGS} ${R_CPICFLAGS} -fPIC -D_FILE_OFFSET_BITS=64"
+CFLAGS="-Wall -g -O2 -fvisibility=hidden -fPIC -D_FILE_OFFSET_BITS=64"
+# remove assert by defining NDEBUG
+CPPFLAGS="${R_CPPFLAGS} -DNDEBUG"
 
 HTSLIB_DIR="htslib-1.21"
 
 echo "Configuring HTSlib in $HTSLIB_DIR"
 cd src/$HTSLIB_DIR
-## copy file instead of symbolic linking
-cp htscodecs_bundled.mk htscodecs.mk
-./configure CFLAGS="-g -O2 -fPIC -D_FILE_OFFSET_BITS=64 -DNDEBUG"
+./configure \
+    CFLAGS="${CFLAGS}"
 
-hasdeflate="no"
+## copy file instead of symbolic linking
+rm -f htscodecs.mk && cp htscodecs_bundled.mk htscodecs.mk
+
+${MAKE} libhts.a CC="${CC}" CPPFLAGS="${CPPFLAGS}"  AR="${AR}" RANLIB="${RANLIB}"
+
+EXTRA_LIBS="-lz -lm -lbz2 -llzma -lcurl"
+
 if grep -wq "#define HAVE_LIBDEFLATE 1" config.h;then
-    hasdeflate="yes"
+    EXTRA_LIBS="${EXTRA_LIBS} -ldeflate"
 fi
     
-make libhts.a
-
 echo "Create Makevar file"
-cd ../../
-SRC_MAKEVAR="src/Makevars"
-echo "PKG_CPPFLAGS=-I${HTSLIB_DIR} -I../inst/include" >$SRC_MAKEVAR
+cd ..
+sed \
+    -e "s|@EXTRA_CPPFLAGS@|${CPPFLAGS}|g" \
+    -e "s|@EXTRA_LIBS@|${EXTRA_LIBS}|g" \
+    Makevars.in > Makevars
 
-if [ $hasdeflate = "no" ]; then
-    echo "PKG_LIBS=${HTSLIB_DIR}/libhts.a -lz -lm -lbz2 -llzma -lcurl" >>$SRC_MAKEVAR
-else
-    echo "PKG_LIBS=${HTSLIB_DIR}/libhts.a -ldeflate -lz -lm -lbz2 -llzma -lcurl" >>$SRC_MAKEVAR
-fi    

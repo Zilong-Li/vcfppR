@@ -1,0 +1,7 @@
+HTSLIB_DIR='./htslib-1.21'
+PKG_CPPFLAGS=-I$(HTSLIB_DIR) -I../inst/include @EXTRA_CPPFLAGS@
+PKG_LIBS=-L$(HTSLIB_DIR) -lhts @EXTRA_LIBS@
+
+.PHONY: all
+
+all: $(SHLIB)

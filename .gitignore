@@ -21,3 +21,4 @@ README.html
 ## docs
 inst/doc
 /src/Makevars
+/src/Makevars.win
