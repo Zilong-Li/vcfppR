@@ -13,6 +13,7 @@
 ^README.html
 .*\.tar\.gz$
 .*\.tbi$
+.*\.log$
 ^.covrignore$
 ^codecov.yaml$
 ^\.github$
