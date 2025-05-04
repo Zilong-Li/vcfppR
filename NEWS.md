@@ -1,3 +1,6 @@
+# vcfppR 0.8.0
+* copy static libs into libs folder
+
 # vcfppR 0.7.6
 * fix CRAN notes
 
