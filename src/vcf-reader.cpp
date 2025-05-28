@@ -292,7 +292,7 @@ class vcfreader {
         writable = true;
     }
     inline void modify() {
-        bw.copyHeader(fin);
+        bw.initalHeader(br.header);
         if (!samples_in.empty()) bw.header.setSamples(samples_in);
         var.resetHeader(bw.header);
         modifiable = true;
