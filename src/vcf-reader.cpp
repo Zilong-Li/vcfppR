@@ -276,6 +276,8 @@ class vcfreader {
         auto v = genotypes(false);
         return v.size() / nsamples();
     }
+    inline int getInfoType(std::string tag) const { return br.header.getInfoType(tag); }
+    inline int getFormatType(std::string tag) const { return br.header.getFormatType(tag); }
     inline std::string header() const { return br.header.asString(); }
     inline std::vector<std::string> samples() const { return br.header.getSamples(); }
     inline std::string string() const { return var.asString(); }
@@ -411,7 +413,10 @@ RCPP_MODULE(vcfreader) {
         .method("qual", &vcfreader::qual, "get QUAL")
         .method("filter", &vcfreader::filter, "get FILTER")
         .method("info", &vcfreader::info, "get INFO as a string")
-        .method("genotypes", &vcfreader::genotypes, "get genotypes")
+        .method("genotypes", &vcfreader::genotypes, "get genotypes of the input VCF")
+        .method("header", &vcfreader::header, "get header of the input VCF")
+        .method("getInfoType", &vcfreader::getInfoType, "get the type of a given INFO tag")
+        .method("getFormatType", &vcfreader::getFormatType, "get the type of a given FORMAT tag")
         .method("infoInt", &vcfreader::infoInt, "get tag value of int type in INFO")
         .method("infoIntVec", &vcfreader::infoIntVec,
                 "get tag values in a vector of int type in INFO")
