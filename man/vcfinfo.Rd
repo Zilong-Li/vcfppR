@@ -81,7 +81,7 @@ parsing a vector of values for a given INFO tag.
 \examples{
 library('vcfppR')
 vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
-res <- vcfinfo(vcffile, "AF", region = "chr21:1-5050000", vartype = "snps", pass = T)
+res <- vcfinfo(vcffile, "AF", region = "chr21:1-5050000", vartype = "snps", pass = TRUE)
 str(res)
 }
 \author{
