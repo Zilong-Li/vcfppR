@@ -89,7 +89,7 @@ the FILTER column in the VCF file
 the INFO column in the VCF file
 }
 
-\item{format}{: matrix of either integer of numberic values depending on the tag to extract; \cr
+\item{format}{: matrix of either integer or numberic values depending on the tag to extract; \cr
 a specifiy tag in the FORMAT column to be extracted
 }
 }

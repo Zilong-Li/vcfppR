@@ -2,11 +2,11 @@
 #' read a INFO tag in the VCF/BCF into R data structure
 #'
 #' @details
-#' \code{vcftable} uses the C++ API of vcfpp, which is a wrapper of htslib, to read VCF/BCF files.
+#' \code{vcfinfo} uses the C++ API of vcfpp, which is a wrapper of htslib, to read VCF/BCF files.
 #' Thus, it has the full functionalities of htslib, such as restrict to specific variant types,
-#' samples and regions. For the memory efficiency reason, the \code{vcftable} is designed
-#' to parse only one tag at a time in the FORMAT column of the VCF. In default, only the matrix of genotypes,
-#' i.e. "GT" tag, are returned by \code{vcftable}, but there are many other tags supported by the \code{format} option.
+#' samples and regions. For the memory efficiency reason, the \code{vcfinfo} is designed
+#' to parse only one tag at a time in the INFO column of the VCF. Currently it does not support
+#' parsing a vector of values for a given INFO tag.
 #'
 #' @param vcffile path to the VCF/BCF file
 #'
@@ -63,7 +63,7 @@
 #' @examples
 #' library('vcfppR')
 #' vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
-#' res <- vcfinfo(vcffile, "AF", region = "chr21:1-5050000", vartype = "snps")
+#' res <- vcfinfo(vcffile, "AF", region = "chr21:1-5050000", vartype = "snps", pass = T)
 #' str(res)
 #
 #' @export
