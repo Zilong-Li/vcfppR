@@ -103,8 +103,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // tableInfo
-List tableInfo(std::string vcffile, std::string tag, std::string region, const std::vector<std::string>& ids, double qualval, bool pass, bool INFO, bool snps, bool indels, bool multiallelics, bool multisnps, bool svs);
-RcppExport SEXP _vcfppR_tableInfo(SEXP vcffileSEXP, SEXP tagSEXP, SEXP regionSEXP, SEXP idsSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP INFOSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP, SEXP svsSEXP) {
+List tableInfo(std::string vcffile, std::string tag, std::string region, const std::vector<std::string>& ids, double qualval, bool pass, bool snps, bool indels, bool multiallelics, bool multisnps, bool svs);
+RcppExport SEXP _vcfppR_tableInfo(SEXP vcffileSEXP, SEXP tagSEXP, SEXP regionSEXP, SEXP idsSEXP, SEXP qualvalSEXP, SEXP passSEXP, SEXP snpsSEXP, SEXP indelsSEXP, SEXP multiallelicsSEXP, SEXP multisnpsSEXP, SEXP svsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -114,13 +114,12 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const std::vector<std::string>& >::type ids(idsSEXP);
     Rcpp::traits::input_parameter< double >::type qualval(qualvalSEXP);
     Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
-    Rcpp::traits::input_parameter< bool >::type INFO(INFOSEXP);
     Rcpp::traits::input_parameter< bool >::type snps(snpsSEXP);
     Rcpp::traits::input_parameter< bool >::type indels(indelsSEXP);
     Rcpp::traits::input_parameter< bool >::type multiallelics(multiallelicsSEXP);
     Rcpp::traits::input_parameter< bool >::type multisnps(multisnpsSEXP);
     Rcpp::traits::input_parameter< bool >::type svs(svsSEXP);
-    rcpp_result_gen = Rcpp::wrap(tableInfo(vcffile, tag, region, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps, svs));
+    rcpp_result_gen = Rcpp::wrap(tableInfo(vcffile, tag, region, ids, qualval, pass, snps, indels, multiallelics, multisnps, svs));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -134,7 +133,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfppR_summarySVs", (DL_FUNC) &_vcfppR_summarySVs, 5},
     {"_vcfppR_tableGT", (DL_FUNC) &_vcfppR_tableGT, 14},
     {"_vcfppR_tableFormat", (DL_FUNC) &_vcfppR_tableFormat, 13},
-    {"_vcfppR_tableInfo", (DL_FUNC) &_vcfppR_tableInfo, 12},
+    {"_vcfppR_tableInfo", (DL_FUNC) &_vcfppR_tableInfo, 11},
     {"_rcpp_module_boot_vcfreader", (DL_FUNC) &_rcpp_module_boot_vcfreader, 0},
     {"_rcpp_module_boot_vcfwriter", (DL_FUNC) &_rcpp_module_boot_vcfwriter, 0},
     {NULL, NULL, 0}

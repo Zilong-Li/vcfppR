@@ -144,8 +144,8 @@ tableFormat <- function(vcffile, region, samples, format, ids, qualval, pass, IN
     .Call(`_vcfppR_tableFormat`, vcffile, region, samples, format, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps, svs)
 }
 
-tableInfo <- function(vcffile, tag, region, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps, svs) {
-    .Call(`_vcfppR_tableInfo`, vcffile, tag, region, ids, qualval, pass, INFO, snps, indels, multiallelics, multisnps, svs)
+tableInfo <- function(vcffile, tag, region, ids, qualval, pass, snps, indels, multiallelics, multisnps, svs) {
+    .Call(`_vcfppR_tableInfo`, vcffile, tag, region, ids, qualval, pass, snps, indels, multiallelics, multisnps, svs)
 }
 
 #' @name vcfwriter

@@ -198,7 +198,7 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
 
 // [[Rcpp::export]]
 List tableInfo(std::string vcffile, std::string tag, std::string region, 
-               const std::vector<std::string>& ids, double qualval, bool pass, bool INFO,
+               const std::vector<std::string>& ids, double qualval, bool pass,
                bool snps, bool indels, bool multiallelics, bool multisnps, bool svs) {
   vcfpp::BcfReader vcf(vcffile, region);
   vcfpp::BcfRecord var(vcf.header);
@@ -207,7 +207,7 @@ List tableInfo(std::string vcffile, std::string tag, std::string region,
   vector<std::string> chr, ref, alt, id, filter;
   UMapStringInt ids_m = map_ids(ids);
   const int tagtype = vcf.header.getInfoType(tag);
-  if(tagtype <= 0) throw std::runtime_error("no such tag or does not support it");
+  if(tagtype <= 0) stop("no such tag or does not support it");
   vector<int> iVec;
   vector<float> fVec;
   vector<std::string> sVec;
