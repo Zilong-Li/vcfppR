@@ -194,3 +194,75 @@ List tableFormat(std::string vcffile, std::string region, std::string samples, s
                             Named("info") = info, Named("na") = IntegerVector::create(NA_INTEGER));
     }
 }
+
+
+// [[Rcpp::export]]
+List tableInfo(std::string vcffile, std::string tag, std::string region, 
+               const std::vector<std::string>& ids, double qualval, bool pass, bool INFO,
+               bool snps, bool indels, bool multiallelics, bool multisnps, bool svs) {
+  vcfpp::BcfReader vcf(vcffile, region);
+  vcfpp::BcfRecord var(vcf.header);
+  vector<int> pos;
+  vector<float> qual;
+  vector<std::string> chr, ref, alt, id, filter;
+  UMapStringInt ids_m = map_ids(ids);
+  const int tagtype = vcf.header.getInfoType(tag);
+  if(tagtype <= 0) throw std::runtime_error("no such tag or does not support it");
+  vector<int> iVec;
+  vector<float> fVec;
+  vector<std::string> sVec;
+  int i;
+  float f;
+  std::string s;
+  while (vcf.getNextVariant(var)) {
+    if (ids_m.size() && ids_m.count(var.ID()) == 0) continue;
+    if (pass && (var.FILTER() != "PASS")) continue;
+    if ((qualval > 0) && (var.QUAL() < qualval)) continue;
+    if (multiallelics && (!var.isMultiAllelics())) continue;
+    if (multisnps && (!var.isMultiAllelicSNP())) continue;
+    if (snps && (!var.isSNP())) continue;
+    if (indels && (!var.isIndel())) continue;
+    if (svs && (!var.isSV())) continue;
+    pos.push_back(var.POS());
+    qual.push_back(var.QUAL());
+    chr.push_back(var.CHROM());
+    id.push_back(var.ID());
+    ref.push_back(var.REF());
+    alt.push_back(var.ALT());
+    filter.push_back(var.FILTER());
+    if(tagtype==1) {
+      var.getINFO(tag, i);
+      iVec.push_back(i);
+    } else if (tagtype==2) {
+      var.getINFO(tag, f);
+      fVec.push_back(f);
+    } else if (tagtype==3) {
+      var.getINFO(tag, s);
+      sVec.push_back(s);
+    } else {
+      ;
+    }
+  }
+
+  // auto info = IntegerVector::create(NA_INTEGER);
+  SEXP info;
+  switch(tagtype) {
+  case 1:
+    info = Rcpp::wrap(iVec);
+    break;
+  case 2:
+    info = Rcpp::wrap(fVec);
+    break;
+  case 3:
+    info = Rcpp::wrap(sVec);
+    break;
+  default:
+    stop("Invalid type of tag found!");
+  }
+  
+  return List::create(Named("chr") = chr,
+                      Named("pos") = pos, Named("id") = id, Named("ref") = ref,
+                      Named("alt") = alt, Named("qual") = qual, Named("filter") = filter,
+                      Named(tag) = info);
+  
+}
