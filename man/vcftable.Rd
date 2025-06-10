@@ -16,7 +16,8 @@ vcftable(
   info = TRUE,
   collapse = TRUE,
   setid = FALSE,
-  mac = 0
+  mac = 0,
+  rmdup = FALSE
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ However, this raises issues when one variant is mutliallelic resulting in more v
 \item{setid}{logical. reset ID column as CHR_POS_REF_ALT.}
 
 \item{mac}{integer. restrict to variants with minor allele count higher than the value.}
+
+\item{rmdup}{logical. remove duplicated sites by keeping the first occurrence of POS. (default: FALSE)}
 }
 \value{
 Return a list containing the following components:

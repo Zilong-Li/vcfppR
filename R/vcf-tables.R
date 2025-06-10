@@ -39,6 +39,8 @@
 #'
 #' @param setid logical. reset ID column as CHR_POS_REF_ALT.
 #'
+#' @param rmdup logical. remove duplicated sites by keeping the first occurrence of POS. (default: FALSE)
+#'
 #' @param mac integer. restrict to variants with minor allele count higher than the value.
 #'
 #' @return Return a list containing the following components:
@@ -102,7 +104,8 @@ vcftable <- function(vcffile,
                      info = TRUE,
                      collapse = TRUE,
                      setid = FALSE,
-                     mac = 0) {
+                     mac = 0,
+                     rmdup = FALSE) {
   snps <- FALSE
   indels <- FALSE
   svs <- FALSE
@@ -139,6 +142,18 @@ vcftable <- function(vcffile,
   }
   if(setid) res$id <- paste(res$chr, res$pos, res$ref, res$alt, sep = "_")
   class(res) <- "vcftable"
+
+  if(rmdup) { ## detect duplication via duplicated for POS
+    w <- duplicated(res$pos)
+    res <- lapply(res, function(v) {
+      if(is.matrix(v))
+        v[-w,,drop = F]
+      else 
+        v[-w,drop = F]
+      v
+    })
+  }
+  
   return(res)
 }
 
