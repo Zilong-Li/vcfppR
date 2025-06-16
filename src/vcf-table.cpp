@@ -207,7 +207,7 @@ List tableInfo(std::string vcffile, std::string tag, std::string region,
   vector<std::string> chr, ref, alt, id, filter;
   UMapStringInt ids_m = map_ids(ids);
   const int tagtype = vcf.header.getInfoType(tag);
-  if(tagtype <= 0) stop("no such tag or does not support it");
+  if(tagtype <= 0) stop("no such tag or it only exits for some variants");
   vector<int> iVec;
   vector<float> fVec;
   vector<std::string> sVec;

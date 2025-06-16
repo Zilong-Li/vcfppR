@@ -65,7 +65,6 @@
 #' vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
 #' res <- vcfinfo(vcffile, "AF", region = "chr21:1-5050000", vartype = "snps", pass = TRUE)
 #' str(res)
-#
 #' @export
 vcfinfo <- function(vcffile,
                     tag,
@@ -75,6 +74,7 @@ vcfinfo <- function(vcffile,
                     qual = 0,
                     pass = FALSE,
                     setid = FALSE) {
+
   snps <- FALSE
   indels <- FALSE
   svs <- FALSE
@@ -87,6 +87,5 @@ vcfinfo <- function(vcffile,
   else if(vartype == "multiallelics") multiallelics <- TRUE
   else if(vartype != "all") stop("Invaild variant type!")
   if(is.null(ids)) ids <- c("")
-  res <- tableInfo(vcffile, tag, region, ids, qual, pass, snps, indels, multiallelics, multisnps, svs)
-  return(res)
+  return(tableInfo(vcffile, tag, region, ids, qual, pass, snps, indels, multiallelics, multisnps, svs))
 }
