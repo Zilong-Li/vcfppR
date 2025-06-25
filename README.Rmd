@@ -33,7 +33,7 @@ The vcfppR package implements various powerful functions for fast genomics analy
 - Visualize and chracterize variants
 - Compare two VCF/BCF files and report various statistics
 - Streaming read/write VCF/BCF files with fine control of everything
-- [Paper](https://doi.org/10.1093/bioinformatics/btae049) shows vcfppR is ~20x faster than `vcfR`
+- [Paper](https://doi.org/10.1093/bioinformatics/btae049) shows vcfppR is the fastest
 
 ## Installation
 
