@@ -85,7 +85,7 @@
 <div class="section level2">
 <h2 id="case-2-genotype-concordance">Case 2: Genotype concordance<a class="anchor" aria-label="anchor" href="#case-2-genotype-concordance"></a>
 </h2>
-<p>In this case, we are interested in the called genotype concordance and the sensitivity / specificity in genotype calling. In contrast to <code>stats="r2"</code>, we choose <code>stats="f1"</code> or <code>stats="nrc"</code> and specify the <code>formats=c("GT", "GT")</code>. Normally, we want the results for each sample, which can be achieved by using <code>by.sample=TRUE</code>.</p>
+<p>In this case, we are interested in the called genotype concordance and the sensitivity / specificity in genotype calling. In addition to <code>stats="r2"</code>, we choose <code>stats="f1"</code> or <code>stats="nrc"</code> and specify the <code>formats=c("GT", "GT")</code>. Normally, we want the results for each sample, which can be achieved by using <code>by.sample=TRUE</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span><span class="va">testvcf</span>, <span class="va">truthvcf</span>, formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GT"</span>,<span class="st">"GT"</span><span class="op">)</span>, stats<span class="op">=</span><span class="st">"nrc"</span>, by.sample<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span><span class="va">testvcf</span>, <span class="va">truthvcf</span>, formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GT"</span>,<span class="st">"GT"</span><span class="op">)</span>, stats<span class="op">=</span><span class="st">"f1"</span>, by.sample<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -93,7 +93,7 @@
 <div class="section level2">
 <h2 id="case-3-phasing-switch-error">Case 3: Phasing switch error<a class="anchor" aria-label="anchor" href="#case-3-phasing-switch-error"></a>
 </h2>
-<p>In this case, we look for functionality to assess the phasing switch error. First of all, we need the two VCF files to contain the <strong>phased GT</strong>, which is represented through the ‘|’. We can choose to return the sites that have pse.</p>
+<p>In this case, we look for a functionality to assess the phasing switch error(PSE). First of all, we need the two VCF files to contain the <strong>phased GT</strong>, which is represented through the ‘|’. We can choose to return the sites that have PSE.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span><span class="va">testvcf</span>, <span class="va">truthvcf</span>, stats<span class="op">=</span><span class="st">"pse"</span>, return_pse_sites<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Note:</strong> Currently, the <code>pse</code> statatics is a simple form that doesn’t take the completeness and quality into account.</p>
@@ -101,17 +101,26 @@
 <div class="section level2">
 <h2 id="case-4-multiple-testing-repetitively">Case 4: Multiple testing repetitively<a class="anchor" aria-label="anchor" href="#case-4-multiple-testing-repetitively"></a>
 </h2>
-<p>In the comprehensive benchmarking, we often run many tests against the same true sets. In this scenario, we can save the truth as an RDS object and reuse it. Actually, both <code>test</code> and <code>truth</code> can take an RDS file as input. The RDS file stores an object that returned by <code>vcftable</code>.</p>
+<p>In the comprehensive benchmarking, we often run many tests against the same true sets. In this scenario, we can save the truth object and reuse it. Actually, both <code>test</code> and <code>truth</code> can take as input a <code>vcftable</code> object or a RDS file. The RDS file stores an object that returned by <code>vcftable</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/vcftable.html">vcftable</a></span><span class="op">(</span><span class="va">truthvcf</span><span class="op">)</span>, <span class="st">"truth.rds"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span>test<span class="op">=</span><span class="va">testvcf1</span>, truth<span class="op">=</span><span class="st">"truth.rds"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span>test<span class="op">=</span><span class="va">testvcf2</span>, truth<span class="op">=</span><span class="st">"truth.rds"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span>test<span class="op">=</span><span class="va">testvcf3</span>, truth<span class="op">=</span><span class="st">"truth.rds"</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Note:</strong> Since the input is R objects instead of VCF path, then you can not use the <code>formats</code> option in <code>vcfcomp</code> to specify new formats other than the ones in your input R objects.</p>
 </div>
 <div class="section level2">
 <h2 id="qa-how-to-fix-the-error-inconsistent-samples-name">Q&amp;A: How to fix the error “inconsistent samples name”<a class="anchor" aria-label="anchor" href="#qa-how-to-fix-the-error-inconsistent-samples-name"></a>
 </h2>
 <p>If one is certain about the samples name in the testvcf can be replaced with other names that can match the samples in the truthvcf. One can use the <code>names</code> option to specify a vector of new names that can be found in the truthvcf.</p>
+</div>
+<div class="section level2">
+<h2 id="qa-na-values-returned">Q&amp;A: NA values returned<a class="anchor" aria-label="anchor" href="#qa-na-values-returned"></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li>make sure you read the docs carefully and use the correct FORMAT in your VCF files</li>
+<li>set <code>bins</code> to bigger intervals because there will be NAs if no variants exist in the specified intervals bin.</li>
+</ol>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

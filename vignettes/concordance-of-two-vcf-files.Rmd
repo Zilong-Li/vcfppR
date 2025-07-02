@@ -39,7 +39,7 @@ vcfcomp(testvcf, truthvcf, formats = c("FDS", "GT"), stats = "r2")
 
 ## Case 2: Genotype concordance
 
-In this case, we are interested in the called genotype concordance and the sensitivity / specificity in genotype calling. In contrast to `stats="r2"`, we choose `stats="f1"` or `stats="nrc"` and specify the `formats=c("GT", "GT")`. Normally, we want the results for each sample, which can be achieved by using `by.sample=TRUE`.
+In this case, we are interested in the called genotype concordance and the sensitivity / specificity in genotype calling. In addition to `stats="r2"`, we choose `stats="f1"` or `stats="nrc"` and specify the `formats=c("GT", "GT")`. Normally, we want the results for each sample, which can be achieved by using `by.sample=TRUE`.
 
 ```{r eval = FALSE}
 vcfcomp(testvcf, truthvcf, formats = c("GT","GT"), stats="nrc", by.sample=TRUE)
@@ -48,7 +48,7 @@ vcfcomp(testvcf, truthvcf, formats = c("GT","GT"), stats="f1", by.sample=TRUE)
 
 ## Case 3: Phasing switch error
 
-In this case, we look for functionality to assess the phasing switch error. First of all, we need the two VCF files to contain the **phased GT**, which is represented through the '|'.  We can choose to return the sites that have pse. 
+In this case, we look for a functionality to assess the phasing switch error(PSE). First of all, we need the two VCF files to contain the **phased GT**, which is represented through the '|'.  We can choose to return the sites that have PSE. 
 
 ```{r eval = FALSE}
 vcfcomp(testvcf, truthvcf, stats="pse", return_pse_sites=TRUE)
@@ -58,7 +58,7 @@ vcfcomp(testvcf, truthvcf, stats="pse", return_pse_sites=TRUE)
 
 ## Case 4: Multiple testing repetitively
 
-In the comprehensive benchmarking, we often run many tests against the same true sets. In this scenario, we can save the truth as an RDS object and reuse it. Actually, both `test` and `truth` can take an RDS file as input. The RDS file stores an object that returned by `vcftable`.
+In the comprehensive benchmarking, we often run many tests against the same true sets. In this scenario, we can save the truth object and reuse it. Actually, both `test` and `truth` can take as input a `vcftable` object or a RDS file. The RDS file stores an object that returned by `vcftable`.
 
 ```{r eval = FALSE}
 saveRDS(vcftable(truthvcf), "truth.rds")
@@ -66,8 +66,13 @@ vcfcomp(test=testvcf1, truth="truth.rds")
 vcfcomp(test=testvcf2, truth="truth.rds")
 vcfcomp(test=testvcf3, truth="truth.rds")
 ```
+**Note:** Since the input is R objects instead of VCF path, then you can not use the `formats` option in `vcfcomp` to specify new formats other than the ones in your input R objects.
 
 ## Q&A: How to fix the error "inconsistent samples name"
 
 If one is certain about the samples name in the testvcf can be replaced with other names that can match the samples in the truthvcf. One can use the `names` option to specify a vector of new names that can be found in the truthvcf.
 
+## Q&A: NA values returned
+
+1. make sure you read the docs carefully and use the correct FORMAT in your VCF files
+2. set `bins` to bigger intervals because there will be NAs if no variants exist in the specified intervals bin.
