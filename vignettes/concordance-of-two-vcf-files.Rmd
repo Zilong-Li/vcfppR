@@ -68,11 +68,17 @@ vcfcomp(test=testvcf3, truth="truth.rds")
 ```
 **Note:** Since the input is R objects instead of VCF path, then you can not use the `formats` option in `vcfcomp` to specify new formats other than the ones in your input R objects.
 
-## Q&A: How to fix the error "inconsistent samples name"
+# Q&A
+## Where is the allele frequency from and can I use customized one?
+
+In default, the allele frequency of each vairant is calculated on the fly from the truth VCF based on GT. 
+Yes, you can specify an external file that stores allele frequencies from a database. Currently, `vcfcomp` can only take a space-separated text file with five columns and a header named with "chr" "pos" "ref" "alt" "af".
+
+## How to fix the error "inconsistent samples name"
 
 If one is certain about the samples name in the testvcf can be replaced with other names that can match the samples in the truthvcf. One can use the `names` option to specify a vector of new names that can be found in the truthvcf.
 
-## Q&A: NA values returned
+## NA values returned
 
 1. make sure you read the docs carefully and use the correct FORMAT in your VCF files
 2. set `bins` to bigger intervals because there will be NAs if no variants exist in the specified intervals bin.

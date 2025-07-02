@@ -156,5 +156,5 @@ test_that("can change samples name and set genotypes for single sample", {
   expect_true(vcf$gt==2)
   expect_true(vcf$samples=="ZZZZZ")
 })
-#> Test passed 😸
+#> Test passed 🎉
 ```
