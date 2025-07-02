@@ -29,7 +29,8 @@
 #' 
 #' @param bins numeric vector. break statistics into allele frequency bins.
 #'
-#' @param af file path to allele frequency text file or saved RDS file.
+#' @param af file path with allele frequency or a RDS file with a saved object for af.
+#'           Format of the text file: a space-separated text file with five columns and a header named 'chr' 'pos' 'ref' 'alt' 'af'
 #' 
 #' @param out output prefix for saving objects into RDS file
 #'

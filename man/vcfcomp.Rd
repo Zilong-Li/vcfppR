@@ -46,7 +46,8 @@ If both by.sample and by.variant are FALSE, then do calculations for all samples
 
 \item{bins}{numeric vector. break statistics into allele frequency bins.}
 
-\item{af}{file path to allele frequency text file or saved RDS file.}
+\item{af}{file path with allele frequency or a RDS file with a saved object for af.
+Format of the text file: a space-separated text file with five columns and a header named 'chr' 'pos' 'ref' 'alt' 'af'}
 
 \item{out}{output prefix for saving objects into RDS file}
 

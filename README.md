@@ -24,7 +24,7 @@ genomics analyses with VCF/BCF files using the C++ API of
   - Compare two VCF/BCF files and report various statistics
   - Streaming read/write VCF/BCF files with fine control of everything
   - [Paper](https://doi.org/10.1093/bioinformatics/btae049) shows vcfppR
-    is \~20x faster than `vcfR`
+    is the fastest
 
 ## Installation
 
@@ -156,5 +156,5 @@ test_that("can change samples name and set genotypes for single sample", {
   expect_true(vcf$gt==2)
   expect_true(vcf$samples=="ZZZZZ")
 })
-#> Test passed 🥇
+#> Test passed 🎉
 ```

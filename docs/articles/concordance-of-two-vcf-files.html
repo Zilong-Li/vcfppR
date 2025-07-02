@@ -66,14 +66,14 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Zilong-Li/vcfppR" class="external-link">vcfppR</a></span><span class="op">)</span></span></code></pre></div>
-<div class="section level2">
-<h2 id="background">Background<a class="anchor" aria-label="anchor" href="#background"></a>
-</h2>
+<div class="section level3">
+<h3 id="background">Background<a class="anchor" aria-label="anchor" href="#background"></a>
+</h3>
 <p>In a benchmarking, it’s often that we need to calculate the concordance rate between the test set and truth set. In the truth VCF file, there are always true genotypes <strong>GT</strong> otherwise we can’t validate the test VCF. A test VCF may be from the variant caller or the genotype imputation program, and the format can be variable, e.g <strong>GP</strong>, <strong>DS</strong> and <strong>GT</strong>. Hence, this article guides you how to use the <code><a href="../reference/vcfcomp.html">vcfppR::vcfcomp</a></code> function to rapidly examine various statistics for different scenarios and formats, such as the Pearson correlation of genotyping (stats=“r2”), the Non-Reference Concordance (stats=“nrc”), the F1-score (stats=“f1”) or the Phasing Switch Error (stats=“pse”).</p>
 </div>
-<div class="section level2">
-<h2 id="case-1-genotype-imputation-accuracy">Case 1: Genotype imputation accuracy<a class="anchor" aria-label="anchor" href="#case-1-genotype-imputation-accuracy"></a>
-</h2>
+<div class="section level3">
+<h3 id="case-1-genotype-imputation-accuracy">Case 1: Genotype imputation accuracy<a class="anchor" aria-label="anchor" href="#case-1-genotype-imputation-accuracy"></a>
+</h3>
 <p>We normally get genotype posterior <code>GP</code> and genotype dosage <code>DS</code> from the diploid imputation software, eg QUILT and GLIMPSE. To examine the imputation accuracy, we calculate the Pearson correlation between the imputed genotype dosage and the true genotypes. With <code>vcfcomp</code>, we need to specify the desired <code>stats="r2"</code> and <code>formats=c("DS","GT")</code>, which will extract the respective FORMAT items for the <code>testvcf</code> and <code>truthvcf</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span><span class="va">testvcf</span>, <span class="va">truthvcf</span>, formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DS"</span>, <span class="st">"GT"</span><span class="op">)</span>, stats <span class="op">=</span> <span class="st">"r2"</span><span class="op">)</span></span></code></pre></div>
@@ -82,36 +82,54 @@
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span><span class="va">testvcf</span>, <span class="va">truthvcf</span>, formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MDS"</span>, <span class="st">"GT"</span><span class="op">)</span>, stats <span class="op">=</span> <span class="st">"r2"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span><span class="va">testvcf</span>, <span class="va">truthvcf</span>, formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FDS"</span>, <span class="st">"GT"</span><span class="op">)</span>, stats <span class="op">=</span> <span class="st">"r2"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="case-2-genotype-concordance">Case 2: Genotype concordance<a class="anchor" aria-label="anchor" href="#case-2-genotype-concordance"></a>
-</h2>
-<p>In this case, we are interested in the called genotype concordance and the sensitivity / specificity in genotype calling. In contrast to <code>stats="r2"</code>, we choose <code>stats="f1"</code> or <code>stats="nrc"</code> and specify the <code>formats=c("GT", "GT")</code>. Normally, we want the results for each sample, which can be achieved by using <code>by.sample=TRUE</code>.</p>
+<div class="section level3">
+<h3 id="case-2-genotype-concordance">Case 2: Genotype concordance<a class="anchor" aria-label="anchor" href="#case-2-genotype-concordance"></a>
+</h3>
+<p>In this case, we are interested in the called genotype concordance and the sensitivity / specificity in genotype calling. In addition to <code>stats="r2"</code>, we choose <code>stats="f1"</code> or <code>stats="nrc"</code> and specify the <code>formats=c("GT", "GT")</code>. Normally, we want the results for each sample, which can be achieved by using <code>by.sample=TRUE</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span><span class="va">testvcf</span>, <span class="va">truthvcf</span>, formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GT"</span>,<span class="st">"GT"</span><span class="op">)</span>, stats<span class="op">=</span><span class="st">"nrc"</span>, by.sample<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span><span class="va">testvcf</span>, <span class="va">truthvcf</span>, formats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GT"</span>,<span class="st">"GT"</span><span class="op">)</span>, stats<span class="op">=</span><span class="st">"f1"</span>, by.sample<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="case-3-phasing-switch-error">Case 3: Phasing switch error<a class="anchor" aria-label="anchor" href="#case-3-phasing-switch-error"></a>
-</h2>
-<p>In this case, we look for functionality to assess the phasing switch error. First of all, we need the two VCF files to contain the <strong>phased GT</strong>, which is represented through the ‘|’. We can choose to return the sites that have pse.</p>
+<div class="section level3">
+<h3 id="case-3-phasing-switch-error">Case 3: Phasing switch error<a class="anchor" aria-label="anchor" href="#case-3-phasing-switch-error"></a>
+</h3>
+<p>In this case, we look for a functionality to assess the phasing switch error(PSE). First of all, we need the two VCF files to contain the <strong>phased GT</strong>, which is represented through the ‘|’. We can choose to return the sites that have PSE.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span><span class="va">testvcf</span>, <span class="va">truthvcf</span>, stats<span class="op">=</span><span class="st">"pse"</span>, return_pse_sites<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Note:</strong> Currently, the <code>pse</code> statatics is a simple form that doesn’t take the completeness and quality into account.</p>
 </div>
-<div class="section level2">
-<h2 id="case-4-multiple-testing-repetitively">Case 4: Multiple testing repetitively<a class="anchor" aria-label="anchor" href="#case-4-multiple-testing-repetitively"></a>
-</h2>
-<p>In the comprehensive benchmarking, we often run many tests against the same true sets. In this scenario, we can save the truth as an RDS object and reuse it. Actually, both <code>test</code> and <code>truth</code> can take an RDS file as input. The RDS file stores an object that returned by <code>vcftable</code>.</p>
+<div class="section level3">
+<h3 id="case-4-multiple-testing-repetitively">Case 4: Multiple testing repetitively<a class="anchor" aria-label="anchor" href="#case-4-multiple-testing-repetitively"></a>
+</h3>
+<p>In the comprehensive benchmarking, we often run many tests against the same true sets. In this scenario, we can save the truth object and reuse it. Actually, both <code>test</code> and <code>truth</code> can take as input a <code>vcftable</code> object or a RDS file. The RDS file stores an object that returned by <code>vcftable</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/vcftable.html">vcftable</a></span><span class="op">(</span><span class="va">truthvcf</span><span class="op">)</span>, <span class="st">"truth.rds"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span>test<span class="op">=</span><span class="va">testvcf1</span>, truth<span class="op">=</span><span class="st">"truth.rds"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span>test<span class="op">=</span><span class="va">testvcf2</span>, truth<span class="op">=</span><span class="st">"truth.rds"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/vcfcomp.html">vcfcomp</a></span><span class="op">(</span>test<span class="op">=</span><span class="va">testvcf3</span>, truth<span class="op">=</span><span class="st">"truth.rds"</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Note:</strong> Since the input is R objects instead of VCF path, then you can not use the <code>formats</code> option in <code>vcfcomp</code> to specify new formats other than the ones in your input R objects.</p>
 </div>
 <div class="section level2">
-<h2 id="qa-how-to-fix-the-error-inconsistent-samples-name">Q&amp;A: How to fix the error “inconsistent samples name”<a class="anchor" aria-label="anchor" href="#qa-how-to-fix-the-error-inconsistent-samples-name"></a>
+<h2 id="qa">Q&amp;A<a class="anchor" aria-label="anchor" href="#qa"></a>
 </h2>
+<div class="section level3">
+<h3 id="where-is-the-allele-frequency-from-and-can-i-use-customized-one">Where is the allele frequency from and can I use customized one?<a class="anchor" aria-label="anchor" href="#where-is-the-allele-frequency-from-and-can-i-use-customized-one"></a>
+</h3>
+<p>In default, the allele frequency of each vairant is calculated on the fly from the truth VCF based on GT. Yes, you can specify an external file that stores allele frequencies from a database. Currently, <code>vcfcomp</code> can only take a space-separated text file with five columns and a header named with “chr” “pos” “ref” “alt” “af”.</p>
+</div>
+<div class="section level3">
+<h3 id="how-to-fix-the-error-inconsistent-samples-name">How to fix the error “inconsistent samples name”<a class="anchor" aria-label="anchor" href="#how-to-fix-the-error-inconsistent-samples-name"></a>
+</h3>
 <p>If one is certain about the samples name in the testvcf can be replaced with other names that can match the samples in the truthvcf. One can use the <code>names</code> option to specify a vector of new names that can be found in the truthvcf.</p>
+</div>
+<div class="section level3">
+<h3 id="na-values-returned">NA values returned<a class="anchor" aria-label="anchor" href="#na-values-returned"></a>
+</h3>
+<ol style="list-style-type: decimal">
+<li>make sure you read the docs carefully and use the correct FORMAT in your VCF files</li>
+<li>set <code>bins</code> to bigger intervals because there will be NAs if no variants exist in the specified intervals bin.</li>
+</ol>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
