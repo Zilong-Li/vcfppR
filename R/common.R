@@ -41,7 +41,7 @@ concordance_by_freq <- function(truthG, testDS, breaks, af, FUN,
       list(
         n = length(w),
         nA = sum(truthG[w, ], na.rm = TRUE),
-        concordance = unlist(sapply(1:ncol(truthG), function(ind) {
+        accuracy = unlist(sapply(1:ncol(truthG), function(ind) {
           FUN(truthG[w, ind], testDS[w, ind])
         }))
       )
@@ -52,7 +52,7 @@ concordance_by_freq <- function(truthG, testDS, breaks, af, FUN,
       c(
         n = length(w),
         nA = sum(truthG[w, ], na.rm = TRUE),
-        concordance = mean(sapply(w, function(ww) {
+        accuracy = mean(sapply(w, function(ww) {
           FUN(truthG[ww, ], testDS[ww, ])
         }), na.rm = TRUE)
       )
@@ -62,14 +62,14 @@ concordance_by_freq <- function(truthG, testDS, breaks, af, FUN,
       c(
         n = length(w),
         nA = sum(truthG[w, ], na.rm = TRUE),
-        concordance = FUN(truthG[w,], testDS[w,])
+        accuracy = FUN(truthG[w,], testDS[w,])
       )
     })
   }
   # fill with NA for AF bins without SNPs
   cors_per_af <- t(sapply(cors_per_af, function(a) {
     if (is.null(a[1])) {
-      return(c(n = NA, nA = NA, concordance = NA))
+      return(c(n = NA, nA = NA, accuracy = NA))
     }
     a
   }))

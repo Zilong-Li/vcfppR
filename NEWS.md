@@ -1,3 +1,7 @@
+# vcfppR 0.8.1
+* remove unused code in vcfpp.h
+* vcfcomp: rename the col name "concordance" as "accuracy"
+
 # vcfppR 0.8.0
 * copy static libs into libs folder
 
