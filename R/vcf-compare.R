@@ -41,7 +41,7 @@
 #'           If NULL, allele frequencies are calculated from the truth genotypes.
 #'
 #' @param out output prefix for saving objects into RDS file. If provided, creates three files:
-#'            <out>.af.rds, <out>.test.rds, and <out>.truth.rds
+#'            out.af.rds, out.test.rds, and out.truth.rds
 #'
 #' @param choose_random_start logical. choose random start for stats="pse". Defaults to FALSE.
 #'
