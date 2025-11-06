@@ -4,7 +4,6 @@
 .httr-oauth
 .DS_Store
 *.tar.gz
-*.tbi
 vignettes/*_cache
 src/htslib-1.21
 test-random.R

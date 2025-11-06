@@ -2,7 +2,6 @@
 ^README\.Rmd$
 ^\.clangd$
 ^\.clang-format$
-^.*\.tbi$
 ^src/htslib-1.21/htscodecs/tests
 ^src/htslib-1.21/.*\.o$
 ^src/.*\.o$
@@ -12,7 +11,6 @@
 ^Makefile
 ^README.html
 .*\.tar\.gz$
-.*\.tbi$
 .*\.log$
 ^.covrignore$
 ^codecov.yaml$
