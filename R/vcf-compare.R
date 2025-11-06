@@ -244,14 +244,15 @@ comp_stats_per_sample <- function(test, truth, stats, ...) {
   if(sum(!d1$samples[w2] == d2$samples)>0) stop('Sample IDs do not match')
   gt <- d1[[10]][w1,w2]
   gq <- d1[[11]][w1,w2]
-  call <- as.data.frame(cbind(
-    'gq'=as.vector(gq),
+  call <- data.frame(
+    'x'=as.vector(gq),
     'disc'= as.vector(gt != d2[[10]])
-  ))
+  )
+  colnames(call) <- c(formats[2], 'disc')
   w <- !is.na(call$disc)
   call <- call[w,] ## remove NAs
   # then order by gq
-  call <- call[order(call$gq, decreasing = T),]
+  call <- call[order(call[,1], decreasing = T),]
   # return ranked mean discordance
   call$meandisc <- cumsum(call$disc)/1:sum(w)
   ret <- list(samples = d2$samples, stats = call)

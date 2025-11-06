@@ -189,7 +189,7 @@ plot_call <- function(obj, stats,
   d <- obj[[stats]]
 
   if(stats == "gtgq") {
-    changed <- which(diff(d$gq) != 0)+1
+    changed <- which(diff(d[,1]) != 0)+1
     x <- changed[seq(1,length(changed), 4)] ## select every 4 
     plot(changed, d[changed,"meandisc"],
          xlab = xlab,
