@@ -93,7 +93,7 @@ str(res)
 # sample-wise comparision stratified by sample-level metrice e.g GQ
 test <- system.file("extdata", "svupp.call.vcf.gz", package="vcfppR")
 truth <- system.file("extdata", "platinum.sv.vcf.gz", package="vcfppR")
-res <- vcfcomp(svupp, truth, stats = "gtgq", region = "chr1")
+res <- vcfcomp(test, truth, stats = "gtgq", region = "chr1")
 str(res)
 
 }

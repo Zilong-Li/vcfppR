@@ -178,6 +178,8 @@ vcftable <- function(vcffile,
 #' @param drop logical. If TRUE, the result is coerced to the lowest possible dimension.
 #'             Passed to the [ operator when subsetting. Default FALSE.
 #'
+#' @param ... Currently not used but can avoid S3 generic consistency warnings
+#'
 #' @return A vcftable object with the selected variants and fields.
 #'
 #' @author Zilong Li \email{zilong.dk@gmail.com}
@@ -201,7 +203,7 @@ vcftable <- function(vcffile,
 #' snps <- subset(res, nchar(ref) == 1 & nchar(alt) == 1)
 #'
 #' @export
-subset.vcftable <- function(x, subset, select, drop = FALSE) {
+subset.vcftable <- function(x, subset, select, drop = FALSE, ...) {
   # Convert subset expression to logical vector
   if (missing(subset)) {
     r <- TRUE

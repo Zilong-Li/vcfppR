@@ -4,7 +4,7 @@
 \alias{subset.vcftable}
 \title{Subset a vcftable object}
 \usage{
-\method{subset}{vcftable}(x, subset, select, drop = FALSE)
+\method{subset}{vcftable}(x, subset, select, drop = FALSE, ...)
 }
 \arguments{
 \item{x}{a vcftable object returned by \code{\link{vcftable}}}
@@ -20,6 +20,8 @@ Note: the samples field is always kept and cannot be selected/deselected.}
 
 \item{drop}{logical. If TRUE, the result is coerced to the lowest possible dimension.
 Passed to the [ operator when subsetting. Default FALSE.}
+
+\item{...}{Currently not used but can avoid S3 generic consistency warnings}
 }
 \value{
 A vcftable object with the selected variants and fields.
