@@ -5,6 +5,8 @@
 #'
 #' @param which.sample which sample to be plotted. NULL will aggregate all samples.
 #'
+#' @param which.format which FORMAT field to be plotted. Defaults will use the 10-th names.
+#'
 #' @param variant which types of variant are desired
 #'
 #' @param pop file contains population information
@@ -14,6 +16,7 @@
 #' @export
 vcfplot <- function(obj,
                     which.sample = NULL,
+                    which.format = 10,
                     variant = c("SNP","INDEL"),
                     pop = NULL,
                     ...) {
@@ -31,6 +34,8 @@ vcfplot <- function(obj,
       plot_comp(obj, "f1", which.sample, ...)
     else if("nrc" %in% obj.names)
       plot_comp(obj, "nrc", which.sample, ...)
+    else
+      message("no available plots for unnamed vcfcomp objects")
   }
 
   if(is(obj, "vcfsummary")){
@@ -55,7 +60,7 @@ vcfplot <- function(obj,
   }
 
   if(is(obj, "vcftable")){
-    plot_scatter(obj, which.sample, ...)
+    plot_scatter(obj, which.sample, which.format, ...)
   }
 }
 
@@ -68,7 +73,7 @@ plot_comp <- function(obj, stats, which.sample,
                       xlab = "Minor allele frequency %",
                       ...) {
   bysample <- TRUE
-  d <- tryCatch({ do.call(rbind, obj[[stats]][,"concordance"])},
+  d <- tryCatch({ do.call(rbind, obj[[stats]][,"accuracy"])},
                 error = function(e){
                   FALSE
                 })
@@ -82,7 +87,7 @@ plot_comp <- function(obj, stats, which.sample,
   }
   if(is.null(which.sample)){
     if(rm.na)
-      d <- d[complete.cases(d[,"concordance"]),]
+      d <- d[complete.cases(d[,"accuracy"]),]
   } else {
     if(rm.na)
       d <- d[complete.cases(d[,which.sample]),]
@@ -102,7 +107,7 @@ plot_comp <- function(obj, stats, which.sample,
        ylab = ylab,
        main = main)
   if(is.null(which.sample)){
-    points(x=x[bin], y=d[bin, "concordance"], ...)
+    points(x=x[bin], y=d[bin, "accuracy"], ...)
   } else {
     for(i in seq_along(which.sample))
       points(x=x[bin], y=d[bin, which.sample[i]], col = i, ...)
@@ -137,12 +142,13 @@ plot_pse <- function(pse, extra = 10, col = 2, xaxt = "s",
 
 plot_scatter <- function(obj,
                          which.sample,
+                         which.format = 10,
                          xlab = "Genomic coordinates",
                          ylab = NULL,
                          main = NULL,
                          ...){
   stopifnot(is(obj, "vcftable"))
-  if(!is.matrix(obj[[10]]))
+  if(!is.matrix(obj[[which.format]]))
     warning("the format is not well aligned across all samples")
   if(is.null(which.sample)){
     message("which.sample is NULL. will set which.sample as 1")
@@ -153,12 +159,12 @@ plot_scatter <- function(obj,
     which.sample <- which.sample[1]
   }
   x <- obj$pos
-  y <- obj[[10]]
+  y <- obj[[which.format]]
   objattr <- names(obj)
   if(is.null(ylab))
     ylab <- ""
   if(is.null(main))
-    main <- objattr[10]
+    main <- objattr[which.format]
   plot(x, y[,which.sample],
        xlab = xlab,
        ylab = ylab,

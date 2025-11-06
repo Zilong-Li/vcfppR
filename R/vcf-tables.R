@@ -121,7 +121,10 @@ vcftable <- function(vcffile,
   res <- NULL
   if(format == "GT") {
     res <- tableGT(vcffile, region, samples, "GT", ids, qual, pass, info, snps, indels, multiallelics, multisnps, svs, mac)
-    if(length(res$gt)==0) return(res)
+    if(length(res$gt)==0) {
+        class(res) <- "vcftable"
+        return(res)
+    }
     res[[10]] <- do.call("rbind", res[[10]])
     n <- ncol(res$gt)
     ploidy <- n / length(res$samples)
@@ -141,7 +144,6 @@ vcftable <- function(vcffile,
     } 
   }
   if(setid) res$id <- paste(res$chr, res$pos, res$ref, res$alt, sep = "_")
-  class(res) <- "vcftable"
 
   if(rmdup) { ## detect duplication via duplicated for POS
     w <- duplicated(res$pos)
@@ -153,7 +155,92 @@ vcftable <- function(vcffile,
       v
     })
   }
-  
+
+  class(res) <- "vcftable"
   return(res)
 }
+
+#' @title
+#' Subset a vcftable object
+#'
+#' @description
+#' S3 method for subsetting vcftable objects by rows (variants) and columns (fields).
+#' Allows filtering variants based on logical conditions and selecting specific fields.
+#'
+#' @param x a vcftable object returned by \code{\link{vcftable}}
+#' @param subset logical expression indicating variants (rows) to keep.
+#'               The expression is evaluated in the context of the vcftable object,
+#'               allowing direct reference to fields like chr, pos, ref, alt, qual, etc.
+#'               Missing values are treated as FALSE.
+#' @param select expression indicating which fields (columns) to select.
+#'               If omitted, all fields except samples are selected.
+#'               Note: the samples field is always kept and cannot be selected/deselected.
+#' @param drop logical. If TRUE, the result is coerced to the lowest possible dimension.
+#'             Passed to the [ operator when subsetting. Default FALSE.
+#'
+#' @return A vcftable object with the selected variants and fields.
+#'
+#' @author Zilong Li \email{zilong.dk@gmail.com}
+#'
+#' @examples
+#' library('vcfppR')
+#' vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
+#' res <- vcftable(vcffile, "chr21:1-5050000")
+#'
+#' # Subset by quality score
+#' high_qual <- subset(res, qual > 100)
+#'
+#' # Subset by position and select specific fields
+#' region_subset <- subset(res, pos >= 5000000 & pos <= 5010000,
+#'                         select = c(chr, pos, ref, alt))
+#'
+#' region_subset <- subset(res, pos >= 5000000 & pos <= 5030400,
+#'                         select = c(chr, pos, ref, alt))
+#' 
+#' # Subset SNPs (REF and ALT are single nucleotides)
+#' snps <- subset(res, nchar(ref) == 1 & nchar(alt) == 1)
+#'
+#' @export
+subset.vcftable <- function(x, subset, select, drop = FALSE) {
+  # Convert subset expression to logical vector
+  if (missing(subset)) {
+    r <- TRUE
+  } else {
+    e <- substitute(subset)
+    r <- eval(e, x, parent.frame())
+    if (!is.logical(r)) stop("'subset' must be logical")
+    r <- r & !is.na(r)  # Remove NAs
+  }
+  
+  # do selection
+  # skip the first item, i.e. the samples
+  if (missing(select)) {
+    vars <- setdiff(names(x), "samples")
+  } else {
+    # Create named list of indices for all fields
+    nl <- as.list(seq_along(x))
+    names(nl) <- names(x)
+    # Evaluate select expression to get indices
+    indices <- eval(substitute(select), nl, parent.frame())
+    # Convert indices to field names
+    vars <- names(x)[indices]
+  }
+
+  # Apply subsetting
+  ret <- list(samples = x$samples)
+  for(v in vars) {
+    # Skip samples if it was somehow selected
+    if(v == "samples") next
+    if(is.vector(x[[v]]) | is.list(x[[v]])) {
+      ret[[v]] <- x[[v]][r, drop = drop]
+    } else {
+      ret[[v]] <- x[[v]][r, , drop = drop]
+    }
+  }
+
+  class(ret) <- "vcftable"
+  return(ret)
+}
+
+
 
