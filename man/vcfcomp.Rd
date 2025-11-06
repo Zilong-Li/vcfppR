@@ -58,7 +58,7 @@ Format of the text file: a space-separated text file with five columns and a hea
 If NULL, allele frequencies are calculated from the truth genotypes.}
 
 \item{out}{output prefix for saving objects into RDS file. If provided, creates three files:
-\if{html}{\out{<out>}}.af.rds, \if{html}{\out{<out>}}.test.rds, and \if{html}{\out{<out>}}.truth.rds}
+out.af.rds, out.test.rds, and out.truth.rds}
 
 \item{choose_random_start}{logical. choose random start for stats="pse". Defaults to FALSE.}
 
