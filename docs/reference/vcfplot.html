@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">vcfppR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,14 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vcfplot</span><span class="op">(</span><span class="va">obj</span>, which.sample <span class="op">=</span> <span class="cn">NULL</span>, variant <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SNP"</span>, <span class="st">"INDEL"</span><span class="op">)</span>, pop <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vcfplot</span><span class="op">(</span></span>
+<span>  <span class="va">obj</span>,</span>
+<span>  which.sample <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  which.format <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  variant <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SNP"</span>, <span class="st">"INDEL"</span><span class="op">)</span>,</span>
+<span>  pop <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -56,6 +63,10 @@
 
 <dt id="arg-which-sample">which.sample<a class="anchor" aria-label="anchor" href="#arg-which-sample"></a></dt>
 <dd><p>which sample to be plotted. NULL will aggregate all samples.</p></dd>
+
+
+<dt id="arg-which-format">which.format<a class="anchor" aria-label="anchor" href="#arg-which-format"></a></dt>
+<dd><p>which FORMAT field to be plotted. Defaults will use the 10-th names.</p></dd>
 
 
 <dt id="arg-variant">variant<a class="anchor" aria-label="anchor" href="#arg-variant"></a></dt>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">vcfppR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,24 +66,42 @@
 
 
 <dl><dt id="arg-test">test<a class="anchor" aria-label="anchor" href="#arg-test"></a></dt>
-<dd><p>path to the comparision file (test), which can be a VCF/BCF file, vcftable object  or saved RDS file.</p></dd>
+<dd><p>path to the comparison file (test), which can be a VCF/BCF file, vcftable object or saved RDS file.</p></dd>
 
 
 <dt id="arg-truth">truth<a class="anchor" aria-label="anchor" href="#arg-truth"></a></dt>
-<dd><p>path to the baseline file (truth),which can be a VCF/BCF file, vcftable object  or saved RDS file.</p></dd>
+<dd><p>path to the baseline file (truth), which can be a VCF/BCF file, vcftable object or saved RDS file.</p></dd>
 
 
 <dt id="arg-formats">formats<a class="anchor" aria-label="anchor" href="#arg-formats"></a></dt>
 <dd><p>character vector. the FORMAT tags to extract for the test and truth respectively.
-default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.</p></dd>
+default c("DS", "GT") extracts 'DS' of the test and 'GT' of the truth.</p></dd>
 
 
 <dt id="arg-stats">stats<a class="anchor" aria-label="anchor" href="#arg-stats"></a></dt>
-<dd><p>the statistics to be calculated. supports the following.
-"r2": the Pearson correlation coefficient square.
-"f1": the F1-score, good balance between sensitivity and precision.
-"nrc": the Non-Reference Concordance rate
-"pse": the Phasing Switch Error rate</p></dd>
+<dd><p>character. the statistics to be calculated. Supports the following options:</p><dl><dt>"r2"</dt>
+<dd><p>the Pearson correlation coefficient squared (default)</p></dd>
+
+<dt>"f1"</dt>
+<dd><p>the F1-score, good balance between sensitivity and precision</p></dd>
+
+<dt>"nrc"</dt>
+<dd><p>the Non-Reference Concordance rate</p></dd>
+
+<dt>"pse"</dt>
+<dd><p>the Phasing Switch Error rate</p></dd>
+
+<dt>"all"</dt>
+<dd><p>calculate r2, f1, and nrc together</p></dd>
+
+<dt>"gtgq"</dt>
+<dd><p>genotype quality-based concordance analysis</p></dd>
+
+<dt>"gtdp"</dt>
+<dd><p>depth-based concordance analysis</p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-by-sample">by.sample<a class="anchor" aria-label="anchor" href="#arg-by-sample"></a></dt>
@@ -104,38 +122,49 @@ If both by.sample and by.variant are FALSE, then do calculations for all samples
 
 
 <dt id="arg-bins">bins<a class="anchor" aria-label="anchor" href="#arg-bins"></a></dt>
-<dd><p>numeric vector. break statistics into allele frequency bins.</p></dd>
+<dd><p>numeric vector. break statistics into allele frequency bins.
+If NULL (default), bins are automatically generated with fine resolution for rare variants
+and coarser resolution for common variants (ranging from 0 to 0.5).</p></dd>
 
 
 <dt id="arg-af">af<a class="anchor" aria-label="anchor" href="#arg-af"></a></dt>
 <dd><p>file path with allele frequency or a RDS file with a saved object for af.
-Format of the text file: a space-separated text file with five columns and a header named 'chr' 'pos' 'ref' 'alt' 'af'</p></dd>
+Format of the text file: a space-separated text file with five columns and a header named 'chr' 'pos' 'ref' 'alt' 'af'.
+If NULL, allele frequencies are calculated from the truth genotypes.</p></dd>
 
 
 <dt id="arg-out">out<a class="anchor" aria-label="anchor" href="#arg-out"></a></dt>
-<dd><p>output prefix for saving objects into RDS file</p></dd>
+<dd><p>output prefix for saving objects into RDS file. If provided, creates three files:
+<out>.af.rds, <out>.test.rds, and <out>.truth.rds</out></out></out></p></dd>
 
 
 <dt id="arg-choose-random-start">choose_random_start<a class="anchor" aria-label="anchor" href="#arg-choose-random-start"></a></dt>
-<dd><p>choose random start for stats="pse"</p></dd>
+<dd><p>logical. choose random start for stats="pse". Defaults to FALSE.</p></dd>
 
 
 <dt id="arg-return-pse-sites">return_pse_sites<a class="anchor" aria-label="anchor" href="#arg-return-pse-sites"></a></dt>
-<dd><p>boolean. return phasing switch error sites</p></dd>
+<dd><p>logical. return phasing switch error sites when stats="pse". Defaults to FALSE.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>options passed to <code>vcftable</code></p></dd>
+<dd><p>additional options passed to <code>vcftable</code>, such as 'samples', 'region', or 'pass'.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a list of various statistics</p>
-    </div>
+    <p>a list object of class "vcfcomp" containing:</p><dl><dt>samples</dt>
+<dd><p>character vector of sample names</p></dd>
+
+<dt><a href="https://rdrr.io/r/stats/stats-package.html" class="external-link">stats</a></dt>
+<dd><p>the calculated statistics, named according to the 'stats' parameter.
+For stats="all", returns r2, f1, and nrc components.</p></dd>
+
+
+</dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p><code>vcfcomp</code> implements various statisitcs to compare two VCF/BCF files,
-e.g. report genotype concocrdance, correlation stratified by allele frequency.</p>
+    <p><code>vcfcomp</code> implements various statistics to compare two VCF/BCF files,
+e.g. report genotype concordance, correlation stratified by allele frequency.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -145,11 +174,19 @@ e.g. report genotype concocrdance, correlation stratified by allele frequency.</
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/Zilong-Li/vcfppR" class="external-link">'vcfppR'</a></span><span class="op">)</span></span>
+<span><span class="co"># site-wise comparision stratified by allele frequency</span></span>
 <span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"imputed.gt.vcf.gz"</span>, package<span class="op">=</span><span class="st">"vcfppR"</span><span class="op">)</span></span>
-<span><span class="va">truth</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"imputed.gt.vcf.gz"</span>, package<span class="op">=</span><span class="st">"vcfppR"</span><span class="op">)</span></span>
-<span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="st">"HG00133,HG00143,HG00262"</span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">vcfcomp</span><span class="op">(</span><span class="va">test</span>, <span class="va">truth</span>, stats<span class="op">=</span><span class="st">"f1"</span>, samples<span class="op">=</span><span class="va">samples</span>, setid<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">truth</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"raw.gt.vcf.gz"</span>, package<span class="op">=</span><span class="st">"vcfppR"</span><span class="op">)</span></span>
+<span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="st">"HG00673,NA10840"</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">vcfcomp</span><span class="op">(</span><span class="va">test</span>, <span class="va">truth</span>, stats<span class="op">=</span><span class="st">"r2"</span>, bins<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>, samples<span class="op">=</span><span class="va">samples</span>, setid<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># sample-wise comparision stratified by sample-level metrice e.g GQ</span></span>
+<span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"svupp.call.vcf.gz"</span>, package<span class="op">=</span><span class="st">"vcfppR"</span><span class="op">)</span></span>
+<span><span class="va">truth</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"platinum.sv.vcf.gz"</span>, package<span class="op">=</span><span class="st">"vcfppR"</span><span class="op">)</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">vcfcomp</span><span class="op">(</span><span class="va">test</span>, <span class="va">truth</span>, stats <span class="op">=</span> <span class="st">"gtgq"</span>, region <span class="op">=</span> <span class="st">"chr1"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span></span></code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

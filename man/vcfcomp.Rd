@@ -22,18 +22,23 @@ vcfcomp(
 )
 }
 \arguments{
-\item{test}{path to the comparision file (test), which can be a VCF/BCF file, vcftable object  or saved RDS file.}
+\item{test}{path to the comparison file (test), which can be a VCF/BCF file, vcftable object or saved RDS file.}
 
-\item{truth}{path to the baseline file (truth),which can be a VCF/BCF file, vcftable object  or saved RDS file.}
+\item{truth}{path to the baseline file (truth), which can be a VCF/BCF file, vcftable object or saved RDS file.}
 
 \item{formats}{character vector. the FORMAT tags to extract for the test and truth respectively.
-default c("DS", "GT") extracts 'DS' of the target and 'GT' of the truth.}
+default c("DS", "GT") extracts 'DS' of the test and 'GT' of the truth.}
 
-\item{stats}{the statistics to be calculated. supports the following.
-"r2": the Pearson correlation coefficient square.
-"f1": the F1-score, good balance between sensitivity and precision.
-"nrc": the Non-Reference Concordance rate
-"pse": the Phasing Switch Error rate}
+\item{stats}{character. the statistics to be calculated. Supports the following options:
+\describe{
+\item{"r2"}{the Pearson correlation coefficient squared (default)}
+\item{"f1"}{the F1-score, good balance between sensitivity and precision}
+\item{"nrc"}{the Non-Reference Concordance rate}
+\item{"pse"}{the Phasing Switch Error rate}
+\item{"all"}{calculate r2, f1, and nrc together}
+\item{"gtgq"}{genotype quality-based concordance analysis}
+\item{"gtdp"}{depth-based concordance analysis}
+}}
 
 \item{by.sample}{logical. calculate sample-wise concordance, which can be stratified by MAF bin.}
 
@@ -44,36 +49,53 @@ If both by.sample and by.variant are FALSE, then do calculations for all samples
 
 \item{names}{character vector. reset samples' names in the test VCF.}
 
-\item{bins}{numeric vector. break statistics into allele frequency bins.}
+\item{bins}{numeric vector. break statistics into allele frequency bins.
+If NULL (default), bins are automatically generated with fine resolution for rare variants
+and coarser resolution for common variants (ranging from 0 to 0.5).}
 
 \item{af}{file path with allele frequency or a RDS file with a saved object for af.
-Format of the text file: a space-separated text file with five columns and a header named 'chr' 'pos' 'ref' 'alt' 'af'}
+Format of the text file: a space-separated text file with five columns and a header named 'chr' 'pos' 'ref' 'alt' 'af'.
+If NULL, allele frequencies are calculated from the truth genotypes.}
 
-\item{out}{output prefix for saving objects into RDS file}
+\item{out}{output prefix for saving objects into RDS file. If provided, creates three files:
+\if{html}{\out{<out>}}.af.rds, \if{html}{\out{<out>}}.test.rds, and \if{html}{\out{<out>}}.truth.rds}
 
-\item{choose_random_start}{choose random start for stats="pse"}
+\item{choose_random_start}{logical. choose random start for stats="pse". Defaults to FALSE.}
 
-\item{return_pse_sites}{boolean. return phasing switch error sites}
+\item{return_pse_sites}{logical. return phasing switch error sites when stats="pse". Defaults to FALSE.}
 
-\item{...}{options passed to \code{vcftable}}
+\item{...}{additional options passed to \code{vcftable}, such as 'samples', 'region', or 'pass'.}
 }
 \value{
-a list of various statistics
+a list object of class "vcfcomp" containing:
+\describe{
+\item{samples}{character vector of sample names}
+\item{\link{stats}}{the calculated statistics, named according to the 'stats' parameter.
+For stats="all", returns r2, f1, and nrc components.}
+}
 }
 \description{
 Compare two VCF/BCF files reporting various statistics
 }
 \details{
-\code{vcfcomp} implements various statisitcs to compare two VCF/BCF files,
-e.g. report genotype concocrdance, correlation stratified by allele frequency.
+\code{vcfcomp} implements various statistics to compare two VCF/BCF files,
+e.g. report genotype concordance, correlation stratified by allele frequency.
 }
 \examples{
 library('vcfppR')
+# site-wise comparision stratified by allele frequency
 test <- system.file("extdata", "imputed.gt.vcf.gz", package="vcfppR")
-truth <- system.file("extdata", "imputed.gt.vcf.gz", package="vcfppR")
-samples <- "HG00133,HG00143,HG00262"
-res <- vcfcomp(test, truth, stats="f1", samples=samples, setid=TRUE)
+truth <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
+samples <- "HG00673,NA10840"
+res <- vcfcomp(test, truth, stats="r2", bins=c(0,1), samples=samples, setid=TRUE)
 str(res)
+
+# sample-wise comparision stratified by sample-level metrice e.g GQ
+test <- system.file("extdata", "svupp.call.vcf.gz", package="vcfppR")
+truth <- system.file("extdata", "platinum.sv.vcf.gz", package="vcfppR")
+res <- vcfcomp(test, truth, stats = "gtgq", region = "chr1")
+str(res)
+
 }
 \author{
 Zilong Li \email{zilong.dk@gmail.com}
