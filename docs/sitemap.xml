@@ -1,5 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>/404.html</loc></url>
+<url><loc>/CLAUDE.html</loc></url>
 <url><loc>/CONTRIBUTING.html</loc></url>
 <url><loc>/LICENSE-text.html</loc></url>
 <url><loc>/PULL_REQUEST_TEMPLATE.html</loc></url>
@@ -9,6 +10,7 @@
 <url><loc>/index.html</loc></url>
 <url><loc>/news/index.html</loc></url>
 <url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/subset.vcftable.html</loc></url>
 <url><loc>/reference/vcfcomp.html</loc></url>
 <url><loc>/reference/vcfinfo.html</loc></url>
 <url><loc>/reference/vcfplot.html</loc></url>

@@ -28,6 +28,8 @@ vcfplot <- function(obj,
     obj.names <- names(obj)
     if("pse" %in% obj.names)
       plot_pse(obj$pse[which.sample], ...)
+    else if("gtgq" %in% obj.names)
+      plot_call(obj, "gtgq", ...)
     else if("r2" %in% obj.names)
       plot_comp(obj, "r2", which.sample, ...)
     else if("f1" %in% obj.names)
@@ -64,6 +66,9 @@ vcfplot <- function(obj,
   }
 }
 
+## +--------------------+
+## | internal functions |
+## +--------------------+
 
 plot_comp <- function(obj, stats, which.sample,
                       rm.na = TRUE, bin = NULL,
@@ -170,4 +175,28 @@ plot_scatter <- function(obj,
        ylab = ylab,
        main = main,
        ...)
+}
+
+plot_call <- function(obj, stats,
+                      xlab = NULL,
+                      ylab = NULL,
+                      main = NULL,
+                      ...) {
+  if(is.null(xlab)) xlab <- "# called genotypes"
+  if(is.null(ylab)) ylab <- "Mean genotype discordance"
+  if(is.null(main)) main <- paste0("stats='", stats,"'")
+  ## plot(x, d[x,"meandisc"], bty = 'l', type = 'l')
+  d <- obj[[stats]]
+
+  if(stats == "gtgq") {
+    changed <- which(diff(d$gq) != 0)+1
+    x <- changed[seq(1,length(changed), 4)] ## select every 4 
+    plot(changed, d[changed,"meandisc"],
+         xlab = xlab,
+         ylab = ylab,
+         main = main,
+         ...)
+  } else {
+    stop("no plots for this. please submit a PR!")
+  }
 }

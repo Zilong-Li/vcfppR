@@ -79,6 +79,26 @@ str(res)
 #>  - attr(*, "class")= chr "vcftable"
 ```
 
+**Read all variants followed by subsetting operations**
+
+``` r
+vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
+res <- vcftable(vcffile, "chr21:1-5050000")
+str(subset(res, pos >= 5000000 & pos <= 5030300 & nchar(ref) == 1 & nchar(alt) == 1))
+#> List of 10
+#>  $ samples: chr [1:3202] "HG00096" "HG00097" "HG00099" "HG00100" ...
+#>  $ chr    : chr [1:5] "chr21" "chr21" "chr21" "chr21" ...
+#>  $ pos    : int [1:5] 5030082 5030088 5030105 5030253 5030278
+#>  $ id     : chr [1:5] "chr21:5030082:G:A" "chr21:5030088:C:T" "chr21:5030105:C:A" "chr21:5030253:G:T" ...
+#>  $ ref    : chr [1:5] "G" "C" "C" "G" ...
+#>  $ alt    : chr [1:5] "A" "T" "A" "T" ...
+#>  $ qual   : num [1:5] 70.1 2773.1 3897.8 102.6 868.9
+#>  $ filter : chr [1:5] "VQSRTrancheSNP99.80to100.00" "VQSRTrancheSNP99.80to100.00" "VQSRTrancheSNP99.80to100.00" "VQSRTrancheSNP99.80to100.00" ...
+#>  $ info   : chr [1:5] "AC=2;AF=0.000616523;AN=3244;DP=2498;FS=0;MLEAC=1;MLEAF=0.0003083;MQ=17.07;MQ0=0;QD=17.52;SOR=3.258;VQSLOD=-32.6"| __truncated__ "AC=127;AF=0.0400126;AN=3174;BaseQRankSum=0.736;ClippingRankSum=0.736;DP=2750;FS=0;InbreedingCoeff=0.0015;MLEAC="| __truncated__ "AC=128;AF=0.0352811;AN=3628;BaseQRankSum=0.736;ClippingRankSum=0.727;DP=3476;FS=0;InbreedingCoeff=-0.0015;MLEAC"| __truncated__ "AC=1;AF=0.000165837;AN=6030;BaseQRankSum=-0.583;ClippingRankSum=-0.259;DP=19530;FS=0;InbreedingCoeff=-0.0274;ML"| __truncated__ ...
+#>  $ gt     : int [1:5, 1:3202] NA 2 2 0 0 0 NA NA 0 0 ...
+#>  - attr(*, "class")= chr "vcftable"
+```
+
 **Read INDEL variants with DP format and QUAL\>100**
 
 ``` r
@@ -103,6 +123,21 @@ vcfplot(res, col = 2,cex = 2, lwd = 3, type = "b")
 ```
 
 <img src="man/figures/README-r2-1.png" width="100%" />
+
+Also, we want to investigate the relationship between the genotype
+concordance and the call rate ranked by the genotype quality.
+
+``` r
+svvcf <- system.file("extdata", "platinum.sv.vcf.gz", package="vcfppR")
+svuppvcf <- system.file("extdata", "svupp.call.vcf.gz", package="vcfppR")
+truth <- vcftable(svvcf)
+truth$neighbors <-as.integer(sub(".*NumNeighbors=([^;]+).*", "\\1", truth$info))
+truth <- subset(truth, neighbors == 0) ## subset biallelic SVs
+res <- vcfcomp(svuppvcf, truth, stats = "gtgq", region = "chr1")
+vcfplot(res, col = 2,cex = 2, lwd = 3, type = "l", bty = 'l')
+```
+
+<img src="man/figures/README-gtgq-1.png" width="100%" />
 
 Check out the [vignettes](https://zilong-li.github.io/vcfppR/articles/)
 for more\!

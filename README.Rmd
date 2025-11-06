@@ -74,6 +74,14 @@ res <- vcftable(phasedvcf, "chr21:1-5100000", samples = "HG00673,NA10840", varty
 str(res)
 ```
 
+**Read all variants followed by subsetting  operations**
+
+```{r snp2}
+vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
+res <- vcftable(vcffile, "chr21:1-5050000")
+str(subset(res, pos >= 5000000 & pos <= 5030300 & nchar(ref) == 1 & nchar(alt) == 1))
+```
+
 **Read INDEL variants with DP format and QUAL>100**
 
 ```{r dp}
@@ -91,6 +99,18 @@ res <- vcfcomp(test = rawvcf, truth = phasedvcf,
                formats = c("GT","GT"), setid = TRUE)
 par(mar=c(5,5,2,2), cex.lab = 2)
 vcfplot(res, col = 2,cex = 2, lwd = 3, type = "b")
+```
+
+Also, we want to investigate the relationship between the genotype concordance and the call rate ranked by the genotype quality.
+
+```{r gtgq}
+svvcf <- system.file("extdata", "platinum.sv.vcf.gz", package="vcfppR")
+svuppvcf <- system.file("extdata", "svupp.call.vcf.gz", package="vcfppR")
+truth <- vcftable(svvcf)
+truth$neighbors <-as.integer(sub(".*NumNeighbors=([^;]+).*", "\\1", truth$info))
+truth <- subset(truth, neighbors == 0) ## subset biallelic SVs
+res <- vcfcomp(svuppvcf, truth, stats = "gtgq", region = "chr1")
+vcfplot(res, col = 2,cex = 2, lwd = 3, type = "l", bty = 'l')
 ```
 
 Check out the [vignettes](https://zilong-li.github.io/vcfppR/articles/) for more!
