@@ -130,7 +130,7 @@ comp_stats_vs_maf <- function(test, truth,
 
   collapse <- ifelse(stats=="pse", FALSE, TRUE)
 
-  if(is(truth, "vcftable")) {
+  if(is(test, "vcftable")) {
     d1 <- test
   } else {
     d1 <- tryCatch( { suppressWarnings(readRDS(test)) }, error = function(e) {

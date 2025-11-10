@@ -1,6 +1,6 @@
 Package: vcfppR
 Title: Rapid Manipulation of the Variant Call Format (VCF)
-Version: 0.8.2
+Version: 0.8.3
 Authors@R: c(
     person("Zilong", "Li", , "zilong.dk@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5859-2078")),
