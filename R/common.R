@@ -88,16 +88,53 @@ R2 <- function(a, b) {
 ## 1      FN     TP     FP/FN
 ## 2      FN     FP/FN     TP
 ## f1 = 2 * TP / (2 * TP + FP + FN)
-F1 <- function(a, b) {
-  o <- table(as.vector(a), as.vector(b))
-  ## make sure table is valid
-  if( !((nrow(o) == ncol(o)) && (nrow(o) == 3)) ) {
-    warning("NRC should be used only for a sample with genotypes of all types, hom ref(0), het(1) and hom alt(2)")
+F1 <- function(a, b, ref = "0") {
+  # Ensure vectors are treated as factors with all common levels
+  all_levels <- union(unique(a), unique(b))
+  a_fct <- factor(a, levels = all_levels)
+  b_fct <- factor(b, levels = all_levels)
+  tbl <- table(a_fct, b_fct)
+
+  # Check if we have at least some variant genotypes (non-ref)
+  non_ref_levels <- setdiff(rownames(tbl), ref)
+  if (length(non_ref_levels) == 0) {
+    warning("F1 requires variant genotypes (het or hom-alt) to calculate, only reference genotypes found")
     return(NA)
   }
-  TP <- o[2,2] + o[3,3]
-  FP <- o[1,2] + o[1, 3] + o[2, 3] + o[3,2]
-  FN <- o[2,1] +o[2,3] + o[3,1] + o[3,2]
+
+  # Calculate TP, FP, FN following hap.py approach
+  TP <- 0
+  FP <- 0
+  FN <- 0
+
+  for (i in rownames(tbl)) {
+    for (j in colnames(tbl)) {
+      if (tbl[i, j] == 0) next
+
+      if (i == ref && j == ref) {
+        # (0,0): ignore
+        next
+      } else if (i == ref && j != ref) {
+        # (0,1) or (0,2): FP - called variant when truth is ref
+        FP <- FP + tbl[i, j]
+      } else if (i != ref && j == ref) {
+        # (1,0) or (2,0): FN - missed variant
+        FN <- FN + tbl[i, j]
+      } else if (i == j) {
+        # (1,1) or (2,2): TP - correct variant match
+        TP <- TP + tbl[i, j]
+      } else {
+        # (1,2) or (2,1): both FP and FN - wrong variant category
+        FP <- FP + tbl[i, j]
+        FN <- FN + tbl[i, j]
+      }
+    }
+  }
+
+  if (TP == 0 && FP == 0 && FN == 0) {
+    return(NA)
+  }
+
   res <- 2 * TP / (2 * TP + FP + FN)
   return(res)
 }
@@ -122,16 +159,15 @@ F1 <- function(a, b) {
 ## a <- c(1, 2, 1, 1,1)
 ## b <- c(1, 1, 1, 1,1)
 ## NRC(a, b)
-NRC <- function(a, b, ref = 0) {
+NRC <- function(a, b, ref = "0") {
   # Ensure vectors are treated as factors with all common levels
   all_levels <- union(unique(a), unique(b))
   a_fct <- factor(a, levels = all_levels)
   b_fct <- factor(b, levels = all_levels)
   tbl <- table(a_fct, b_fct)
-  ref_char <- as.character(ref)
   # Get reference-reference count
-  if (ref_char %in% rownames(tbl) && ref_char %in% colnames(tbl)) {
-    ref_ref <- tbl[ref_char, ref_char]
+  if (ref %in% rownames(tbl) && ref %in% colnames(tbl)) {
+    ref_ref <- tbl[ref, ref]
   } else {
     ref_ref <- 0
   }

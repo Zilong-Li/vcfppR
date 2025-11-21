@@ -1,5 +1,6 @@
 # vcfppR 0.8.3
 * bugfix: vcfcomp with truth being an vcftable object for stats = "r2"!
+* update F1 score to allow for missing category
 
 # vcfppR 0.8.2
 * extend subset S3 function for vcftable
