@@ -52,11 +52,11 @@ test_that("vcfplot with vcftable accepts custom parameters", {
 
   # Should work with custom plotting parameters
   expect_silent(vcfplot(res, which.sample = 1,
-                       col = "red",
-                       pch = 19,
-                       main = "Custom Title",
-                       xlab = "Position",
-                       ylab = "Quality"))
+                        col = "red",
+                        pch = 19,
+                        main = "Custom Title",
+                        xlab = "Position",
+                        ylab = "Quality"))
 })
 
 test_that("vcfplot works with vcfsummary objects", {
@@ -76,10 +76,10 @@ test_that("vcfplot with vcfsummary accepts custom barplot parameters", {
 
   # Should work with custom parameters
   expect_silent(vcfplot(res,
-                       col = "blue",
-                       main = "Variant Summary",
-                       xlab = "Type",
-                       ylab = "Count"))
+                        col = "blue",
+                        main = "Variant Summary",
+                        xlab = "Type",
+                        ylab = "Count"))
 })
 
 test_that("vcfplot works with vcfcomp r2 objects", {
@@ -153,3 +153,11 @@ test_that("vcfplot comp handles variant-wise statistics", {
   # Should work without specifying which.sample
   expect_silent(vcfplot(comp))
 })
+
+
+## vcffiles <- rep("/home//zilong/Downloads/longcallD.vcf.gz", 5)
+## region <- "chr1:570000-592000"
+## plot_variants_per_haplotype(vcffiles, region)
+
+
+

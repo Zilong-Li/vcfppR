@@ -66,6 +66,26 @@ vcfplot <- function(obj,
   }
 }
 
+#' @title
+#' plot all variants on the haplotypes 
+#' 
+#' @export
+plot_variants_per_haplotype <- function(vcffiles, region) {
+  dl <- lapply(vcffiles, function(f) {
+    dat <- vcftable(f, region = region, collapse = F, info = F)
+    data.frame(pos = dat$pos, ref = dat$ref, alt = dat$alt, h1 = dat$gt[,1], h2 = dat$gt[,2])
+  })
+
+  xlim <- range(sapply(dl, function(d) range(d$pos))) + c(-100, 100)
+  ylim <- c(0, length(dl))
+  
+  plot(1, col = 'transparent', xlim = xlim, ylim = ylim, axes = F, xlab = "Genomic position", ylab = "Haplotypes")
+  for(iid in seq_along(dl)) {
+    add_haplotypes_per_iid(dl[[iid]], iid-1, xlim[1], xlim[2])
+  }
+  box()
+}
+
 ## +--------------------+
 ## | internal functions |
 ## +--------------------+
@@ -199,4 +219,66 @@ plot_call <- function(obj, stats,
   } else {
     stop("no plots for this. please submit a PR!")
   }
+}
+
+
+
+add_haplotypes_per_iid <- function(dd, iid, xleft, xright) {
+
+  colorpalette('colorblind')
+  
+  refdel <- 3 # lightblue
+  refins <- 6 # darkblue
+  altsnp <- 5 # yellow
+  refsnp <- 4 # green
+  altins <- 7 # darkorange
+
+  rect(xleft, iid, xright, iid+0.2, lty = 1, border = NA, col = 1)
+  rect(xleft, iid+0.5, xright, iid+0.7, lty = 1, border = NA, col = 1)
+
+  w <- nchar(dd$alt) < nchar(dd$ref) # DEL
+  a <- dd[w,]
+  s <- ifelse(a$h1 == 1, a$alt, a$ref)
+  bc <- rep('white', length(a$pos))
+  bc[which(a$h1 == 0)] <- refdel
+  rect(a$pos, iid, a$pos+nchar(s), iid+0.2, border = bc, col = bc)
+
+  # what about ref/ref for a del ATT / A
+
+  s <- ifelse(a$h1 == 2, a$alt, a$ref)
+  bc <- rep('white', length(a$pos))
+  bc[which(a$h2 == 0)] <- refdel
+  rect(a$pos, iid+0.5, a$pos+nchar(s), iid+0.7, border = bc, col = bc)
+
+
+  w <- nchar(dd$alt) > nchar(dd$ref) # INS
+  a <- dd[w,]
+
+  bc <- rep(altins, length(a$pos))
+  bc[which(a$h1 == 0)] <- refins
+  rect(a$pos, iid, a$pos+1, iid+0.2, border = bc, col = bc)
+
+  s <- ifelse(a$h1 == 1, a$alt, a$ref)
+  bc <- rep(altins, length(a$pos))
+  bc[which(a$h1 == 0)] <- 'white'  # we don't plot ref
+  rect(a$pos, iid+0.2, a$pos+nchar(s), iid+0.3, border = bc, col = bc)
+
+  bc <- rep(altins, length(a$pos))
+  bc[which(a$h2 == 0)] <- refins
+  rect(a$pos, iid+0.5, a$pos+1, iid+0.7, border = bc, col = bc)
+
+  s <- ifelse(a$h2 == 1, a$alt, a$ref)
+  bc <- rep(altins, length(a$pos))
+  bc[which(a$h2 == 0)] <- 'transparent'  # we don't plot ref
+  rect(a$pos, iid+0.7, a$pos+nchar(s), iid+0.8, border = bc, col = bc)
+
+  w <- nchar(dd$alt) == nchar(dd$ref) # SNP
+  a <- dd[w,]
+  bc <- rep(altsnp, length(a$pos))
+  bc[which(a$h1 == 0)] <- refsnp
+  rect(a$pos, iid, a$pos+1, iid+0.2, border = bc, col = bc)
+
+  bc <- rep(altsnp, length(a$pos))
+  bc[which(a$h2 == 0)] <- refsnp
+  rect(a$pos, iid+0.5, a$pos+1, iid+0.7, border = bc, col = bc)
 }
