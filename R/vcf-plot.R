@@ -100,7 +100,7 @@ vcfplot <- function(obj,
 #' }
 #'
 #' When large gaps exist between variants (exceeding \code{shrink_threshold}), the function
-#' compresses these regions and marks them with red dashed lines and "..." text to indicate
+#' compresses these regions and marks them with black dashed lines and "..." text to indicate
 #' the compression. This feature helps visualize sparse variant distributions more effectively.
 #'
 #' @return Invisibly returns NULL. The function is called for its side effect of creating a plot.
@@ -226,13 +226,13 @@ plot_variants_per_haplotype <- function(vcffiles, region,
     for(i in seq(1, length(shrink_lines), 2)) {
       # Draw capped vertical lines instead of full ablines
       segments(x0 = shrink_lines[i], y0 = 0, x1 = shrink_lines[i],
-               y1 = length(dl), col = "red", lty = 2, lwd = 1)
+               y1 = length(dl), col = "black", lty = 2, lwd = 1)
       segments(x0 = shrink_lines[i+1], y0 = 0, x1 = shrink_lines[i+1],
-               y1 = length(dl), col = "red", lty = 2, lwd = 1)
+               y1 = length(dl), col = "black", lty = 2, lwd = 1)
 
       # Add "..." text between lines
       mid_pos <- mean(c(shrink_lines[i], shrink_lines[i+1]))
-      text(mid_pos, length(dl)/2, "...", cex = 1.2, col = "red", font = 2)
+      text(mid_pos, length(dl)/2, "...", cex = 1.2, col = "black", font = 2)
     }
   }
   
@@ -255,7 +255,7 @@ plot_variants_per_haplotype <- function(vcffiles, region,
   }
 
   if(length(shrink_lines) > 0) {
-    legend_colors <- c(legend_colors, "red")
+    legend_colors <- c(legend_colors, "black")
     legend_labels <- c(legend_labels, "Compressed")
   }
 

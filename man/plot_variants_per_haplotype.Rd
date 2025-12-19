@@ -58,7 +58,7 @@ Variant types are distinguished by color:
 }
 
 When large gaps exist between variants (exceeding \code{shrink_threshold}), the function
-compresses these regions and marks them with red dashed lines and "..." text to indicate
+compresses these regions and marks them with black dashed lines and "..." text to indicate
 the compression. This feature helps visualize sparse variant distributions more effectively.
 }
 \examples{
