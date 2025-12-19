@@ -4,7 +4,15 @@
 \alias{plot_variants_per_haplotype}
 \title{plot all variants on the haplotypes}
 \usage{
-plot_variants_per_haplotype(vcffiles, region)
+plot_variants_per_haplotype(
+  vcffiles,
+  region,
+  types = c("SNP", "DEL", "INS"),
+  xlab = "Genomic position",
+  ylab = "Haplotypes of each sample",
+  main = NULL,
+  ...
+)
 }
 \description{
 plot all variants on the haplotypes

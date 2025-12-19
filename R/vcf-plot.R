@@ -70,21 +70,53 @@ vcfplot <- function(obj,
 #' plot all variants on the haplotypes 
 #' 
 #' @export
-plot_variants_per_haplotype <- function(vcffiles, region) {
+plot_variants_per_haplotype <- function(vcffiles, region,
+                                        types = c('SNP', 'DEL', 'INS'),
+                                        xlab = "Genomic position",
+                                        ylab = "Haplotypes of each sample",
+                                        main = NULL,
+                                        ...) {
   dl <- lapply(vcffiles, function(f) {
     dat <- vcftable(f, region = region, collapse = F, info = F)
-    data.frame(pos = dat$pos, ref = dat$ref, alt = dat$alt, h1 = dat$gt[,1], h2 = dat$gt[,2])
+    d <- data.frame(pos = integer(), ref = character(), alt = character(), h1 = integer(), h2 = integer())
+    # wif no vars
+    if(length(dat$gt)>0) {
+      gt <- dat$gt
+      d <- data.frame(pos = dat$pos, ref = dat$ref, alt = dat$alt, h1 = gt[,1], h2 = gt[,2])
+    }
+    return(d)
   })
 
-  xlim <- range(sapply(dl, function(d) range(d$pos))) + c(-100, 100)
-  ylim <- c(0, length(dl))
+  xlim <- range(sapply(dl, function(d) c(d$pos))) + c(-10, 10)
+  ylim <- c(0, length(dl)+2)
   
-  plot(1, col = 'transparent', xlim = xlim, ylim = ylim, axes = F, xlab = "Genomic position", ylab = "Haplotypes")
-  for(iid in seq_along(dl)) {
-    add_haplotypes_per_iid(dl[[iid]], iid-1, xlim[1], xlim[2])
+  colorpalette('colorblind')
+  legend_colors <- c()
+  legend_labels <- c()
+
+  plot(1, col = 'transparent', xlim = xlim, ylim = ylim, axes = T, xlab = xlab, ylab = ylab, main = main, ...)
+
+  if('SNP' %in% types) {
+    legend_colors <- c(legend_colors, 4, 5)  # refsnp (green), altsnp (yellow)
+    legend_labels <- c(legend_labels, "SNP Ref", "SNP Alt")
   }
-  box()
+  if('DEL' %in% types) {
+    legend_colors <- c(legend_colors, 3)  # refdel (lightblue)
+    legend_labels <- c(legend_labels, "DEL Ref")
+  }
+  if('INS' %in% types) {
+    legend_colors <- c(legend_colors, 6, 7)  # refins (darkblue), altins (darkorange)
+    legend_labels <- c(legend_labels, "INS Ref", "INS Alt")
+  }
+  
+  legend("top", legend = legend_labels, fill = legend_colors, 
+         ncol = length(legend_labels), bty = "n", xpd = TRUE)
+
+  for(iid in seq_along(dl)) {
+    myadd_haplotypes_per_iid(dl[[iid]], iid-1, xlim[1], xlim[2], types)
+  }
 }
+
 
 ## +--------------------+
 ## | internal functions |
@@ -223,7 +255,7 @@ plot_call <- function(obj, stats,
 
 
 
-add_haplotypes_per_iid <- function(dd, iid, xleft, xright) {
+add_haplotypes_per_iid <- function(dd, iid, xleft, xright, types = c('SNP', 'DEL', 'INS')) {
 
   colorpalette('colorblind')
   
@@ -237,48 +269,51 @@ add_haplotypes_per_iid <- function(dd, iid, xleft, xright) {
   rect(xleft, iid+0.5, xright, iid+0.7, lty = 1, border = NA, col = 1)
 
   w <- nchar(dd$alt) < nchar(dd$ref) # DEL
-  a <- dd[w,]
-  s <- ifelse(a$h1 == 1, a$alt, a$ref)
-  bc <- rep('white', length(a$pos))
-  bc[which(a$h1 == 0)] <- refdel
-  rect(a$pos, iid, a$pos+nchar(s), iid+0.2, border = bc, col = bc)
+  if(('DEL' %in% types) & (sum(w)>0)) {
+    a <- dd[w,]
+    ## s <- ifelse(a$h1 == 1, a$alt, a$ref)
+    s <- a$ref
+    bc <- rep('white', length(a$pos))
+    bc[which(a$h1 == 0)] <- refdel
+    rect(a$pos, iid, a$pos+nchar(s), iid+0.2, border = bc, col = bc)
 
-  # what about ref/ref for a del ATT / A
-
-  s <- ifelse(a$h1 == 2, a$alt, a$ref)
-  bc <- rep('white', length(a$pos))
-  bc[which(a$h2 == 0)] <- refdel
-  rect(a$pos, iid+0.5, a$pos+nchar(s), iid+0.7, border = bc, col = bc)
-
+    bc <- rep('white', length(a$pos))
+    bc[which(a$h2 == 0)] <- refdel
+    rect(a$pos, iid+0.5, a$pos+nchar(s), iid+0.7, border = bc, col = bc)
+  }
 
   w <- nchar(dd$alt) > nchar(dd$ref) # INS
-  a <- dd[w,]
+  if(('INS' %in% types) & (sum(w)>0)) {
+    a <- dd[w,]
 
-  bc <- rep(altins, length(a$pos))
-  bc[which(a$h1 == 0)] <- refins
-  rect(a$pos, iid, a$pos+1, iid+0.2, border = bc, col = bc)
+    bc <- rep(altins, length(a$pos))
+    bc[which(a$h1 == 0)] <- refins
+    rect(a$pos, iid, a$pos+1, iid+0.2, border = bc, col = bc)
 
-  s <- ifelse(a$h1 == 1, a$alt, a$ref)
-  bc <- rep(altins, length(a$pos))
-  bc[which(a$h1 == 0)] <- 'white'  # we don't plot ref
-  rect(a$pos, iid+0.2, a$pos+nchar(s), iid+0.3, border = bc, col = bc)
+    ## s <- ifelse(a$h1 == 1, a$alt, a$ref)
+    s <- a$alt
+    bc <- rep(altins, length(a$pos))
+    bc[which(a$h1 == 0)] <- 'white'  # we don't plot ref
+    rect(a$pos, iid+0.2, a$pos+nchar(s), iid+0.3, border = bc, col = bc)
 
-  bc <- rep(altins, length(a$pos))
-  bc[which(a$h2 == 0)] <- refins
-  rect(a$pos, iid+0.5, a$pos+1, iid+0.7, border = bc, col = bc)
+    bc <- rep(altins, length(a$pos))
+    bc[which(a$h2 == 0)] <- refins
+    rect(a$pos, iid+0.5, a$pos+1, iid+0.7, border = bc, col = bc)
 
-  s <- ifelse(a$h2 == 1, a$alt, a$ref)
-  bc <- rep(altins, length(a$pos))
-  bc[which(a$h2 == 0)] <- 'transparent'  # we don't plot ref
-  rect(a$pos, iid+0.7, a$pos+nchar(s), iid+0.8, border = bc, col = bc)
+    bc <- rep(altins, length(a$pos))
+    bc[which(a$h2 == 0)] <- 'transparent'  # we don't plot ref
+    rect(a$pos, iid+0.7, a$pos+nchar(s), iid+0.8, border = bc, col = bc)
+  }
 
   w <- nchar(dd$alt) == nchar(dd$ref) # SNP
-  a <- dd[w,]
-  bc <- rep(altsnp, length(a$pos))
-  bc[which(a$h1 == 0)] <- refsnp
-  rect(a$pos, iid, a$pos+1, iid+0.2, border = bc, col = bc)
+  if(('SNP' %in% types) & (sum(w)>0)) {
+    a <- dd[w,]
+    bc <- rep(altsnp, length(a$pos))
+    bc[which(a$h1 == 0)] <- refsnp
+    rect(a$pos, iid, a$pos+1, iid+0.2, border = bc, col = bc)
 
-  bc <- rep(altsnp, length(a$pos))
-  bc[which(a$h2 == 0)] <- refsnp
-  rect(a$pos, iid+0.5, a$pos+1, iid+0.7, border = bc, col = bc)
+    bc <- rep(altsnp, length(a$pos))
+    bc[which(a$h2 == 0)] <- refsnp
+    rect(a$pos, iid+0.5, a$pos+1, iid+0.7, border = bc, col = bc)
+  }
 }
