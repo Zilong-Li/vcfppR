@@ -154,10 +154,53 @@ test_that("vcfplot comp handles variant-wise statistics", {
   expect_silent(vcfplot(comp))
 })
 
+test_that("plot_variants_per_haplotype works with basic parameters", {
+  skip_on_os("windows")
 
-## vcffiles <- rep("/home//zilong/Downloads/longcallD.vcf.gz", 5)
-## region <- "chr1:570000-592000"
-## plot_variants_per_haplotype(vcffiles, region)
+  # Test with the same file repeated (simulating multiple samples)
+  vcffiles <- rep(vcffile, 3)
+  region <- "chr21:1-100000"
+
+  # Should work with default parameters
+  expect_silent(plot_variants_per_haplotype(vcffiles, region))
+})
+
+test_that("plot_variants_per_haplotype works with different variant types", {
+  skip_on_os("windows")
+
+  vcffiles <- rep(vcffile, 2)
+  region <- "chr21:1-100000"
+
+  # Should work with only SNPs
+  expect_silent(plot_variants_per_haplotype(vcffiles, region, types = c("SNP")))
+
+  # Should work with only INDELs
+  expect_silent(plot_variants_per_haplotype(vcffiles, region, types = c("DEL", "INS")))
+})
+
+test_that("plot_variants_per_haplotype handles custom shrink threshold", {
+  skip_on_os("windows")
+
+  vcffiles <- rep(vcffile, 2)
+  region <- "chr21:1-500000"
+
+  # Should work with different shrink thresholds
+  expect_silent(plot_variants_per_haplotype(vcffiles, region, shrink_threshold = 5000))
+  expect_silent(plot_variants_per_haplotype(vcffiles, region, shrink_threshold = 10000))
+})
+
+test_that("plot_variants_per_haplotype accepts custom plot parameters", {
+  skip_on_os("windows")
+
+  vcffiles <- rep(vcffile, 2)
+  region <- "chr21:1-100000"
+
+  # Should work with custom labels
+  expect_silent(plot_variants_per_haplotype(vcffiles, region,
+                                           main = "Test Plot",
+                                           xlab = "Position (bp)",
+                                           ylab = "Samples"))
+})
 
 
 

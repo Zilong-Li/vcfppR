@@ -66,12 +66,71 @@ vcfplot <- function(obj,
   }
 }
 
-#' @title
-#' plot all variants on the haplotypes 
-#' 
+#' @title Plot variants on haplotypes across multiple samples
+#'
+#' @description
+#' Visualizes variant positions and alleles on both haplotypes for multiple samples.
+#' Each sample is represented by two horizontal tracks (one per haplotype), with variants
+#' colored according to their type (SNP, insertion, deletion) and allele (reference or alternate).
+#' Large gaps between variants can be automatically compressed for better visualization.
+#'
+#' @param vcffiles Character vector of VCF/BCF file paths or URLs. Each file represents one sample.
+#' @param region Character string specifying the genomic region to visualize (e.g., "chr1:1000-5000").
+#' @param types Character vector of variant types to include in the plot.
+#'        Valid options are "SNP" (single nucleotide polymorphisms),
+#'        "DEL" (deletions), and "INS" (insertions). Default: c("SNP", "DEL", "INS").
+#' @param shrink_threshold Numeric value specifying the minimum gap size (in base pairs)
+#'        between variants that will trigger compression. Gaps larger than this threshold
+#'        are shrunk to improve visualization density. Default: 1000.
+#' @param xlab Character string for the x-axis label. Default: "Genomic position".
+#' @param ylab Character string for the y-axis label. Default: "Haplotypes of each sample".
+#' @param main Character string for the plot title. Default: NULL (no title).
+#' @param ... Additional graphical parameters passed to the base plot function.
+#'
+#' @details
+#' The function reads variant data from multiple VCF files using \code{\link{vcftable}} with
+#' \code{collapse=FALSE} to preserve haplotype phasing information. Each sample is displayed
+#' as two horizontal tracks representing the two haplotypes (h1 and h2).
+#'
+#' Variant types are distinguished by color:
+#' \itemize{
+#'   \item SNPs: Green (reference allele) or Yellow (alternate allele)
+#'   \item Deletions: Light blue (reference allele only)
+#'   \item Insertions: Dark blue (reference allele) or Dark orange (alternate allele)
+#' }
+#'
+#' When large gaps exist between variants (exceeding \code{shrink_threshold}), the function
+#' compresses these regions and marks them with red dashed lines and "..." text to indicate
+#' the compression. This feature helps visualize sparse variant distributions more effectively.
+#'
+#' @return Invisibly returns NULL. The function is called for its side effect of creating a plot.
+#'
+#' @seealso \code{\link{vcftable}}, \code{\link{vcfplot}}
+#'
+#' @examples
+#' \dontrun{
+#' # Plot variants from three samples in a specific region
+#' vcf_files <- c("sample1.vcf.gz", "sample2.vcf.gz", "sample3.vcf.gz")
+#' plot_variants_per_haplotype(vcf_files, region = "chr20:1000000-1100000")
+#'
+#' # Plot only SNPs and insertions with custom threshold
+#' plot_variants_per_haplotype(vcf_files,
+#'                            region = "chr20:1000000-1100000",
+#'                            types = c("SNP", "INS"),
+#'                            shrink_threshold = 5000)
+#'
+#' # Customize plot appearance
+#' plot_variants_per_haplotype(vcf_files,
+#'                            region = "chr20:1000000-1100000",
+#'                            main = "Variant Distribution",
+#'                            xlab = "Position (bp)",
+#'                            cex.axis = 0.8)
+#' }
+#'
 #' @export
 plot_variants_per_haplotype <- function(vcffiles, region,
                                         types = c('SNP', 'DEL', 'INS'),
+                                        shrink_threshold = 1000, 
                                         xlab = "Genomic position",
                                         ylab = "Haplotypes of each sample",
                                         main = NULL,
@@ -87,33 +146,128 @@ plot_variants_per_haplotype <- function(vcffiles, region,
     return(d)
   })
 
-  xlim <- range(sapply(dl, function(d) c(d$pos))) + c(-10, 10)
-  ylim <- c(0, length(dl)+2)
+  # Get all variant positions across samples
+  all_pos <- sort(unique(unlist(lapply(dl, function(d) d$pos))))
   
+  if(length(all_pos) == 0) {
+    # No variants to plot
+    xlim <- c(0, 1000)
+    plot(1, col = 'transparent', xlim = xlim, ylim = c(0, length(dl)+2), 
+         axes = T, xlab = xlab, ylab = ylab, main = main, ...)
+    return()
+  }
+  
+  # Find large gaps between variants
+  gaps <- diff(all_pos)
+  large_gaps <- which(gaps > shrink_threshold)
+  
+  # Create mapping between original and compressed positions
+  compressed_pos <- all_pos
+  shrink_lines <- c()  # positions for vertical lines
+  
+  if(length(large_gaps) > 0) {
+    cumulative_shrink <- 0
+    
+    for(i in large_gaps) {
+      gap_size <- gaps[i]
+      shrink_amount <- gap_size - shrink_threshold/2
+      
+      # Mark positions for vertical lines (before shrinking)
+      line_pos1 <- all_pos[i] + shrink_threshold/4 - cumulative_shrink
+      line_pos2 <- all_pos[i+1] - shrink_threshold/4 - cumulative_shrink - shrink_amount
+      shrink_lines <- c(shrink_lines, line_pos1, line_pos2)
+      
+      # Adjust positions after this gap
+      compressed_pos[(i+1):length(compressed_pos)] <- compressed_pos[(i+1):length(compressed_pos)] - shrink_amount
+      cumulative_shrink <- cumulative_shrink + shrink_amount
+    }
+  }
+  
+  # Create position mapping function
+  map_position <- function(pos) {
+    if(length(pos) == 0) return(numeric(0))
+    
+    mapped <- pos
+    if(length(large_gaps) > 0) {
+      cumulative_shrink <- 0
+      
+      for(i in large_gaps) {
+        gap_size <- gaps[i]
+        shrink_amount <- gap_size - shrink_threshold/2
+        gap_start <- all_pos[i]
+        gap_end <- all_pos[i+1]
+        
+        # Positions after the gap start get shifted
+        after_gap <- pos > gap_start
+        mapped[after_gap] <- mapped[after_gap] - shrink_amount
+        
+        cumulative_shrink <- cumulative_shrink + shrink_amount
+      }
+    }
+    return(mapped)
+  }
+  
+  # Update variant positions in data
+  dl_mapped <- lapply(dl, function(d) {
+    if(nrow(d) > 0) {
+      d$pos <- map_position(d$pos)
+    }
+    return(d)
+  })
+  
+  xlim <- range(c(compressed_pos, shrink_lines)) + c(-10, 10)
+  ylim <- c(0, length(dl)+1)
+
   colorpalette('colorblind')
+  plot(1, col = 'transparent', xlim = xlim, ylim = ylim, axes = T, xlab = xlab, ylab = ylab, main = main, ...)
+  
+  # Add vertical lines to indicate shrinked regions (capped to data region)
+  if(length(shrink_lines) > 0) {
+    for(i in seq(1, length(shrink_lines), 2)) {
+      # Draw capped vertical lines instead of full ablines
+      segments(x0 = shrink_lines[i], y0 = 0, x1 = shrink_lines[i],
+               y1 = length(dl), col = "red", lty = 2, lwd = 1)
+      segments(x0 = shrink_lines[i+1], y0 = 0, x1 = shrink_lines[i+1],
+               y1 = length(dl), col = "red", lty = 2, lwd = 1)
+
+      # Add "..." text between lines
+      mid_pos <- mean(c(shrink_lines[i], shrink_lines[i+1]))
+      text(mid_pos, length(dl)/2, "...", cex = 1.2, col = "red", font = 2)
+    }
+  }
+  
+  # Build legend with proper color palette
   legend_colors <- c()
   legend_labels <- c()
-
-  plot(1, col = 'transparent', xlim = xlim, ylim = ylim, axes = T, xlab = xlab, ylab = ylab, main = main, ...)
+  pal <- palette()  # Get current palette
 
   if('SNP' %in% types) {
-    legend_colors <- c(legend_colors, 4, 5)  # refsnp (green), altsnp (yellow)
+    legend_colors <- c(legend_colors, pal[4], pal[5])
     legend_labels <- c(legend_labels, "SNP Ref", "SNP Alt")
   }
   if('DEL' %in% types) {
-    legend_colors <- c(legend_colors, 3)  # refdel (lightblue)
+    legend_colors <- c(legend_colors, pal[3])
     legend_labels <- c(legend_labels, "DEL Ref")
   }
   if('INS' %in% types) {
-    legend_colors <- c(legend_colors, 6, 7)  # refins (darkblue), altins (darkorange)
+    legend_colors <- c(legend_colors, pal[6], pal[7])
     legend_labels <- c(legend_labels, "INS Ref", "INS Alt")
   }
-  
-  legend("top", legend = legend_labels, fill = legend_colors, 
-         ncol = length(legend_labels), bty = "n", xpd = TRUE)
 
-  for(iid in seq_along(dl)) {
-    myadd_haplotypes_per_iid(dl[[iid]], iid-1, xlim[1], xlim[2], types)
+  if(length(shrink_lines) > 0) {
+    legend_colors <- c(legend_colors, "red")
+    legend_labels <- c(legend_labels, "Compressed")
+  }
+
+  # Improved legend with better layout
+  ## n_items <- length(legend_labels)
+  ## legend_ncol <- min(n_items, 4)  # Maximum 4 columns for readability
+
+  legend("top", legend = legend_labels, fill = legend_colors, cex = 1.1,
+         ncol = length(legend_labels), bty = "n", bg = "white", xpd = FALSE)
+
+  for(iid in seq_along(dl_mapped)) {
+    add_haplotypes_per_iid(dl_mapped[[iid]], iid-1, xlim[1], xlim[2], types)
   }
 }
 
@@ -286,14 +440,14 @@ add_haplotypes_per_iid <- function(dd, iid, xleft, xright, types = c('SNP', 'DEL
   if(('INS' %in% types) & (sum(w)>0)) {
     a <- dd[w,]
 
+    ## s <- ifelse(a$h1 == 1, a$alt, a$ref)
+    s <- a$alt
     bc <- rep(altins, length(a$pos))
     bc[which(a$h1 == 0)] <- refins
     rect(a$pos, iid, a$pos+1, iid+0.2, border = bc, col = bc)
 
-    ## s <- ifelse(a$h1 == 1, a$alt, a$ref)
-    s <- a$alt
     bc <- rep(altins, length(a$pos))
-    bc[which(a$h1 == 0)] <- 'white'  # we don't plot ref
+    bc[which(a$h1 == 0)] <- 'transparent'  # we don't plot ref
     rect(a$pos, iid+0.2, a$pos+nchar(s), iid+0.3, border = bc, col = bc)
 
     bc <- rep(altins, length(a$pos))
@@ -317,3 +471,5 @@ add_haplotypes_per_iid <- function(dd, iid, xleft, xright, types = c('SNP', 'DEL
     rect(a$pos, iid+0.5, a$pos+1, iid+0.7, border = bc, col = bc)
   }
 }
+
+

@@ -2,18 +2,86 @@
 % Please edit documentation in R/vcf-plot.R
 \name{plot_variants_per_haplotype}
 \alias{plot_variants_per_haplotype}
-\title{plot all variants on the haplotypes}
+\title{Plot variants on haplotypes across multiple samples}
 \usage{
 plot_variants_per_haplotype(
   vcffiles,
   region,
   types = c("SNP", "DEL", "INS"),
+  shrink_threshold = 1000,
   xlab = "Genomic position",
   ylab = "Haplotypes of each sample",
   main = NULL,
   ...
 )
 }
+\arguments{
+\item{vcffiles}{Character vector of VCF/BCF file paths or URLs. Each file represents one sample.}
+
+\item{region}{Character string specifying the genomic region to visualize (e.g., "chr1:1000-5000").}
+
+\item{types}{Character vector of variant types to include in the plot.
+Valid options are "SNP" (single nucleotide polymorphisms),
+"DEL" (deletions), and "INS" (insertions). Default: c("SNP", "DEL", "INS").}
+
+\item{shrink_threshold}{Numeric value specifying the minimum gap size (in base pairs)
+between variants that will trigger compression. Gaps larger than this threshold
+are shrunk to improve visualization density. Default: 1000.}
+
+\item{xlab}{Character string for the x-axis label. Default: "Genomic position".}
+
+\item{ylab}{Character string for the y-axis label. Default: "Haplotypes of each sample".}
+
+\item{main}{Character string for the plot title. Default: NULL (no title).}
+
+\item{...}{Additional graphical parameters passed to the base plot function.}
+}
+\value{
+Invisibly returns NULL. The function is called for its side effect of creating a plot.
+}
 \description{
-plot all variants on the haplotypes
+Visualizes variant positions and alleles on both haplotypes for multiple samples.
+Each sample is represented by two horizontal tracks (one per haplotype), with variants
+colored according to their type (SNP, insertion, deletion) and allele (reference or alternate).
+Large gaps between variants can be automatically compressed for better visualization.
+}
+\details{
+The function reads variant data from multiple VCF files using \code{\link{vcftable}} with
+\code{collapse=FALSE} to preserve haplotype phasing information. Each sample is displayed
+as two horizontal tracks representing the two haplotypes (h1 and h2).
+
+Variant types are distinguished by color:
+\itemize{
+\item SNPs: Green (reference allele) or Yellow (alternate allele)
+\item Deletions: Light blue (reference allele only)
+\item Insertions: Dark blue (reference allele) or Dark orange (alternate allele)
+}
+
+When large gaps exist between variants (exceeding \code{shrink_threshold}), the function
+compresses these regions and marks them with red dashed lines and "..." text to indicate
+the compression. This feature helps visualize sparse variant distributions more effectively.
+}
+\examples{
+\dontrun{
+# Plot variants from three samples in a specific region
+vcf_files <- c("sample1.vcf.gz", "sample2.vcf.gz", "sample3.vcf.gz")
+plot_variants_per_haplotype(vcf_files, region = "chr20:1000000-1100000")
+
+# Plot only SNPs and insertions with custom threshold
+plot_variants_per_haplotype(vcf_files,
+                           region = "chr20:1000000-1100000",
+                           types = c("SNP", "INS"),
+                           shrink_threshold = 5000)
+
+# Customize plot appearance
+plot_variants_per_haplotype(vcf_files,
+                           region = "chr20:1000000-1100000",
+                           main = "Variant Distribution",
+                           xlab = "Position (bp)",
+                           cex.axis = 0.8)
+}
+
+}
+\seealso{
+\code{\link{vcftable}}, \code{\link{vcfplot}}
 }
