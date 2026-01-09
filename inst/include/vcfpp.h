@@ -1006,6 +1006,10 @@ class BcfRecord
         {
             ret = bcf_update_info_string(header->hdr.get(), line.get(), tag.c_str(), NULL);
         }
+        else if(bcf_hdr_id2type(header->hdr.get(), BCF_HL_INFO, tag_id) == (BCF_HT_FLAG & 0xff))
+        {
+            ret = bcf_update_info_flag(header->hdr.get(), line.get(), tag.c_str(), NULL, 0);
+        }
         else
         {
             ret = -1;

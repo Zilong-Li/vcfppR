@@ -1,3 +1,4 @@
+
 test_that("clearInfo removes all INFO tags", {
   library(vcfppR)
   vcffile <- system.file("extdata", "raw.gt.vcf.gz", package="vcfppR")
@@ -19,7 +20,7 @@ test_that("clearInfo removes all INFO tags", {
 
   # Check that INFO column is now empty (should be ".")
   info_after <- br$info()
-  expect_equal(info_after, "")
+  expect_equal(info_after, ".")
 
   # Write the modified variant
   br$write()
@@ -37,7 +38,7 @@ test_that("clearInfo removes all INFO tags", {
 
   # First variant should have empty INFO
   expect_true(br2$variant())
-  expect_equal(br2$info(), "")
+  expect_equal(br2$info(), ".")
 
   # Second variant should still have INFO
   expect_true(br2$variant())
@@ -57,11 +58,13 @@ test_that("clearInfo works with multiple variants", {
   br$output(outvcf)
 
   variant_count <- 0
+
   while(br$variant()) {
     br$clearInfo()
     br$write()
     variant_count <- variant_count + 1
   }
+
   br$close()
 
   expect_true(variant_count > 0)
@@ -69,7 +72,7 @@ test_that("clearInfo works with multiple variants", {
   # Verify all variants have empty INFO
   br2 <- vcfreader$new(outvcf)
   while(br2$variant()) {
-    expect_equal(br2$info(), "")
+    expect_equal(br2$info(), ".")
   }
 
   # Clean up
@@ -96,7 +99,7 @@ test_that("clearInfo handles variants with no INFO", {
   br$output(outvcf2)
 
   expect_true(br$variant())
-  expect_equal(br$info(), "")
+  expect_equal(br$info(), ".")
 
   # Should not error when clearing already empty INFO
   expect_silent(br$clearInfo())
