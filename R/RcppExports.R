@@ -149,6 +149,13 @@ tableInfo <- function(vcffile, tag, region, ids, qualval, pass, snps, indels, mu
     .Call(`_vcfppR_tableInfo`, vcffile, tag, region, ids, qualval, pass, snps, indels, multiallelics, multisnps, svs)
 }
 
+#' @title Calculate INFO score from GP after genotype imputation
+#' @param GP vector of length a multiple of 3
+#' @export
+vcfpp_calc_info_persite <- function(GP) {
+    .Call(`_vcfppR_vcfpp_calc_info_persite`, GP)
+}
+
 #' @name vcfwriter
 #' @title API for writing the VCF/BCF.
 #' @description Type the name of the class to see the details and methods

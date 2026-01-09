@@ -123,6 +123,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// vcfpp_calc_info_persite
+double vcfpp_calc_info_persite(const std::vector<double>& GP);
+RcppExport SEXP _vcfppR_vcfpp_calc_info_persite(SEXP GPSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type GP(GPSEXP);
+    rcpp_result_gen = Rcpp::wrap(vcfpp_calc_info_persite(GP));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP _rcpp_module_boot_vcfreader();
 RcppExport SEXP _rcpp_module_boot_vcfwriter();
@@ -134,6 +145,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_vcfppR_tableGT", (DL_FUNC) &_vcfppR_tableGT, 14},
     {"_vcfppR_tableFormat", (DL_FUNC) &_vcfppR_tableFormat, 13},
     {"_vcfppR_tableInfo", (DL_FUNC) &_vcfppR_tableInfo, 11},
+    {"_vcfppR_vcfpp_calc_info_persite", (DL_FUNC) &_vcfppR_vcfpp_calc_info_persite, 1},
     {"_rcpp_module_boot_vcfreader", (DL_FUNC) &_rcpp_module_boot_vcfreader, 0},
     {"_rcpp_module_boot_vcfwriter", (DL_FUNC) &_rcpp_module_boot_vcfwriter, 0},
     {NULL, NULL, 0}
