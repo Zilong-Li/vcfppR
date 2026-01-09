@@ -2,7 +2,7 @@
  * @file        https://github.com/Zilong-Li/vcfpp/vcfpp.h
  * @author      Zilong Li
  * @email       zilong.dk@gmail.com
- * @version     v0.7.3
+ * @version     v0.7.4
  * @breif       a single C++ file for manipulating VCF
  * Copyright (C) 2022-2025.The use of this code is governed by the LICENSE file.
  ******************************************************************************/
@@ -1014,6 +1014,32 @@ class BcfRecord
         if(ret < 0)
         {
             throw std::runtime_error("couldn't remove " + tag + " for this variant.\n");
+        }
+    }
+
+    /// remove all INFO tags from the variant, making INFO column empty
+    void clearAllINFO()
+    {
+        if(line->n_info == 0) return; // no INFO to clear
+
+        // collect all INFO tag names first to avoid iterator invalidation
+        std::vector<std::string> info_tags;
+        info_tags.reserve(line->n_info);
+
+        int32_t max_dt_id = header->hdr->n[BCF_DT_ID];
+        for(int i = 0; i < line->n_info; ++i)
+        {
+            bcf_info_t * z = &line->d.info[i];
+            if(!z->vptr) continue;
+            if(z->key < 0 || z->key >= max_dt_id || header->hdr->id[BCF_DT_ID][z->key].key == NULL)
+                continue;
+            info_tags.push_back(std::string(header->hdr->id[BCF_DT_ID][z->key].key));
+        }
+
+        // remove each INFO tag
+        for(const auto& tag : info_tags)
+        {
+            removeINFO(tag);
         }
     }
 

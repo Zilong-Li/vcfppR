@@ -87,5 +87,7 @@ vcfinfo <- function(vcffile,
   else if(vartype == "multiallelics") multiallelics <- TRUE
   else if(vartype != "all") stop("Invaild variant type!")
   if(is.null(ids)) ids <- c("")
-  return(tableInfo(vcffile, tag, region, ids, qual, pass, snps, indels, multiallelics, multisnps, svs))
+  res <- tableInfo(vcffile, tag, region, ids, qual, pass, snps, indels, multiallelics, multisnps, svs)
+  class(res) <- "vcftable"
+  return(res)
 }
