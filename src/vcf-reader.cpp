@@ -97,6 +97,7 @@ using namespace std;
 //' \item Parameter: s - A string for the tag value}
 //' @field rmInfoTag Remove the given tag from the INFO of current variant
 //' \itemize{\item Parameter: s - A string for the tag name}
+//' @field clearInfo Remove all INFO tags from the current variant, making INFO column empty
 //' @field rmFormatTag Remove the given tag from the FORMAT of current variant
 //' \itemize{\item Parameter: s - A string for the tag name}
 //' @field setVariant Modify current variant by adding a vcf line
@@ -357,6 +358,7 @@ class vcfreader {
     }
 
     inline void rmInfoTag(const std::string& s) { var.removeINFO(s); }
+    inline void clearInfo() { var.clearAllINFO(); }
     inline void rmFormatTag(const std::string& s) { var.removeFORMAT(s); }
     inline void addINFO(const std::string& id, const std::string& number, const std::string& type,
                         const std::string& desc) {
@@ -464,5 +466,6 @@ RCPP_MODULE(vcfreader) {
         .method("addINFO", &vcfreader::addINFO)
         .method("addFORMAT", &vcfreader::addFORMAT)
         .method("rmInfoTag", &vcfreader::rmInfoTag)
+        .method("clearInfo", &vcfreader::clearInfo)
         .method("rmFormatTag", &vcfreader::rmFormatTag);
 }

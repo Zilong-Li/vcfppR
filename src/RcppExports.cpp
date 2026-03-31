@@ -10,21 +10,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// heterozygosity
-List heterozygosity(std::string vcffile, std::string region, std::string samples, bool pass, double qual);
-RcppExport SEXP _vcfppR_heterozygosity(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP passSEXP, SEXP qualSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
-    Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
-    Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
-    Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
-    Rcpp::traits::input_parameter< double >::type qual(qualSEXP);
-    rcpp_result_gen = Rcpp::wrap(heterozygosity(vcffile, region, samples, pass, qual));
-    return rcpp_result_gen;
-END_RCPP
-}
 // summaryVariants
 List summaryVariants(std::string vcffile, std::string region, std::string samples, bool filter_pass, double qual);
 RcppExport SEXP _vcfppR_summaryVariants(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP filter_passSEXP, SEXP qualSEXP) {
@@ -123,17 +108,44 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// vcfpp_calc_info_persite
+double vcfpp_calc_info_persite(const std::vector<double>& GP);
+RcppExport SEXP _vcfppR_vcfpp_calc_info_persite(SEXP GPSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type GP(GPSEXP);
+    rcpp_result_gen = Rcpp::wrap(vcfpp_calc_info_persite(GP));
+    return rcpp_result_gen;
+END_RCPP
+}
+// heterozygosity
+List heterozygosity(std::string vcffile, std::string region, std::string samples, bool pass, double qual);
+RcppExport SEXP _vcfppR_heterozygosity(SEXP vcffileSEXP, SEXP regionSEXP, SEXP samplesSEXP, SEXP passSEXP, SEXP qualSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type vcffile(vcffileSEXP);
+    Rcpp::traits::input_parameter< std::string >::type region(regionSEXP);
+    Rcpp::traits::input_parameter< std::string >::type samples(samplesSEXP);
+    Rcpp::traits::input_parameter< bool >::type pass(passSEXP);
+    Rcpp::traits::input_parameter< double >::type qual(qualSEXP);
+    rcpp_result_gen = Rcpp::wrap(heterozygosity(vcffile, region, samples, pass, qual));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP _rcpp_module_boot_vcfreader();
 RcppExport SEXP _rcpp_module_boot_vcfwriter();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_vcfppR_heterozygosity", (DL_FUNC) &_vcfppR_heterozygosity, 5},
     {"_vcfppR_summaryVariants", (DL_FUNC) &_vcfppR_summaryVariants, 5},
     {"_vcfppR_summarySVs", (DL_FUNC) &_vcfppR_summarySVs, 5},
     {"_vcfppR_tableGT", (DL_FUNC) &_vcfppR_tableGT, 14},
     {"_vcfppR_tableFormat", (DL_FUNC) &_vcfppR_tableFormat, 13},
     {"_vcfppR_tableInfo", (DL_FUNC) &_vcfppR_tableInfo, 11},
+    {"_vcfppR_vcfpp_calc_info_persite", (DL_FUNC) &_vcfppR_vcfpp_calc_info_persite, 1},
+    {"_vcfppR_heterozygosity", (DL_FUNC) &_vcfppR_heterozygosity, 5},
     {"_rcpp_module_boot_vcfreader", (DL_FUNC) &_rcpp_module_boot_vcfreader, 0},
     {"_rcpp_module_boot_vcfwriter", (DL_FUNC) &_rcpp_module_boot_vcfwriter, 0},
     {NULL, NULL, 0}

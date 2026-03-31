@@ -120,8 +120,8 @@ comp_stats_vs_maf <- function(test, truth,
 
   if(is.null(bins)){
     bins <- sort(unique(c(
-      c(0, 0.01 / 1000, 0.02 / 1000, 0.05 / 1000),
-      c(0, 0.01 / 100, 0.02 / 100, 0.05 / 100),
+      ## c(0, 0.01 / 1000, 0.02 / 1000, 0.05 / 1000),
+      ## c(0, 0.01 / 100, 0.02 / 100, 0.05 / 100),
       c(0, 0.01 / 10, 0.02 / 10, 0.05 / 10),
       c(0, 0.01 / 1, 0.02 / 1, 0.05 / 1),
       seq(0.1, 0.5, length.out = 5)
@@ -130,7 +130,7 @@ comp_stats_vs_maf <- function(test, truth,
 
   collapse <- ifelse(stats=="pse", FALSE, TRUE)
 
-  if(is(truth, "vcftable")) {
+  if(is(test, "vcftable")) {
     d1 <- test
   } else {
     d1 <- tryCatch( { suppressWarnings(readRDS(test)) }, error = function(e) {

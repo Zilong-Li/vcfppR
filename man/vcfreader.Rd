@@ -160,6 +160,8 @@ Type the name of the class to see the details and methods
 \item{\code{rmInfoTag}}{Remove the given tag from the INFO of current variant
 \itemize{\item Parameter: s - A string for the tag name}}
 
+\item{\code{clearInfo}}{Remove all INFO tags from the current variant, making INFO column empty}
+
 \item{\code{rmFormatTag}}{Remove the given tag from the FORMAT of current variant
 \itemize{\item Parameter: s - A string for the tag name}}
 
